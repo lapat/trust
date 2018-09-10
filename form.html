@@ -1,0 +1,24 @@
+        <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+        <script type="text/javascript" src="js/jquery.tokeninput.js"></script>
+
+
+<form id="cplus" method="POST" action="target.php">
+        Title: <input type="text" name="ctitle" id="ctitle"><br>
+        <br>Comment:<br>
+        <textarea name="cbody" id="cbody" rows="4" cols="50" placeholder="
+Enter your reasoning here. You can cite your source urls (entered below) as (1), (2), or (3).
+"></textarea>
+     <br><div id="dynamicInput">
+          Source 1<br><input type="text" name="myInputs[]">
+     </div>
+     <input type="button" value="+ Source" onClick="addSource('dynamicInput');">
+
+        <div id="searchbar">
+      <input type="text" id="tags" name="tags">
+    </div>
+        <input type="submit" value="Save">
+</form>
+
+<input type="button" id="cancel" value="Cancel" onClick="drop('cplus');">
+
+        <script type="text/javascript" src="scripts/tagIt.js" defer></script>

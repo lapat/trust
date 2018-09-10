@@ -1,0 +1,61 @@
+</body>
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            body { 
+                min-width: 420px; 
+                overflow-x: hidden; 
+                font-family: Arial, sans-serif; 
+                font-size: 12px; 
+            }
+            input, textarea { 
+                width: 420px; 
+            }
+            input#save { 
+                font-weight: bold; width: auto; 
+            }
+        </style>
+        <script src="popup.js"></script>
+    </head>
+	<div id="1" name="userData">
+	<table style="width:100%">
+
+	  <tr>
+	    <th>Current Url: <span name="url"></span></th> 
+	    <th>Status: <span name="status"></span></th>
+	  </tr>
+	  <tr>
+	    <td>user: <span name="user"></span></td>
+	    <td>score: <span name="user"></span></td>
+	  </tr>
+	</table>
+	</div>
+
+	<div id="2" name="comments">
+	<!-- Load from script if present -->
+	</div>
+
+	<div id="3" name="contribute">
+	<b> This is where the comment and tag buttons go! </b>
+    <form id="addbookmark">
+            <p><label for="title">Title</label><br />
+            <input type="text" id="title" name="title" size="50" value="" /></p>
+            <p><label for="url">Url</label><br />
+            <input type="text" id="url" name="url" size="50" value="" /></p>
+            <p><label for="summary">Summary</label><br />
+            <textarea id="summary" name="summary" rows="6" cols="35"></textarea></p>
+            <div class="input_fields_wrap">
+               <button class="add_field_button">Add More Fields</button>
+              <div><input type="text" name="mytext[]"></div>
+           </div>
+             <p>
+                <input id="save" type="submit" value="Save Bookmark" />
+                <span id="status-display"></span>
+            </p>
+        </form>
+        </div>
+
+</div>
+    </body>
+</html>
