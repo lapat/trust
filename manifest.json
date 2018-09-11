@@ -10,11 +10,11 @@
     },
 
   "browser_action": {
-    "default_icon": "images/blue.png",
-    "default_popup": "popup.html"
+    "default_icon": "images/blue.png"
    
   },
   "permissions": [
+    "contextMenus",
     "activeTab",
     "https://ajax.googleapis.com/",
     "tabs",

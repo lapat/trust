@@ -1,8 +1,35 @@
+
+
+
 // On page load, refresh icon to match flag
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, updatedTab) {setIcon();});
 //chrome.browserAction.onClicked.addListener(function(tabId, changeInfo, updatedTab) {setIcon();});
 
 chrome.browserAction.onClicked.addListener(function () {getContent();});
+
+chrome.contextMenus.onClicked.addListener(onClickHandler);
+
+// Set up context menu tree at install time.
+chrome.runtime.onInstalled.addListener(function() {
+  // Create one test item for each context type.
+  var contexts = ["page","selection","link","editable","image","video",
+                  "audio"];
+  for (var i = 0; i < contexts.length; i++) {
+    var context = contexts[i];
+    var title = "Voting";
+    var id = chrome.contextMenus.create({"title": title, "contexts":[context],
+                                         "id": "context" + context});
+    console.log("'" + context + "' item:" + id);
+  }
+
+  // Create a parent item and two children.
+  chrome.contextMenus.create(
+      {"title": "Clap", "id":"clap"});
+  chrome.contextMenus.create(
+      {"title": "Report", "id": "report"});
+  console.log("parent child1 child2");
+
+});
 
 function setIcon(){
 	chrome.tabs.query({'active': true, 'currentWindow': true, 'lastFocusedWindow': true}, function (tabs) {
@@ -67,6 +94,34 @@ function getContent(){
 });
 
 }
+
+function onClickHandler(info, tab) {
+  if (info.menuItemId == "clap") {
+    newClap(tab.url);
+
+  } else if (info.menuItemId == "report") {
+    newReport(tab.url);    
+
+  } else {
+    // Random debugging crap
+    console.log("item " + info.menuItemId + " was clicked");
+    console.log("info: " + JSON.stringify(info));
+    console.log("tab: " + JSON.stringify(tab));
+
+  }
+};
+
+function newClap (url) {
+    console.log("clap clicked for " + url);
+
+}
+
+
+function newReport (url) {
+    console.log("report clicked for " + url);
+}
+
+
 
 
 
