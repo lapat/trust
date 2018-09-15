@@ -10,7 +10,7 @@ var sample_data = {
         },
         {
         "domain" : "www.breitbart.com", 
-        "urls" : [ "https://www.breitbart.com/big-government/2018/09/14/live-updates-hurricane-florence-makes-landfall-in-north-carolina/", "breaitbart.com/388.html" ]
+        "urls" : [ "www.breitbart.com/big-government/2018/09/14/live-updates-hurricane-florence-makes-landfall-in-north-carolina/", "breaitbart.com/388.html" ]
         }
        ],
     "flagged" :
@@ -71,17 +71,16 @@ function newFocusHandler (url) {
 }
 
 function setFlag (currentUrl) {
-    var rawUrl = currentUrl.split('?')[0] // remove get params
-    var sUrl = rawUrl.split("/")
-    var domain = sUrl[2]
-    console.log(sUrl, domain)
+    var rawUrl = getRawUrl(currentUrl) 
+    var domain = rawUrl.split("/")[0]
+    console.log(rawUrl, domain)
     var setflag = 0;
     var listings = sample_data;
 
-    console.log('checking verified URLs')
+    // console.log('checking verified URLs')
     for ( var i = 0; i < listings.verified.length; i ++ ) {
-        // console.log('checking domain ' + listings.verified[i])
-        // console.log('currentDomain is ' + domain)
+        console.log('checking domain ' + listings.verified[i])
+        console.log('currentDomain is ' + domain)
         if ( listings.verified[i] === domain ) {
             // if there's a match to a verified domain we stop here 
             console.log ('domain matches verified', listings.verified[i], domain)
@@ -152,6 +151,11 @@ function setIcon(flag){
         console.log("Set to grey");
     } 
 }
+
+function getRawUrl (rawUrl) {
+    var url =  (rawUrl.split('?')[0]).split('//')[1] // remove get params and remove protocol header
+    return url
+}   
 
 // function getContent(){
 // 	chrome.tabs.query({'active': true, 'currentWindow': true, 'lastFocusedWindow': true}, function (tabs) {
