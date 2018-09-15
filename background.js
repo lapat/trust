@@ -22,6 +22,10 @@ var sample_data = {
         {
         "domain" : "thisisbullshit.com", 
         "urls" : [ "thisisbullshit.com/14335.html", "thisisbullshit.com/1433443.h5ml" ]
+        },
+        {
+        "domain" : "stackoverflow.com", 
+        "urls" : [ "stackoverflow.com/questions/1979583/how-can-i-get-the-url-of-the-current-tab-from-a-google-chrome-extension" ]
         }
        ]
 }
@@ -92,7 +96,7 @@ function setFlag (currentUrl) {
     }
 
     if ( setflag === 0 ) {
-        console.log('no verified URLs found, checking for flagged domains')
+        console.log('no verified URLs found, checking for banned domains')
 
         for ( var i = 0; i < listings.banned.length; i ++ ) {
             if ( listings.banned[i].domain === domain ) {
@@ -101,7 +105,7 @@ function setFlag (currentUrl) {
                         if ( listings.banned[i].urls[u] === rawUrl ) {
                             // here we'll need to index through the urls to identify if this url is flagged or banned
                             
-                            console.log ('url matches banned', listings.verified[i], domain)
+                            console.log ('url matches banned', listings.banned[i], domain)
                             return setIcon('red')
                             setflag = 1;
                         }
@@ -113,6 +117,33 @@ function setFlag (currentUrl) {
             }
 
         }    
+
+
+        console.log('no banned URLs found, checking for flagged domains')
+
+        for ( var i = 0; i < listings.flagged.length; i ++ ) {
+
+            console.log ('checking domain', listings.flagged[i], domain)
+            if ( listings.flagged[i].domain === domain ) {
+                // here we'll need to index through the urls to identify if this url is flagged or banned
+                    for ( var u = 0; u < listings.flagged[i].urls.length; u ++ ) {
+                        if ( listings.flagged[i].urls[u] === rawUrl ) {
+                            // here we'll need to index through the urls to identify if this url is flagged or banned
+                            
+                            console.log ('url matches banned', listings.flagged[i].urls[u], rawUrl)
+                            return setIcon('yellow')
+                            setflag = 1;
+                        }
+
+                    } 
+                console.log ('domain has open flags but this URL didn\'t match a known banned site', listings.verified[i], rawUrl)
+                return setIcon('grey')
+                setflag = 1;
+            }
+
+        }   
+
+
         console.log('no matching records found - setting to grey')
         setIcon('grey')        
     }
