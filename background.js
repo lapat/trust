@@ -10,7 +10,7 @@ var sample_data = {
         },
         {
         "domain" : "www.breitbart.com", 
-        "urls" : [ "www.breitbart.com/big-government/2018/09/14/live-updates-hurricane-florence-makes-landfall-in-north-carolina/", "breaitbart.com/388.html" ]
+        "urls" : [ "www.breitbart.com/big-government/2018/09/14/donald-trump-jr-kimberly-guilfoyle-hit-campaign-trail-in-ohio-to-keep-state-red-in-2018/", "breaitbart.com/388.html" ]
         }
        ],
     "flagged" :

@@ -4,6 +4,8 @@ Current Feature List
 
 This chrome extension allows users to access the core network and easily see which content has been flagged as incorrect by experts while browsing online. 
 
+To install the extension, open `chrome://extensions/` in a chrome and then select 'load unpacked extension' to load the extension into your browser. This version just uses the 'sample data' set shown in background.js. Future versions will pull the data set down from the server to verify them.
+
 # Feature List
 ## Popup 
 Most of the popup functionality will be essentially buttons which open a new tab of the website for the user 
