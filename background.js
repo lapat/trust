@@ -10,7 +10,7 @@ var sample_data = {
         },
         {
         "domain" : "www.breitbart.com", 
-        "urls" : [ "breitbard.com/15333.html", "breaitbart.com/388.html" ]
+        "urls" : [ "https://www.breitbart.com/big-government/2018/09/14/live-updates-hurricane-florence-makes-landfall-in-north-carolina/", "breaitbart.com/388.html" ]
         }
        ],
     "flagged" :
@@ -28,28 +28,15 @@ var sample_data = {
 
 // On new page load, refresh icon to match flag
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, updatedTab) {
-    console.log('tab updated')
-    console.log(updatedTab.url)
-    newFocusHandler(updatedTab.url)
-
+    setFlag(updatedTab.url)
 });
 
 // On tab change, update icon
 chrome.tabs.onActivated.addListener(function(activeInfo) {
     chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
-        var url = tabs[0].url;
-        console.log(url)
-        newFocusHandler(url)
+        setFlag(tabs[0].url)
     });
 });
-
-function newFocusHandler (url) {
-
-    var pUrl = getFlag(url)
-    console.log(pUrl)
-    // setIcon(pUrl)
-
-}
 
 //chrome.browserAction.onClicked.addListener(function(tabId, changeInfo, updatedTab) {setIcon();});
 
@@ -79,7 +66,11 @@ function newFocusHandler (url) {
 
 // });
 
-function getFlag (currentUrl) {
+function newFocusHandler (url) {
+    var pUrl = setFlag(url)
+}
+
+function setFlag (currentUrl) {
     var rawUrl = currentUrl.split('?')[0] // remove get params
     var sUrl = rawUrl.split("/")
     var domain = sUrl[2]
@@ -89,8 +80,8 @@ function getFlag (currentUrl) {
 
     console.log('checking verified URLs')
     for ( var i = 0; i < listings.verified.length; i ++ ) {
-        console.log('checking domain ' + listings.verified[i])
-        console.log('currentDomain is ' + domain)
+        // console.log('checking domain ' + listings.verified[i])
+        // console.log('currentDomain is ' + domain)
         if ( listings.verified[i] === domain ) {
             // if there's a match to a verified domain we stop here 
             console.log ('domain matches verified', listings.verified[i], domain)
@@ -113,16 +104,18 @@ function getFlag (currentUrl) {
                             
                             console.log ('url matches banned', listings.verified[i], domain)
                             return setIcon('red')
-
+                            setflag = 1;
                         }
 
                     } 
-                console.log ('domain is flagged but this URL didn\'t match a known banned site', listings.verified[i], url)
+                console.log ('domain is flagged but this URL didn\'t match a known banned site', listings.verified[i], rawUrl)
                 return setIcon('yellow')
-
+                setflag = 1;
             }
 
         }    
+        console.log('no matching records found - setting to grey')
+        setIcon('grey')        
     }
 
 }
