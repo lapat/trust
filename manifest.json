@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
 
-  "name": "Blue Ribbon",
+  "name": "eTrust",
   "description": "Verify before you believe. Blue : Good, Yellow : Debate, Red : Bad, Grey : Untracked",
   "version": "1.0",
       "background": {
