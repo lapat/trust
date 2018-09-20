@@ -46,26 +46,27 @@ var sample_data = {
       var contexts = ["page","selection"];
       for (var i = 0; i < contexts.length; i++) {
         var context = contexts[i];
-        var title = "Page Actions";
+        var title = "Flag";
         var id = chrome.contextMenus.create({"title": title, "contexts":[context],
                                              "id": context});
       }
 
       // Create a parent item and two children.
       chrome.contextMenus.create(
-          {"title": "Clap", "id":"clap"});
-      chrome.contextMenus.create(
-          {"title": "Report", "id": "report"});
+          {"title": "GetInfo", "id":"getInfo"});
 
     });
 
     function onClickHandler(info, tab) {
-      console.log('info click caught')
-      if (info.menuItemId == "clap") {
-        newClap(tab.url);
+      // console.log('info click caught', info)
+      if (info.menuItemId == "page") {
+        newFlag(tab.url, info.selectionText);
 
-      } else if (info.menuItemId == "report") {
-        newReport(tab.url);    
+      } else if (info.menuItemId == "getInfo") {
+        getInfo(tab.url);
+
+      } else if (info.menuItemId == "selection") {
+        newFlag(tab.url, info.selectionText);
 
       } else {
         // Random debugging crap
@@ -76,15 +77,14 @@ var sample_data = {
       }
     };
 
-    function newClap (url) {
-        console.log("clap clicked for " + url);
+    function newFlag (url, text) {
+        console.log("newFlag clicked for " + url, "with text" + text);
 
     }
+    function getInfo (url) {
+        console.log("getInfo clicked for " + url);
 
-    function newReport (url) {
-        console.log("report clicked for " + url);
-    }
-
+    }    
 
 // 3. Icon Logic
 
