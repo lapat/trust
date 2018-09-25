@@ -40,16 +40,22 @@ var config = {
   storageBucket: "trust-f0fdc.appspot.com",
   messagingSenderId: "802077806931"
 };
-//if (!firebase.apps.length) {
-//  console.log("initializingApp")
-  firebase.initializeApp(config);
-//}
+
 
 // 1. Data storage setup
     // init task - runs when chrome is opened and not after
     chrome.runtime.onStartup.addListener(function () {
         console.log('chrome launched - syncing sample data')
         setData();
+        console.log("initializingApp")
+        firebase.initializeApp(config);
+
+    });
+    chrome.runtime.onInstalled.addListener(function(details){ 
+        console.log('chrome launched - syncing sample data')
+        setData();
+        console.log("initializingApp")
+        firebase.initializeApp(config);
     });
 
 // 2. Right click menu setup
@@ -233,6 +239,7 @@ var config = {
     }
 
     function setData () {
+        console.log('setdata ran')
         // insert api call to fetch flag data here
         chrome.storage.sync.set({data: sample_data}, function() {
               console.log('Data set is ' + sample_data);
