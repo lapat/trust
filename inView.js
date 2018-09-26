@@ -24,25 +24,29 @@ function addNewFlagForm (coordinates) {
 	var form = document.createElement('div')
 		form.style.width = "100px"
 		form.style.height = "100px"
-		form.style.background = "white"
+		form.style.background = "black"
 		form.innerHtml = "test"
 		form.style.display = "none"
-		form.id = Math.random().toString(16);
+		form.style.position = "relative"
+		// form.id = Math.random().toString(16);
+		form.id = "testFlagForm"
 
+	console.log( 'Appending new child form')
 	document.body.appendChild(form)
 	setElementPosition(form.id, coordinates)
 	showElement(form.id)
 }
 
-function setElementPosition (element, position) {
-	document.getElementById(element).style.top = position.y;
-	document.getElementById(element).style.left = position.x;
+function setElementPosition (id, position) {
+	console.log( 'setting element with id ' + id + " to position ", position )
+	document.getElementById( id ).style.top = position.clientY;
+	document.getElementById( id ).style.left = position.clientX;
 }
 
-function showElement(element) {
-    document.getElementById(element).style.display = "block";
+function showElement(id) {
+    document.getElementById(id).style.display = "block";
 }
 
-function hideElement(element) {
-    document.getElementById(element).style.display = "none";
+function hideElement(id) {
+    document.getElementById(id).style.display = "none";
 }
