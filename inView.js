@@ -27,7 +27,8 @@ function addNewFlagForm (coordinates) {
 		form.style.background = "black"
 		form.innerHtml = "test"
 		form.style.display = "none"
-		form.style.position = "relative"
+		form.style.position = "absolute"
+		form.style.zIndex = "10"
 		// form.id = Math.random().toString(16);
 		form.id = "testFlagForm"
 
@@ -39,8 +40,8 @@ function addNewFlagForm (coordinates) {
 
 function setElementPosition (id, position) {
 	console.log( 'setting element with id ' + id + " to position ", position )
-	document.getElementById( id ).style.top = position.clientY;
-	document.getElementById( id ).style.left = position.clientX;
+	document.getElementById( id ).style.top = position.clientY.toString() + "px";
+	document.getElementById( id ).style.left = position.clientX.toString() + "px";
 }
 
 function showElement(id) {
