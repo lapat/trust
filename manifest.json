@@ -25,6 +25,12 @@
     "http://*/*",
     "identity"
   ],
+  "content_scripts": [{
+    "matches": ["*://*/*","<all_urls>"],
+    "js": ["inView.js"],
+    "run_at": "document_end",
+    "all_frames": true
+    }],
   "content_security_policy" : "script-src 'self' https://www.gstatic.com/ https://*.firebaseio.com https://www.googleapis.com; object-src 'self'",
   "oauth2": {
     "client_id": "802077806931-h5n2kn7vq9c4sq9eogksir1348003pmr.apps.googleusercontent.com",

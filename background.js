@@ -30,6 +30,10 @@ var sample_data = {
        ]
 }
 
+if (!mousePoint) {
+    var mousePoint = {};
+}
+
 // Initialize Firebase
 
 var config = {
@@ -45,23 +49,35 @@ var config = {
 // 1. Data storage setup
     // init task - runs when chrome is opened and not after
     chrome.runtime.onStartup.addListener(function () {
-        console.log('chrome launched - syncing sample data')
-        setData();
-        console.log("initializingApp")
-        firebase.initializeApp(config);
-
+        runTimeTasks()
     });
     chrome.runtime.onInstalled.addListener(function(details){ 
-        console.log('chrome launched - syncing sample data')
-        setData();
-        console.log("initializingApp")
-        firebase.initializeApp(config);
+        runTimeTasks()
     });
 
+    function runTimeTasks () {
+        // console.log('chrome launched - syncing sample data')
+        setData();
+        // console.log("initializingApp")
+        firebase.initializeApp(config);     
+        configureContextMenus(); 
+        chrome.contextMenus.onClicked.addListener(onClickHandler); 
+    }
+
 // 2. Right click menu setup
+    chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
+        // console.log(msg, sender, sendResponse)
+
+        if (msg.from == 'rightclick') {
+            //storing position
+            mousePoint = msg.point;
+            console.log('mouse head at ', mousePoint)
+
+        }
+    })
+
     // Set up context menu tree at install time.
-    chrome.contextMenus.onClicked.addListener(onClickHandler);
-    chrome.runtime.onInstalled.addListener(function() {
+    function configureContextMenus() {
       // Create one test item for each context type.
       var contexts = ["page","selection"];
       for (var i = 0; i < contexts.length; i++) {
@@ -73,20 +89,22 @@ var config = {
 
       // Create a parent item and two children.
       chrome.contextMenus.create(
-          {"title": "GetInfo", "id":"getInfo"});
-
-    });
+            {"title": "GetInfo", "id":"getInfo"}
+          );
+      
+    }
 
     function onClickHandler(info, tab) {
       // console.log('info click caught', info)
+
       if (info.menuItemId == "page") {
-        newFlag(tab.url, info.selectionText);
+        newFlag(tab, info.selectionText);
 
       } else if (info.menuItemId == "getInfo") {
         getInfo(tab.url);
 
       } else if (info.menuItemId == "selection") {
-        newFlag(tab.url, info.selectionText);
+        newFlag(tab, info.selectionText);
 
       } else {
         // Random debugging crap
@@ -97,12 +115,41 @@ var config = {
       }
     };
 
-    function newFlag (url, text) {
-        console.log("newFlag clicked for " + url, "with text" + text);
+    function newFlag (tab, text) {
+
+        console.log("new flag triggered from ", tab," for " + tab.url, "with text " + text, "current point is ", mousePoint, "sending to tab " + tab.index, tab);
+        
+          var payload = {
+            "point" : mousePoint
+          }
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+          chrome.tabs.sendMessage(tabs[0].id, payload, function(response) {
+            // console.log(response);
+          });
+        });
 
     }
+
+    function sendFlag () {
+        var payload = {
+            "url":url,
+            "subject_id":"12345",
+            "description":text,
+            "source":"test.com",
+            "offense_type":"false information",
+            "selected_text":text
+        }
+
+        firebase.functions().httpsCallable('flag')(payload)
+            .then( function(result) {
+                console.log(result);
+            });
+
+    }
+
     function getInfo (url) {
-        console.log("getInfo clicked for " + url);
+        console.log("getInfo clicked for " + url, "mousePoint at ", mousePoint);
+
 
     }
 
@@ -242,7 +289,7 @@ var config = {
         console.log('setdata ran')
         // insert api call to fetch flag data here
         chrome.storage.sync.set({data: sample_data}, function() {
-              console.log('Data set is ' + sample_data);
+              // console.log('Data set is ' + sample_data);
         });
     }
 
