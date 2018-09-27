@@ -25,10 +25,9 @@ function addNewFlagForm (coordinates) {
 		form.style.width = "200px"
 		form.style.height = "200px"
 		form.style.background = "white"
-		form.style.borderWidth = "1px"
+		form.style.borderWidth = "0.5px"
 		form.style.border = "solid black"
 		form.style.color = "black"
-		form.innerHtml = "test"
 		form.style.display = "none"
 		form.style.position = "absolute"
 		form.style.zIndex = "10"
@@ -37,8 +36,28 @@ function addNewFlagForm (coordinates) {
 
 	console.log( 'Appending new child form')
 	document.body.appendChild(form)
+	appendFormContents(form.id, "flag")
 	setElementPosition(form.id, coordinates)
 	showElement(form.id)
+}
+
+function appendFormContents (id, type) {
+	if ( type === "flag" ) {
+		
+		var flag = document.createElement('div')	
+			flag.style.color = "black"
+			flag.innerHTML = "<p>Flag!</p>"
+		document.getElementById( id ).appendChild(flag)
+
+	} else {
+
+		var errorMessage = document.createElement('div')	
+			errorMessage.style.color = "red"
+			errorMessage.innerHTML = "Failed to find popover type"
+		document.getElementById( id ).appendChild(errorMessage)
+
+	}
+
 }
 
 function setElementPosition (id, position) {
