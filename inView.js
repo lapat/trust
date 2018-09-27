@@ -22,9 +22,12 @@ chrome.runtime.onMessage.addListener( function(request, sender, sendResponse) {
 function addNewFlagForm (coordinates) {
 	console.log('newFlagForm triggered')
 	var form = document.createElement('div')
-		form.style.width = "100px"
-		form.style.height = "100px"
-		form.style.background = "black"
+		form.style.width = "200px"
+		form.style.height = "200px"
+		form.style.background = "white"
+		form.style.borderWidth = "1px"
+		form.style.border = "solid black"
+		form.style.color = "black"
 		form.innerHtml = "test"
 		form.style.display = "none"
 		form.style.position = "absolute"
