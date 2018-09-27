@@ -4,7 +4,7 @@ document.addEventListener('mousedown', function (mousePos) {
 	console.log('click on ', mousePos, "button", mousePos.button)
 
     if (mousePos.button == 2) {
-        var p = {clientX: mousePos.clientX, clientY: mousePos.clientY};
+        var p = {clientX: mousePos.pageX, clientY: mousePos.pageY};
         var msg = {text: 'example', point: p, from: 'rightclick'};
         console.log('msg ', msg)
         chrome.runtime.sendMessage(msg, function(response) {
