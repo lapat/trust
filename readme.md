@@ -1,3 +1,10 @@
+###Outstanding Bugs:
+
+- [ ] fix popover form css so that it's consistant no matter what the site css looks like
+- [ ] add 'anchoring' point to the payload / flag db so that we know where to put the flag when the user loads the page
+- [ ] update the 'getInfo' call to include the flag placement information
+- [ ] add other popover forms for different things 
+
 Current Feature List
 
 # eTrust (Working Title) Chrome Extension:
