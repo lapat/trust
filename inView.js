@@ -21,44 +21,76 @@ chrome.runtime.onMessage.addListener( function(request, sender, sendResponse) {
 
 function addNewFlagForm (coordinates) {
 	console.log('newFlagForm triggered')
-	var form = document.createElement('div')
-		form.style.width = "200px"
-		form.style.height = "200px"
-		form.style.background = "white"
-		form.style.borderWidth = "0.5px"
-		form.style.border = "solid black"
-		form.style.color = "black"
-		form.style.display = "none"
-		form.style.position = "absolute"
-		form.style.zIndex = "10"
+	var box = document.createElement('div')
+		box.style.width = "200px"
+		box.style.height = "200px"
+		box.style.background = "white"
+		box.style.borderWidth = "0.5px"
+		box.style.border = "solid black"
+		box.style.color = "black"
+		box.style.display = "none"
+		box.style.position = "absolute"
+		box.style.zIndex = "10"
 		// form.id = Math.random().toString(16);
-		form.id = "testFlagForm"
+		box.id = "testFlagForm"
+
+	var form = document.createElement('div')	
+		form.style.color = "black"
+
+	var header = document.createElement('h1')
+		header.innerHTML = "New Flag:"
+		form.appendChild(header)
+
+	var selectedText = document.createElement('input')
+		selectedText.type = "text"
+		form.appendChild(selectedText)
+
+	var subject = document.createElement('select')
+		subject.id = "subjectSelect"
+
+	var subjectOptions = ["Medical","General Science","History"]
+
+		//Create and append the options
+		for (var i = 0; i < subjectOptions.length; i++) {
+		    var option = document.createElement("option");
+		    option.value = subjectOptions[i];
+		    option.text = subjectOptions[i];
+		    subject.appendChild(option);
+		}
+		form.appendChild(subject)
+
+	var submit = document.createElement('button')
+		submit.onclick = "submitBreadCrumbsFlagForm()"
+		form.appendChild(submit)
 
 	console.log( 'Appending new child form')
-	document.body.appendChild(form)
-	appendFormContents(form.id, "flag")
-	setElementPosition(form.id, coordinates)
-	showElement(form.id)
+
+	box.appendChild(form)
+	document.body.appendChild(box)
+	// appendFormContents(form.id, "flag")
+	setElementPosition(box.id, coordinates)
+	showElement(box.id)
 }
 
-function appendFormContents (id, type) {
-	if ( type === "flag" ) {
+function submitBreadCrumbsFlagForm () {
+	console.log('submitted!')
+}
+
+// function appendFormContents (id, type) {
+// 	if ( type === "flag" ) {
 		
-		var flag = document.createElement('div')	
-			flag.style.color = "black"
-			flag.innerHTML = "<p>Flag!</p>"
-		document.getElementById( id ).appendChild(flag)
 
-	} else {
 
-		var errorMessage = document.createElement('div')	
-			errorMessage.style.color = "red"
-			errorMessage.innerHTML = "Failed to find popover type"
-		document.getElementById( id ).appendChild(errorMessage)
+// 	} else {
 
-	}
+// 		var errorMessage = document.createElement('div')	
+// 			errorMessage.style.color = "red"
+// 			errorMessage.innerHTML = "Failed to find popover type"
+// 		document.getElementById( id ).appendChild(errorMessage)
 
-}
+// 	}
+
+// }
 
 function setElementPosition (id, position) {
 	console.log( 'setting element with id ' + id + " to position ", position )
