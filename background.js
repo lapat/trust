@@ -79,26 +79,25 @@ var config = {
 
             console.log('new Flag submit received')
 
-            payload = msg.payload;
+            var payload = msg.payload;
 
+            chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+                
+                payload.url = tabs[0].url
+                console.log(payload)
+                callAPIForNewFlag(payload)
 
-            payload.url = returnCurrentUrl()
-
-            console.log(payload)
-
-            firebase.functions().httpsCallable('flag')(payload)
-                .then( function(result) {
-                    console.log(result);
-                });
+            });
 
         }
 
     })
 
-    function returnCurrentUrl() {
-        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-            return tabs[0].url
-        });
+    function callAPIForNewFlag (payload) {
+        firebase.functions().httpsCallable('flag')(payload)
+            .then( function(result) {
+                console.log(result);
+            });
     }
 
     // Set up context menu tree at install time.
