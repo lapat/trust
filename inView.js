@@ -15,11 +15,11 @@ document.addEventListener('mousedown', function (mousePos) {
 
 chrome.runtime.onMessage.addListener( function(request, sender, sendResponse) {
 	console.log('message received')
-    addNewFlagForm (request.point)
+    addNewFlagForm (request.point, request.selectedText)
   }
 );
 
-function addNewFlagForm (coordinates) {
+function addNewFlagForm (coordinates, selectedText) {
 	console.log('newFlagForm triggered')
 	var box = document.createElement('div')
 		box.style.width = "200px"
@@ -37,13 +37,22 @@ function addNewFlagForm (coordinates) {
 	var form = document.createElement('div')	
 		form.style.color = "black"
 
-	var header = document.createElement('h1')
+	var header = document.createElement('h3')
 		header.innerHTML = "New Flag:"
 		form.appendChild(header)
 
-	var selectedText = document.createElement('input')
-		selectedText.type = "text"
-		form.appendChild(selectedText)
+	var selectedTextInput = document.createElement('input')
+		selectedTextInput.type = "textarea"
+		if (selectedText != "undefined") {
+			selectedTextInput.value = selectedText
+		}
+		selectedTextInput.placeholder = "Enter the offending text here"
+		form.appendChild(selectedTextInput)
+
+	var sourceUrl = document.createElement('input')
+		sourceUrl.type = "textarea"
+		sourceUrl.placeholder = "Enter a citation url to expedite approval"
+		form.appendChild(sourceUrl)	
 
 	var subject = document.createElement('select')
 		subject.id = "subjectSelect"
@@ -52,15 +61,17 @@ function addNewFlagForm (coordinates) {
 
 		//Create and append the options
 		for (var i = 0; i < subjectOptions.length; i++) {
-		    var option = document.createElement("option");
-		    option.value = subjectOptions[i];
-		    option.text = subjectOptions[i];
-		    subject.appendChild(option);
+		    var option = document.createElement("option")
+		    option.value = subjectOptions[i]
+		    option.text = subjectOptions[i]
+		    subject.appendChild(option)
 		}
 		form.appendChild(subject)
 
 	var submit = document.createElement('button')
 		submit.onclick = "submitBreadCrumbsFlagForm()"
+		submit.innerHTML = "Submit Flag"
+		form.appendChild(document.createElement("br"))
 		form.appendChild(submit)
 
 	console.log( 'Appending new child form')
