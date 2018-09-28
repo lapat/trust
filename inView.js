@@ -43,6 +43,7 @@ function addNewFlagForm (coordinates, selectedText) {
 
 	var selectedTextInput = document.createElement('input')
 		selectedTextInput.type = "textarea"
+		selectedTextInput.id = "BC_nf_selectedText"
 		if (selectedText != "undefined") {
 			selectedTextInput.value = selectedText
 		}
@@ -51,11 +52,26 @@ function addNewFlagForm (coordinates, selectedText) {
 
 	var sourceUrl = document.createElement('input')
 		sourceUrl.type = "textarea"
+		sourceUrl.id = "BC_nf_sourceUrl"
 		sourceUrl.placeholder = "Enter a citation url to expedite approval"
 		form.appendChild(sourceUrl)	
 
+	var offense = document.createElement('select')
+		offense.id = "BC_nf_offenseSelect"
+
+	var offenseOptions = ["Slander","Fraud / Misleading","Offensive"]
+
+		//Create and append the options
+		for (var i = 0; i < offenseOptions.length; i++) {
+		    var option = document.createElement("option")
+		    option.value = offenseOptions[i]
+		    option.text = offenseOptions[i]
+		    offense.appendChild(option)
+		}
+		form.appendChild(offense)
+
 	var subject = document.createElement('select')
-		subject.id = "subjectSelect"
+		subject.id = "BC_nf_subjectSelect"
 
 	var subjectOptions = ["Medical","General Science","History"]
 
@@ -68,23 +84,51 @@ function addNewFlagForm (coordinates, selectedText) {
 		}
 		form.appendChild(subject)
 
+	var descriptionTextInput = document.createElement('input')
+		descriptionTextInput.type = "textarea"
+		descriptionTextInput.id = "BC_nf_description"
+		descriptionTextInput.placeholder = "Leave a comment (optional)"
+		form.appendChild(descriptionTextInput)
+
 	var submit = document.createElement('button')
-		submit.onclick = "submitBreadCrumbsFlagForm()"
+		submit.id = "BC_nf_submitNewFlagForm"
 		submit.innerHTML = "Submit Flag"
+		submit.onclick = BC_submitNewFlagForm
 		form.appendChild(document.createElement("br"))
 		form.appendChild(submit)
 
 	console.log( 'Appending new child form')
 
+	// Append the Box
 	box.appendChild(form)
 	document.body.appendChild(box)
+
+	// Add onclick listeners to the box
+	console.log(document.getElementById('BC_submitNewFlagForm'))
+
 	// appendFormContents(form.id, "flag")
 	setElementPosition(box.id, coordinates)
 	showElement(box.id)
 }
 
-function submitBreadCrumbsFlagForm () {
+function BC_submitNewFlagForm () {
+	alert('Thanks!')
 	console.log('submitted!')
+
+	var payload = {
+		"source":document.getElementById("BC_nf_sourceUrl").value,
+		"offense_type":document.getElementById("BC_nf_offenseSelect").value,
+		"selected_text":document.getElementById("BC_nf_selectedText").value,
+		"description":document.getElementById("BC_nf_description").value,
+		"subject":document.getElementById("BC_nf_subjectSelect").value
+	}
+
+    var msg = {payload: payload, from: 'newFlag'};
+    console.log('msg ', msg)
+    chrome.runtime.sendMessage(msg, function(response) {
+    	// console.log(response)
+    });
+
 }
 
 // function appendFormContents (id, type) {

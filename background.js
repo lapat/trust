@@ -74,7 +74,32 @@ var config = {
             console.log('mouse head at ', mousePoint)
 
         }
+
+        if ( msg.from == 'newFlag' ) {
+
+            console.log('new Flag submit received')
+
+            payload = msg.payload;
+
+
+            payload.url = returnCurrentUrl()
+
+            console.log(payload)
+
+            firebase.functions().httpsCallable('flag')(payload)
+                .then( function(result) {
+                    console.log(result);
+                });
+
+        }
+
     })
+
+    function returnCurrentUrl() {
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+            return tabs[0].url
+        });
+    }
 
     // Set up context menu tree at install time.
     function configureContextMenus() {
