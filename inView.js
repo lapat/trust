@@ -115,12 +115,14 @@ function BC_submitNewFlagForm () {
 	alert('Thanks!')
 	console.log('submitted!')
 
+	// temporarily hardcoding subject_id to 1 to avoid bugs
 	var payload = {
 		"source":document.getElementById("BC_nf_sourceUrl").value,
 		"offense_type":document.getElementById("BC_nf_offenseSelect").value,
 		"selected_text":document.getElementById("BC_nf_selectedText").value,
 		"description":document.getElementById("BC_nf_description").value,
-		"subject":document.getElementById("BC_nf_subjectSelect").value
+		"subject":document.getElementById("BC_nf_subjectSelect").value,
+		"subject_id":"1"
 	}
 
     var msg = {payload: payload, from: 'newFlag'};
