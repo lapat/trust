@@ -39,10 +39,22 @@ function addNewFlagForm (coordinates, selectedText) {
 		form.className = "bc_form"	
 		form.style.color = "black"
 
+	var headerDiv = document.createElement('div')
+		headerDiv.className = "bc_header"
+
 	var header = document.createElement('h3')
 		header.className = "bc_header"
 		header.innerHTML = "New Flag:"
-		form.appendChild(header)
+		headerDiv.appendChild(header)
+
+	var cancel = document.createElement('button')
+		cancel.className = "bc_header cancel"
+		cancel.innerHTML = "X"
+		cancel.onclick = function() { BC_hideElement ("testFlagForm") }
+		headerDiv.appendChild(cancel)
+
+		form.appendChild(headerDiv)
+
 
 	var selectedTextInput = document.createElement('textarea')
 		selectedTextInput.className = "bc_input"
@@ -166,6 +178,8 @@ function showElement(id) {
     document.getElementById(id).style.display = "block";
 }
 
-function hideElement(id) {
-    document.getElementById(id).style.display = "none";
+function BC_hideElement(id) {
+    var element = document.getElementById(id)
+    	element.style.display = "none";
+	    element.parentNode.removeChild(id);
 }

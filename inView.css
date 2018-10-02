@@ -15,10 +15,11 @@
     border: none;
     box-shadow: 1px 1px 5px 5px #8e8e8e3d;
 }
+
 h3.bc_header {
     font-weight: bold;
-    width: 100% !important;
-    border-bottom: solid 1px grey;
+    width: 80% !important;
+    display: inline-block;
     padding: 0.25em;
     margin-bottom: 0;
 }
@@ -27,7 +28,10 @@ h3.bc_header {
     margin-left: 1% !important;
     margin-top: 5px !important;
 }
-
+button.bc_header.cancel {
+    display: inline-block;
+    float: right;
+}
 .bc_input.submit {
     color: #FFF;
     background-color: #0095ff;
