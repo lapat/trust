@@ -22,27 +22,30 @@ chrome.runtime.onMessage.addListener( function(request, sender, sendResponse) {
 function addNewFlagForm (coordinates, selectedText) {
 	console.log('newFlagForm triggered')
 	var box = document.createElement('div')
-		box.style.width = "200px"
-		box.style.height = "200px"
-		box.style.background = "white"
-		box.style.borderWidth = "0.5px"
-		box.style.border = "solid black"
-		box.style.color = "black"
-		box.style.display = "none"
-		box.style.position = "absolute"
-		box.style.zIndex = "10"
+		// box.style.width = "200px"
+		// box.style.height = "200px"
+		// box.style.background = "white"
+		// box.style.borderWidth = "0.5px"
+		// box.style.border = "solid black"
+		// box.style.color = "black"
+		// box.style.display = "none"
+		// box.style.position = "absolute"
+		// box.style.zIndex = "10"
+		box.className = "bc_box"
 		// form.id = Math.random().toString(16);
 		box.id = "testFlagForm"
 
-	var form = document.createElement('div')	
+	var form = document.createElement('div')
+		form.className = "bc_form"	
 		form.style.color = "black"
 
 	var header = document.createElement('h3')
+		header.className = "bc_header"
 		header.innerHTML = "New Flag:"
 		form.appendChild(header)
 
-	var selectedTextInput = document.createElement('input')
-		selectedTextInput.type = "textarea"
+	var selectedTextInput = document.createElement('textarea')
+		selectedTextInput.className = "bc_input"
 		selectedTextInput.id = "BC_nf_selectedText"
 		if (selectedText != "undefined") {
 			selectedTextInput.value = selectedText
@@ -51,12 +54,14 @@ function addNewFlagForm (coordinates, selectedText) {
 		form.appendChild(selectedTextInput)
 
 	var sourceUrl = document.createElement('input')
-		sourceUrl.type = "textarea"
+		sourceUrl.type = "text"
 		sourceUrl.id = "BC_nf_sourceUrl"
+		sourceUrl.className = "bc_input"
 		sourceUrl.placeholder = "Enter a citation url to expedite approval"
 		form.appendChild(sourceUrl)	
 
 	var offense = document.createElement('select')
+		offense.className = "bc_input offense"
 		offense.id = "BC_nf_offenseSelect"
 
 	var offenseOptions = ["Slander","Fraud / Misleading","Offensive"]
@@ -71,6 +76,7 @@ function addNewFlagForm (coordinates, selectedText) {
 		form.appendChild(offense)
 
 	var subject = document.createElement('select')
+		subject.className = "bc_input subject"
 		subject.id = "BC_nf_subjectSelect"
 
 	var subjectOptions = ["Medical","General Science","History"]
@@ -84,14 +90,15 @@ function addNewFlagForm (coordinates, selectedText) {
 		}
 		form.appendChild(subject)
 
-	var descriptionTextInput = document.createElement('input')
-		descriptionTextInput.type = "textarea"
+	var descriptionTextInput = document.createElement('textarea')
+		descriptionTextInput.className = "bc_input bc_description"
 		descriptionTextInput.id = "BC_nf_description"
 		descriptionTextInput.placeholder = "Leave a comment (optional)"
 		form.appendChild(descriptionTextInput)
 
 	var submit = document.createElement('button')
 		submit.id = "BC_nf_submitNewFlagForm"
+		submit.className = "bc_input submit"
 		submit.innerHTML = "Submit Flag"
 		submit.onclick = BC_submitNewFlagForm
 		form.appendChild(document.createElement("br"))
