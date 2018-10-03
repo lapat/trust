@@ -14,7 +14,7 @@ document.addEventListener('mousedown', function (mousePos) {
 })
 
 chrome.runtime.onMessage.addListener( function(request, sender, sendResponse) {
-	console.log('message received')
+	console.log('message received', request)
     addNewFlagForm (request.point, request.selectedText)
   }
 );
@@ -181,5 +181,5 @@ function showElement(id) {
 function BC_hideElement(id) {
     var element = document.getElementById(id)
     	element.style.display = "none";
-	    element.parentNode.removeChild(id);
+	    element.parentNode.removeChild(document.getElementById(id));
 }
