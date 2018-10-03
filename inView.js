@@ -1,7 +1,7 @@
 'use strict';
 //when mouse up, send message to background.js with this position
 document.addEventListener('mousedown', function (mousePos) {
-	console.log('click on ', mousePos, "button", mousePos.button)
+	console.log('click on ', mousePos, "button", mousePos.button, "event", event.target)
 
     if (mousePos.button == 2) {
         var p = {clientX: mousePos.pageX, clientY: mousePos.pageY};
@@ -18,6 +18,8 @@ chrome.runtime.onMessage.addListener( function(request, sender, sendResponse) {
     addNewFlagForm (request.point, request.selectedText)
   }
 );
+
+
 
 function addNewFlagForm (coordinates, selectedText) {
 	console.log('newFlagForm triggered')
