@@ -13,7 +13,8 @@ var sample_flag = {
 	time : 1538450438135,
 	url : "https://en.wikipedia.org/wiki/Main_Page",
 	user_id : "TFSbNu466jgeIefYxTyH1ADW8ol2",
-	user_name : "Alex Morris"
+	user_name : "Alex Morris",
+	divId : ""
 }
 
 //when mouse up, send message to background.js with this position

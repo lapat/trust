@@ -22,7 +22,7 @@ var sample_data = {
             "url":"www.breitbart.com/big-government/2018/09/14/donald-trump-jr-kimberly-guilfoyle-hit-campaign-trail-in-ohio-to-keep-state-red-in-2018/", 
             "flags" : ["abc123, abc124"]
             },{
-            "url":"breaitbart.com/388.html",
+            "url":"https://www.breitbart.com/big-government/2018/10/06/kavanaugh-confirmed-possibly-most-conservative-supreme-court-since-1934/",
             "flags" : ["abc123, abc124"]             
             }]
         }
@@ -103,7 +103,7 @@ var config = {
         setData();
         // console.log("initializingApp")
         firebase.initializeApp(config);     
-        configureContextMenus();  m
+        configureContextMenus();  
         chrome.contextMenus.onClicked.addListener(onClickHandler); 
     }
 
@@ -253,7 +253,9 @@ var config = {
         var domain = rawUrl.split("/")[0]
         // console.log(rawUrl, domain)
         var setflag = 0;
+
         getData( function(listings) {
+            console.log('checking against data ', listings)
             // console.log('checking verified URLs')
             for ( var i = 0; i < listings.verified.length; i ++ ) {
                 // console.log('checking domain ' + listings.verified[i])
@@ -285,7 +287,7 @@ var config = {
                                 }
 
                             }
-                        // console.log ('domain is flagged but this URL didn\'t match a known banned site', listings.verified[i], rawUrl)
+                        console.log ('domain is flagged but this URL didn\'t match a known banned site', listings.verified[i], rawUrl)
                         return setIcon('yellow')
                         setflag = 1;
                     }
@@ -304,7 +306,7 @@ var config = {
                                 if ( listings.flagged[i].urls[u] === rawUrl ) {
                                     // here we'll need to index through the urls to identify if this url is flagged or banned
 
-                                    // console.log ('url matches banned', listings.flagged[i].urls[u], rawUrl)
+                                    console.log ('url matches banned', listings.flagged[i].urls[u], rawUrl)
                                     return setIcon('yellow')
                                     setflag = 1;
                                 }
@@ -344,7 +346,7 @@ var config = {
         //     return null
         // }
 
-        // console.log('flag is ' + flag)
+        console.log('flag is ' + flag)
         if(flag==="blue"){
             chrome.browserAction.setIcon({
                 path: "images/blue.png"
