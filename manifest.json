@@ -22,7 +22,7 @@
     "contentSettings",
     "cookies",
     "geolocation",
-    "http://*/*",
+    "*://*/*",
     "identity"
   ],
   "content_scripts": [{

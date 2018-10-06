@@ -6,28 +6,71 @@ var sample_data = {
        [
         {
         "domain" : "coinflashapp.com",
-        "urls" : [ "coinflashapp.com/124.html", "coinflashapp.com/1583.html" ]
+        "urls" : 
+            [{
+            "url":"coinflashapp.com/verified.html", 
+            "flags" : []
+            },{
+            "url":"coinflashapp.com/verified2.html",
+            "flags" : []             
+            }]
         },
         {
         "domain" : "www.breitbart.com",
-        "urls" : [ "www.breitbart.com/big-government/2018/09/14/donald-trump-jr-kimberly-guilfoyle-hit-campaign-trail-in-ohio-to-keep-state-red-in-2018/", "breaitbart.com/388.html" ]
+        "urls" : 
+            [{
+            "url":"www.breitbart.com/big-government/2018/09/14/donald-trump-jr-kimberly-guilfoyle-hit-campaign-trail-in-ohio-to-keep-state-red-in-2018/", 
+            "flags" : ["abc123, abc124"]
+            },{
+            "url":"breaitbart.com/388.html",
+            "flags" : ["abc123, abc124"]             
+            }]
         }
        ],
     "flagged" :
        [
         {
         "domain" : "dirkdiggler.com",
-        "urls" : [ "dirkdiggler.com/145.html", "dirkdiggler.com/14443.h5ml" ]
+        "urls" :  
+            [{
+            "url":"dirkdiggler.com/big-government/2018/09/14/donald-trump-jr-kimberly-guilfoyle-hit-campaign-trail-in-ohio-to-keep-state-red-in-2018/", 
+            "flags" : ["abc1238172, abc1247318"]
+            },{
+            "url":"dirkdiggler.com/38822.html",
+            "flags" : ["abc1239182, abc12498128"]             
+            }]
         },
         {
         "domain" : "thisisbullshit.com",
-        "urls" : [ "thisisbullshit.com/14335.html", "thisisbullshit.com/1433443.h5ml" ]
+        "urls" :  
+            [{
+            "url":"thisisbullshit.com/big-government/2018/09/14/donald-trump-jr-kimberly-guilfoyle-hit-campaign-trail-in-ohio-to-keep-state-red-in-2018/", 
+            "flags" : ["abc1238172, abc1247318"]
+            },{
+            "url":"thisisbullshit.com/38822.html",
+            "flags" : ["abc1239182, abc12498128"]             
+            }]
         },
         {
         "domain" : "stackoverflow.com",
-        "urls" : [ "stackoverflow.com/questions/1979583/how-can-i-get-the-url-of-the-current-tab-from-a-google-chrome-extension" ]
+        "urls" : 
+            [{
+            "url":"stackoverflow.com/someUrl.html", 
+            "flags" : ["abc1238172, abc1247318"]
+            },{
+            "url":"stackoverflow.com/someUrl2.html",
+            "flags" : ["abc1239182, abc12498128"]             
+            }]
         }
        ]
+}
+
+var sample_flags = {
+    "flags" : [{
+        "id" : "123b18291223",
+        "parentNode" : "mp-left",
+        "selectedText" : "hysteria is the key to destruction"
+    }]
 }
 
 if (!mousePoint) {
@@ -60,7 +103,7 @@ var config = {
         setData();
         // console.log("initializingApp")
         firebase.initializeApp(config);     
-        configureContextMenus(); 
+        configureContextMenus();  m
         chrome.contextMenus.onClicked.addListener(onClickHandler); 
     }
 
@@ -90,6 +133,14 @@ var config = {
             });
 
         }
+
+        if (msg.from == 'getFlags') {
+            //storing position
+            console.log('received getflags ', msg)
+            sendResponse = sample_flags
+            return sendResponse
+
+        }        
 
     })
 
@@ -197,6 +248,7 @@ var config = {
     }
 
     function setFlag (currentUrl) {
+        console.log('setFlag ran with url ', currentUrl)
         var rawUrl = getRawUrl(currentUrl)
         var domain = rawUrl.split("/")[0]
         // console.log(rawUrl, domain)
@@ -228,6 +280,7 @@ var config = {
 
                                     // console.log ('url matches banned', listings.banned[i], domain)
                                     return setIcon('red')
+
                                     setflag = 1;
                                 }
 
@@ -272,6 +325,19 @@ var config = {
 
     }
 
+    function setViewData (data) {
+
+        var payload = {
+            data : data
+        }
+
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+          chrome.tabs.sendMessage(tabs[0].id, payload, function(response) {
+            // console.log(response);
+          });
+        });
+    }
+
     function setIcon(flag){
 
         // if ( flag === "undefined" ) {
@@ -313,6 +379,8 @@ var config = {
     function setData () {
         console.log('setdata ran')
         // insert api call to fetch flag data here
+
+
         chrome.storage.sync.set({data: sample_data}, function() {
               // console.log('Data set is ' + sample_data);
         });
@@ -320,6 +388,7 @@ var config = {
 
     function getData (cb) {
         chrome.storage.sync.get(['data'], function(result) {
+            console.log("data loaded", result.data)
             cb (result.data)
         });
     }

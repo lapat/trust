@@ -1,11 +1,30 @@
 'use strict';
-//when mouse up, send message to background.js with this position
-document.addEventListener('mousedown', function (mousePos) {
-	console.log('click on ', mousePos, "button", mousePos.button, "event", event.target)
 
-    if (mousePos.button == 2) {
-        var p = {clientX: mousePos.pageX, clientY: mousePos.pageY};
-        var msg = {text: 'example', point: p, from: 'rightclick'};
+var sample_flag = {
+	description : "test",
+	history : [],
+	id : "12AJhEHjabEHd0hYzfv7", 
+	offense : "Slander",
+	source : "test.com",
+	status : "FLAG PENDING",
+	subject : "medical", 
+	subject_id : "1",
+	text_selected : "state of Washington, established October 2, 1968. Covering more than 500,000 acres (200,000 ha), it features the rugged mountain peaks of the North Cascades Range, the most", 
+	time : 1538450438135,
+	url : "https://en.wikipedia.org/wiki/Main_Page",
+	user_id : "TFSbNu466jgeIefYxTyH1ADW8ol2",
+	user_name : "Alex Morris"
+}
+
+//when mouse up, send message to background.js with this position
+document.addEventListener('mousedown', function (event, mousePos) {
+	console.log(event)
+	var divId = getClosestDiv(event.path)
+	console.log('click on ', event, "button", event.button, "event", event, divId)
+
+    if (event.button == 2) {
+        var p = {clientX: event.pageX, clientY: event.pageY};
+        var msg = {text: 'example', point: p, from: 'rightclick', parentNode: divId };
         console.log('msg ', msg)
         chrome.runtime.sendMessage(msg, function(response) {
         	// console.log(response)
@@ -20,6 +39,13 @@ chrome.runtime.onMessage.addListener( function(request, sender, sendResponse) {
 );
 
 
+
+function getClosestDiv (path) {
+	for ( var i = 0; i < path.length; i++ ) {
+		if ( path[i].id != "" ) return path[i].id
+	}
+
+}
 
 function addNewFlagForm (coordinates, selectedText) {
 	console.log('newFlagForm triggered')
