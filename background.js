@@ -22,7 +22,7 @@ var sample_data = {
             "url":"www.breitbart.com/big-government/2018/09/14/donald-trump-jr-kimberly-guilfoyle-hit-campaign-trail-in-ohio-to-keep-state-red-in-2018/", 
             "flags" : ["abc123, abc124"]
             },{
-            "url":"https://www.breitbart.com/big-government/2018/10/06/kavanaugh-confirmed-possibly-most-conservative-supreme-court-since-1934/",
+            "url":"www.breitbart.com/big-government/2018/10/06/kavanaugh-confirmed-possibly-most-conservative-supreme-court-since-1934/",
             "flags" : ["abc123, abc124"]             
             }]
         }
@@ -277,11 +277,11 @@ var config = {
                     if ( listings.banned[i].domain === domain ) {
                         // here we'll need to index through the urls to identify if this url is flagged or banned
                             for ( var u = 0; u < listings.banned[i].urls.length; u ++ ) {
-                                if ( listings.banned[i].urls[u] === rawUrl ) {
+                                if ( listings.banned[i].urls[u].url === rawUrl ) {
                                     // here we'll need to index through the urls to identify if this url is flagged or banned
 
                                     // console.log ('url matches banned', listings.banned[i], domain)
-                                    return setIcon('red')
+                                    return setIcon('red', listings.banned[i].urls[u].flags.length)
 
                                     setflag = 1;
                                 }
@@ -303,11 +303,11 @@ var config = {
                     if ( listings.flagged[i].domain === domain ) {
                         // here we'll need to index through the urls to identify if this url is flagged or banned
                             for ( var u = 0; u < listings.flagged[i].urls.length; u ++ ) {
-                                if ( listings.flagged[i].urls[u] === rawUrl ) {
+                                if ( listings.flagged[i].urls[u].url === rawUrl ) {
                                     // here we'll need to index through the urls to identify if this url is flagged or banned
 
                                     console.log ('url matches banned', listings.flagged[i].urls[u], rawUrl)
-                                    return setIcon('yellow')
+                                    return setIcon('yellow', listings.flagged[i].urls[u].flags.length)
                                     setflag = 1;
                                 }
 
@@ -340,13 +340,22 @@ var config = {
         });
     }
 
-    function setIcon(flag){
+    function setIcon(flag, count){
 
-        // if ( flag === "undefined" ) {
-        //     return null
-        // }
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 
-        console.log('flag is ' + flag)
+            console.log('flag is ' + flag, 'count is ' + count)
+            if ( typeof count !== "undefined" ) {
+                chrome.browserAction.setBadgeText({text: count.toString(), tabId: tabs[0].id });
+                chrome.browserAction.setBadgeBackgroundColor({ color: [105, 105, 105, 105], tabId: tabs[0].id });
+            } else {
+                // chrome.browserAction.setBadgeText();
+                console.log('badge should unset')
+            
+            }
+
+        });
+
         if(flag==="blue"){
             chrome.browserAction.setIcon({
                 path: "images/blue.png"
