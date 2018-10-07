@@ -33,18 +33,19 @@ document.addEventListener('mousedown', function (event, mousePos) {
     }
 })
 
-// // on final load, initiate onpage flag setup
-// document.addEventListener('load', function () {
-	
-// 	var msg = {
-// 		from : "onload"
-// 	}
+// on final load, initiate onpage flag setup
+document.body.onload = function () {
+	console.log('onload ran')
+	getData(function (data) {
+		// console.log("data", data)
+		var links = getAllLinks()
+		// console.log(links)
+		for ( var l = 0; l < links.length; l++ ) {
+			setUrlStatus(links[l], data)
+		}
+	})
 
-//     chrome.runtime.sendMessage(msg, function(response) {
-//     	console.log(response)
-//     });
-
-// })
+}
 
 // Handlers for return messages from background.js
 chrome.runtime.onMessage.addListener( function(request, sender, sendResponse) {
@@ -60,11 +61,112 @@ chrome.runtime.onMessage.addListener( function(request, sender, sendResponse) {
 
 });
 
+function setIcon (color, div) {
+	console.log('setIcon hit', color, div)
+	var coords = div.getBoundingClientRect()
+	console.log('coords are', coords)
+	insertFlagAtCoords(coords, color)
+}
 
-// function addFlagsToPage (request) {
+
+function setUrlStatus (div, listings) {
+	var url = div.href
+
+    // console.log('setFlag ran with url ', url)
+    var rawUrl = getRawUrl(url)
+    var domain = rawUrl.split("/")[0]
+    console.log("checking ", rawUrl, domain)
+    var setflag = 0;
+
+    // console.log('checking against data ', listings)
+    // console.log('checking verified URLs')
+    for ( var i = 0; i < listings.verified.length; i ++ ) {
+        // console.log('checking domain ' + listings.verified[i])
+        // console.log('currentDomain is ' + domain)
+        if ( listings.verified[i] === domain ) {
+            // if there's a match to a verified domain we stop here
+            // console.log ('domain matches verified', listings.verified[i], domain)
+            return setIcon('blue', div)
+            setflag = 1;
+
+        }
+
+    }
+
+    if ( setflag === 0 ) {
+        // console.log('no verified URLs found, checking for banned domains')
+
+        for ( var i = 0; i < listings.banned.length; i ++ ) {
+            if ( listings.banned[i].domain === domain ) {
+                // here we'll need to index through the urls to identify if this url is flagged or banned
+                    for ( var u = 0; u < listings.banned[i].urls.length; u ++ ) {
+                        if ( listings.banned[i].urls[u].url === rawUrl ) {
+                            // here we'll need to index through the urls to identify if this url is flagged or banned
+
+                            // console.log ('url matches banned', listings.banned[i], domain)
+                            return setIcon('red', div)
+
+                            // sendSetFlagsToView(listings.banned[i].urls[u].flags)
+                                
+                            setflag = 1;
+                        }
+
+                    }
+                // console.log ('domain is flagged but this URL didn\'t match a known banned site', listings.verified[i], rawUrl)
+                return setIcon('yellow', div)
+                setflag = 1;
+            }
+
+        }
+
+
+        // console.log('no banned URLs found, checking for flagged domains')
+
+        for ( var i = 0; i < listings.flagged.length; i ++ ) {
+
+            // console.log ('checking domain', listings.flagged[i], domain)
+            if ( listings.flagged[i].domain === domain ) {
+                // here we'll need to index through the urls to identify if this url is flagged or banned
+                    for ( var u = 0; u < listings.flagged[i].urls.length; u ++ ) {
+                        if ( listings.flagged[i].urls[u].url === rawUrl ) {
+                            // here we'll need to index through the urls to identify if this url is flagged or banned
+
+                            // console.log ('url matches banned', listings.flagged[i].urls[u], rawUrl)
+                            return setIcon('yellow', div)
+                            
+                            // sendSetFlagsToView(listings.flagged[i].urls[u].flags)
+                            
+                            setflag = 1;
+                        }
+
+                    }
+                // console.log ('domain has open flags but this URL didn\'t match a known banned site', listings.verified[i], rawUrl)
+                return setIcon('grey', div)
+                setflag = 1;
+            }
+
+        }
+
+
+        // console.log('no matching records found - setting to grey')
+        setIcon('grey', div)
+    }
+
+}
+
+// function addFlagsToPage (divId, flag) {
 // 	var coords = document.querySelector(request.divId).getBoundingClientRect()
 // 	console.log("coords", coords)
 // }
+
+function getRawUrl (rawUrl) {
+    var url =  (rawUrl.split('?')[0]).split('//')[1] // remove get params and remove protocol header
+    return url
+}
+
+function getAllLinks () {
+	return document.links;
+}
 
 
 function getClosestDiv (path) {
@@ -72,6 +174,25 @@ function getClosestDiv (path) {
 		if ( path[i].id != "" ) return path[i].id
 	}
 
+}
+
+function insertFlagAtCoords (coordinates, color) {
+	console.log('insert flag triggered', coordinates, color)
+
+	var coords = {
+		"clientX" : coordinates.x,
+		"clientY" : coordinates.y 
+	}
+
+	var box = document.createElement('div')
+		box.className = "bc_box tiny"
+		box.id = "flag_" + Math.floor(Math.random() * 1000) + 1 
+
+	document.body.appendChild(box)
+
+	// appendFormContents(form.id, "flag")
+	setElementPosition(box.id, coords)
+	showElement(box.id)
 }
 
 function addNewFlagForm (coordinates, selectedText) {
@@ -222,6 +343,13 @@ function BC_submitNewFlagForm () {
 // 	}
 
 // }
+
+function getData (cb) {
+    chrome.storage.sync.get(['data'], function(result) {
+        console.log("data loaded", result.data)
+        cb (result.data)
+    });
+}
 
 function setElementPosition (id, position) {
 	console.log( 'setting element with id ' + id + " to position ", position )
