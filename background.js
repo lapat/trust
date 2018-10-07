@@ -20,10 +20,22 @@ var sample_data = {
         "urls" : 
             [{
             "url":"www.breitbart.com/big-government/2018/09/14/donald-trump-jr-kimberly-guilfoyle-hit-campaign-trail-in-ohio-to-keep-state-red-in-2018/", 
-            "flags" : ["abc123, abc124"]
+            "flags" : [{
+                    "flagId" : "abc123",
+                    "divId" : "MainW"
+                },{
+                    "flagId" : "abc124",
+                    "divId" : "MainW"
+                }]
             },{
             "url":"www.breitbart.com/big-government/2018/10/06/kavanaugh-confirmed-possibly-most-conservative-supreme-court-since-1934/",
-            "flags" : ["abc123, abc124"]             
+            "flags" : [{
+                    "flagId" : "abc123",
+                    "divId" : "MainW"
+                },{
+                    "flagId" : "abc124",
+                    "divId" : "MainW"
+                }]
             }]
         }
        ],
@@ -67,8 +79,8 @@ var sample_data = {
 
 var sample_flags = {
     "flags" : [{
-        "id" : "123b18291223",
-        "parentNode" : "mp-left",
+        "id" : "abc123",
+        "parentNode" : "MainW",
         "selectedText" : "hysteria is the key to destruction"
     }]
 }
@@ -196,7 +208,8 @@ var config = {
         
           var payload = {
             "point" : mousePoint,
-            "selectedText" : text
+            "selectedText" : text,
+            "actionType" : "newFlag"
           }
         chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
           chrome.tabs.sendMessage(tabs[0].id, payload, function(response) {
@@ -205,6 +218,31 @@ var config = {
         });
 
     }
+
+    // function sendSetFlagsToView(flags) {
+    //     console.log('sending set flags with ' + flags.count + " flags ")
+
+    //     for (var l = 0; l < flags.length; l++ ){
+    //         setFlagsInView(flags[l].flagId, flags[l].divId)
+    //     } 
+    // }
+
+    // function setFlagsInView (flagId, divId) {
+
+    //     console.log("set flags triggered for flag" + flagId, "setting to " + divId);
+        
+    //       var payload = {
+    //         "flagId" : flagId,
+    //         "divId" : divId,
+    //         "actionType" : "setFlags"
+    //       }
+    //     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+    //       chrome.tabs.sendMessage(tabs[0].id, payload, function(response) {
+    //         // console.log(response);
+    //       });
+    //     });
+
+    // }    
 
     function sendFlag () {
         var payload = {
@@ -283,6 +321,8 @@ var config = {
                                     // console.log ('url matches banned', listings.banned[i], domain)
                                     return setIcon('red', listings.banned[i].urls[u].flags.length)
 
+                                    // sendSetFlagsToView(listings.banned[i].urls[u].flags)
+                                        
                                     setflag = 1;
                                 }
 
@@ -308,6 +348,9 @@ var config = {
 
                                     console.log ('url matches banned', listings.flagged[i].urls[u], rawUrl)
                                     return setIcon('yellow', listings.flagged[i].urls[u].flags.length)
+                                    
+                                    // sendSetFlagsToView(listings.flagged[i].urls[u].flags)
+                                    
                                     setflag = 1;
                                 }
 

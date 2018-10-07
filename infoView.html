@@ -26,19 +26,28 @@ limitations under the License.
        * TODO(DEVELOPER): Make sure you are importing the latest version of the Firebase JS. *
        *************************************************************************************** -->
   <script src="https://www.gstatic.com/firebasejs/5.5.1/firebase.js"></script>
-  <script src="credentials.js"></script>
+  <script src="infoView.js"></script>
 
 </head>
 <body>
-  <h3>eTrust Sign In</h3>
-  <div class="quickstart-user-details-container">
+  
+  <div class="header">
+    <h3>Breadcrumbs</h3>
     <button id="quickstart-button">Sign-in with Google</button>
-    <p>
-      Firebase sign-in status: <span id="quickstart-sign-in-status">Unknown</span>
-      <div>Firebase auth <code>currentUser</code> object value:</div>
-      <pre><code id="quickstart-account-details">null</code></pre>
-    </p>
   </div>
-</body>
 
+  <div id="flagContainer">
+    
+  </div>
+
+</body>
+<footer>
+  <table>
+    <tr>
+      <td class="left"><a class="moreLink" href="https://test.com/rules">Rules</a></td>
+      <td class="middle"><a class="moreLink" href="https://test.com/contact">Contact Us</a></td>
+      <td class="right"><a class="moreLink" href="https://test.com/questions">Questions?</a></td>
+    </tr>
+  </table>
+</footer>
 </html>

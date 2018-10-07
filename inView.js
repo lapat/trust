@@ -33,12 +33,38 @@ document.addEventListener('mousedown', function (event, mousePos) {
     }
 })
 
+// // on final load, initiate onpage flag setup
+// document.addEventListener('load', function () {
+	
+// 	var msg = {
+// 		from : "onload"
+// 	}
+
+//     chrome.runtime.sendMessage(msg, function(response) {
+//     	console.log(response)
+//     });
+
+// })
+
+// Handlers for return messages from background.js
 chrome.runtime.onMessage.addListener( function(request, sender, sendResponse) {
 	console.log('message received', request)
-    addNewFlagForm (request.point, request.selectedText)
-  }
-);
 
+	if ( request.actionType === "newFlag" ) {
+	    addNewFlagForm (request.point, request.selectedText)
+	} 
+	// else if ( request.actionType === "setFlags" ) {
+	// 	console.log("setting flags", request)
+	// 	addFlagsToPage(request)
+	// } 
+
+});
+
+
+// function addFlagsToPage (request) {
+// 	var coords = document.querySelector(request.divId).getBoundingClientRect()
+// 	console.log("coords", coords)
+// }
 
 
 function getClosestDiv (path) {

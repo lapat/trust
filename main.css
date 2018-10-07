@@ -52,9 +52,36 @@ code {
   white-space: pre-wrap;
   word-break: break-all;
 }
-h3 {
-  /*background: url('firebase-logo.png') no-repeat;*/
-  background-size: 40px;
-  padding-left: 50px;
-  line-height: 40px;
+.header button {
+    display: inline-block;
+    float: right;
 }
+.flagElement {
+    width: 98%;
+    border: solid 0.2px black;
+    margin: 0.5px;
+    border-radius: 0.25px;
+    padding: 2px;
+}
+.flagElement i {
+    width: 100%;
+    display: inline-block;
+}
+.flagContainer {
+    padding: 3px;
+    border: solid 1px grey;
+    border-radius: 0.5em;
+}
+table {
+    width: 100%;
+}
+footer td {
+    width: 33%;
+}
+td.middle {
+    text-align: center;
+}
+td.right {
+    text-align: right;
+}
+
