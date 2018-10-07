@@ -184,15 +184,19 @@ function insertFlagAtCoords (coordinates, color) {
 		"clientY" : coordinates.y 
 	}
 
-	var box = document.createElement('div')
-		box.className = "bc_box tiny"
-		box.id = "flag_" + Math.floor(Math.random() * 1000) + 1 
+	var imagePath = chrome.extension.getURL('images/' + color + '.png')
+	console.log(imagePath)
+		
+	var img = document.createElement('img')
+		img.src = imagePath
+		img.className = "bc_box_tiny"
+		img.id = "flag_" + Math.floor(Math.random() * 1000) + 1 		
 
-	document.body.appendChild(box)
+	document.body.appendChild(img)
 
 	// appendFormContents(form.id, "flag")
-	setElementPosition(box.id, coords)
-	showElement(box.id)
+	setElementPosition(img.id, coords)
+	showElement(img.id)
 }
 
 function addNewFlagForm (coordinates, selectedText) {

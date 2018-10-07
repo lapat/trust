@@ -16,22 +16,15 @@
     box-shadow: 1px 1px 5px 5px #8e8e8e3d;
 }
 
-.bc_box.tiny {
-    width: 5px;
-    height: 5px;
-    background: white;
-    color: black;
+.bc_box_tiny {
+    width: 10px;
+    height: 10px;
     display: block;
     position: absolute;
     z-index: 1000;
-    border-radius: 2px;
-    border-top-left-radius: 0px;
-    border-width: 0.5px;
-    padding: 0.05px;
-    border-radius: 8px;
-    border-top-left-radius: 0px;
     border: none;
 }
+
 
 h3.bc_header {
     font-weight: bold;
