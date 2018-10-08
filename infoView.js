@@ -93,20 +93,65 @@ function initApp() {
   document.getElementById('quickstart-button').addEventListener('click', startSignIn, false);
 }
 
-function getFlags () {
-  return sample_flags;
+function getFlags (cb) {
+  // console.log('get flags ran')
+  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+      
+    var url = getRawUrl(tabs[0].url)
+    
+    console.log(url)
+    
+    var flags = fetchFlagsForUrl(url)
+
+    if ( flags.length > 0 ) {
+
+      cb(flags)
+
+    } else {
+
+      var arr = []
+      cb(arr)
+    
+    }      
+
+  });
+
+}
+
+function getRawUrl (rawUrl) {
+    var url =  (rawUrl.split('?')[0]).split('//')[1] // remove get params and remove protocol header
+    return url
+}
+
+function fetchFlagsForUrl (url) {
+  console.log(url)
+  if ( url == "www.breitbart.com/big-government/2018/10/06/kavanaugh-confirmed-possibly-most-conservative-supreme-court-since-1934/") {
+
+    return sample_flags
+     
+  } else {
+
+    var arr = []
+    return arr
+
+  }
+
 }
 
 function loadFlags () {
 
-  var flags = getFlags()
-  // var flags = []
+  getFlags(function (flags) {
+    // var flags = []
+    console.log('flags', flags)
 
-  if ( flags.length > 0 ) {
-    showFlags(flags)
-  } else {
-    showNoFlagsMessage()
-  }
+    if ( flags.length > 0 ) {
+      showFlags(flags)
+    } else {
+      showNoFlagsMessage()
+    }
+
+  })
+
 
 }
 
@@ -130,7 +175,7 @@ function showNoFlagsMessage () {
         submitFlagMessage.className = "submitFlagMessage"
 
     var submitFlagInstruction = document.createElement('p')
-        submitFlagInstruction.innerHTML = 'To submit a breadcrumb, just right click any text in the document and click the "Flag" option!' 
+        submitFlagInstruction.innerHTML = 'To submit a breadcrumb, just right click any text in the page and click the "Flag" option!' 
         submitFlagInstruction.className = "submitFlagInstruction"        
 
     newFlag.appendChild(quote)
