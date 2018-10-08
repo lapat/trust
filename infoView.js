@@ -100,36 +100,89 @@ function getFlags () {
 function loadFlags () {
 
   var flags = getFlags()
+  // var flags = []
 
+  if ( flags.length > 0 ) {
+    showFlags(flags)
+  } else {
+    showNoFlagsMessage()
+  }
+
+}
+
+function showNoFlagsMessage () {
+  var flagContainer = document.getElementById("flagContainer");
+      flagContainer.className = "flagContainer noFlags"
+
+    var newFlag = document.createElement('div')
+        newFlag.id = "noFlags"
+        newFlag.className = "flagElement"
+
+    var quoteR = returnRandomQuote()
+
+    var quote = document.createElement('i') 
+        quote.innerHTML = '"' + quoteR.quote + '" <br>- ' + quoteR.author
+        quote.id = "placeholder_quote"
+        quote.className = "flagText"   
+
+    var submitFlagMessage = document.createElement('p')
+        submitFlagMessage.innerHTML = 'No one has submitted any breadcrumbs on this page yet.' 
+        submitFlagMessage.className = "submitFlagMessage"
+
+    var submitFlagInstruction = document.createElement('p')
+        submitFlagInstruction.innerHTML = 'To submit a breadcrumb, just right click any text in the document and click the "Flag" option!' 
+        submitFlagInstruction.className = "submitFlagInstruction"        
+
+    newFlag.appendChild(quote)
+    newFlag.appendChild(submitFlagMessage)
+    newFlag.appendChild(submitFlagInstruction)
+    flagContainer.appendChild(newFlag)  
+}
+
+function returnRandomQuote () {
+  var quote = { 
+      quote : "In vain have you acquired knowledge if you have not imparted it to others.",
+      author : "Deuteronomy Rabbah"
+    }
+  return quote
+}
+
+function showFlags (flags) {
   var flagContainer = document.getElementById("flagContainer");
       flagContainer.className = "flagContainer"
 
   for ( var x = 0; x < flags.length; x++ ) {
 
     var newFlag = document.createElement('div')
-        newFlag.id = flags[x].flagId + "_div"
+        newFlag.id = flags[x].flagId
         newFlag.className = "flagElement"
 
     var flagTitle = document.createElement('i') 
-        flagTitle.innerHTML = flags[x].selectedText
+        flagTitle.innerHTML = '"' + flags[x].selectedText + '"'
         flagTitle.id = flags[x].flagId + "_div"
-        flagTitle.className = "flagElement"
+        flagTitle.className = "flagText"
 
     var moreInfoButton = document.createElement('button')
         moreInfoButton.innerHTML = "More Info"
-        moreInfoButton.onclick = function() { moreInfo (flags[x].flagId) }
+        moreInfoButton.className = "flagInfo"
+        moreInfoButton.onclick = function() { moreInfo (this) }
 
-    var flagStatus = document.createElement('b')
-        flagStatus.innerHTML = flags[x].status
+    var flagStatus = document.createElement('p')
+        flagStatus.innerHTML = 'Status: ' + flags[x].status 
         flagStatus.className = "flagStatus"
 
     newFlag.appendChild(flagTitle)
-    newFlag.appendChild(moreInfoButton)
     newFlag.appendChild(flagStatus)
+    newFlag.appendChild(moreInfoButton)
     flagContainer.appendChild(newFlag)
 
   }    
+}
 
+function moreInfo (div) {
+  var id = div.parentNode.id
+  var url = "https://breadcrumbsapp.com/" + id
+  window.open( url , '_newtab');
 }
 
 function setupFlags () {

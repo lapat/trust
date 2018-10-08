@@ -18,8 +18,8 @@ html, body {
   font-family: 'Roboto', 'Helvetica', sans-serif;
 }
 body {
-  width: 400px;
-  min-height: 400px;
+  width: 300px;
+  /*min-height: 400px;*/
   margin: 0;
   padding: 5px;
 }
@@ -52,25 +52,65 @@ code {
   white-space: pre-wrap;
   word-break: break-all;
 }
+h3 {
+    float: left;
+    margin: unset;
+}
+i#placeholder_quote {
+    text-align: center;
+}
+p.submitFlagMessage {
+    font-size: 1.15em;
+}
+p.submitFlagInstruction {
+    background: white;
+    padding: 0.5em;
+    border-radius: 0.5em;
+    border: solid white;
+    color: grey;
+}
+.header {
+    height: 30px;
+}
 .header button {
     display: inline-block;
     float: right;
+    background: antiquewhite;
+    border-radius: 5px;
+    padding: 5px;
 }
 .flagElement {
-    width: 98%;
-    border: solid 0.2px black;
-    margin: 0.5px;
-    border-radius: 0.25px;
-    padding: 2px;
+    width: 92%;
+    margin: auto;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: aliceblue;
+    box-shadow: 0 0 1px 0.5px lightgrey;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
-.flagElement i {
+.flagText {
     width: 100%;
     display: inline-block;
+    color: black;
+    font-size: 11pt;
+    margin-bottom: 5px;
+}
+button.flagInfo {
+    float: right;
+    padding: 5px;
+    background-color: lightgray;
+    border-radius: 5px;
 }
 .flagContainer {
     padding: 3px;
     border: solid 1px grey;
     border-radius: 0.5em;
+}
+p.flagStatus {
+    display: inline-block;
+    margin-bottom: 0;
+    color: darkgrey;
 }
 table {
     width: 100%;
