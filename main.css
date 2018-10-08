@@ -63,11 +63,15 @@ p.submitFlagMessage {
     font-size: 1.15em;
 }
 p.submitFlagInstruction {
-    background: white;
-    padding: 0.5em;
-    border-radius: 0.5em;
-    border: solid white;
-    color: grey;
+  background: white;
+  padding: 0.5em;
+  border-radius: 0.5em;
+  border: solid white;
+  color: grey;
+  font-size: 1.1em;
+  margin-left: -6px;
+  margin-right: 5px;
+  width: 97%;
 }
 .header {
     height: 30px;
@@ -95,6 +99,7 @@ p.submitFlagInstruction {
     color: black;
     font-size: 11pt;
     margin-bottom: 5px;
+
 }
 button.flagInfo {
     float: right;
