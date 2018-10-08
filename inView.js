@@ -3,13 +3,13 @@
 var sample_flag = {
 	description : "test",
 	history : [],
-	id : "12AJhEHjabEHd0hYzfv7", 
+	id : "12AJhEHjabEHd0hYzfv7",
 	offense : "Slander",
 	source : "test.com",
 	status : "FLAG PENDING",
-	subject : "medical", 
+	subject : "medical",
 	subject_id : "1",
-	text_selected : "state of Washington, established October 2, 1968. Covering more than 500,000 acres (200,000 ha), it features the rugged mountain peaks of the North Cascades Range, the most", 
+	text_selected : "state of Washington, established October 2, 1968. Covering more than 500,000 acres (200,000 ha), it features the rugged mountain peaks of the North Cascades Range, the most",
 	time : 1538450438135,
 	url : "https://en.wikipedia.org/wiki/Main_Page",
 	user_id : "TFSbNu466jgeIefYxTyH1ADW8ol2",
@@ -53,11 +53,11 @@ chrome.runtime.onMessage.addListener( function(request, sender, sendResponse) {
 
 	if ( request.actionType === "newFlag" ) {
 	    addNewFlagForm (request.point, request.selectedText)
-	} 
+	}
 	// else if ( request.actionType === "setFlags" ) {
 	// 	console.log("setting flags", request)
 	// 	addFlagsToPage(request)
-	// } 
+	// }
 
 });
 
@@ -107,7 +107,7 @@ function setUrlStatus (div, listings) {
                             return setIcon('red', div)
 
                             // sendSetFlagsToView(listings.banned[i].urls[u].flags)
-                                
+
                             setflag = 1;
                         }
 
@@ -124,7 +124,7 @@ function setUrlStatus (div, listings) {
 
         for ( var i = 0; i < listings.flagged.length; i ++ ) {
 
-            // console.log ('checking domain', listings.flagged[i], domain)
+            console.log ('checking domain', listings.flagged[i], domain)
             if ( listings.flagged[i].domain === domain ) {
                 // here we'll need to index through the urls to identify if this url is flagged or banned
                     for ( var u = 0; u < listings.flagged[i].urls.length; u ++ ) {
@@ -133,9 +133,9 @@ function setUrlStatus (div, listings) {
 
                             // console.log ('url matches banned', listings.flagged[i].urls[u], rawUrl)
                             return setIcon('yellow', div)
-                            
+
                             // sendSetFlagsToView(listings.flagged[i].urls[u].flags)
-                            
+
                             setflag = 1;
                         }
 
@@ -189,16 +189,16 @@ function insertFlagAtCoords (coordinates, color) {
 
 	var coords = {
 		"clientX" : coordinates.x,
-		"clientY" : coordinates.y 
+		"clientY" : coordinates.y
 	}
 
 	var imagePath = chrome.extension.getURL('images/' + color + '.png')
 	console.log(imagePath)
-		
+
 	var img = document.createElement('img')
 		img.src = imagePath
 		img.className = "bc_box_tiny"
-		img.id = "flag_" + Math.floor(Math.random() * 1000) + 1 		
+		img.id = "flag_" + Math.floor(Math.random() * 1000) + 1
 
 	document.body.appendChild(img)
 
@@ -224,7 +224,7 @@ function addNewFlagForm (coordinates, selectedText) {
 		box.id = "testFlagForm"
 
 	var form = document.createElement('div')
-		form.className = "bc_form"	
+		form.className = "bc_form"
 		form.style.color = "black"
 
 	var headerDiv = document.createElement('div')
@@ -258,7 +258,7 @@ function addNewFlagForm (coordinates, selectedText) {
 		sourceUrl.id = "BC_nf_sourceUrl"
 		sourceUrl.className = "bc_input"
 		sourceUrl.placeholder = "Enter a citation url to expedite approval"
-		form.appendChild(sourceUrl)	
+		form.appendChild(sourceUrl)
 
 	var offense = document.createElement('select')
 		offense.className = "bc_input offense"
@@ -342,12 +342,12 @@ function BC_submitNewFlagForm () {
 
 // function appendFormContents (id, type) {
 // 	if ( type === "flag" ) {
-		
+
 
 
 // 	} else {
 
-// 		var errorMessage = document.createElement('div')	
+// 		var errorMessage = document.createElement('div')
 // 			errorMessage.style.color = "red"
 // 			errorMessage.innerHTML = "Failed to find popover type"
 // 		document.getElementById( id ).appendChild(errorMessage)
