@@ -34,18 +34,18 @@ document.addEventListener('mousedown', function (event, mousePos) {
 })
 
 // on final load, initiate onpage flag setup
-// document.body.onload = function () {
-// 	console.log('onload ran')
-// 	getData(function (data) {
-// 		// console.log("data", data)
-// 		var links = getAllLinks()
-// 		// console.log(links)
-// 		for ( var l = 0; l < links.length; l++ ) {
-// 			setUrlStatus(links[l], data)
-// 		}
-// 	})
+document.body.onload = function () {
+	console.log('onload ran')
+	getData(function (data) {
+		// console.log("data", data)
+		var links = getAllLinks()
+		// console.log(links)
+		for ( var l = 0; l < links.length; l++ ) {
+			setUrlStatus(links[l], data)
+		}
+	})
 
-// }
+}
 
 // Handlers for return messages from background.js
 chrome.runtime.onMessage.addListener( function(request, sender, sendResponse) {

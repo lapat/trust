@@ -1,91 +1,91 @@
 
 console.log("background.js");
 // Sample data:
-var sample_data = {
-  "verified":
-  [ "en.wikipedia.org", "alexmorris.com" ],
-  "banned" :
-  [
-    {
-      "domain" : "coinflashapp.com",
-      "urls" :
-      [{
-        "url":"coinflashapp.com/verified.html",
-        "flags" : []
-      },{
-        "url":"coinflashapp.com/verified2.html",
-        "flags" : []
-      }]
-    },
-    {
-      "domain" : "www.breitbart.com",
-      "urls" :
-      [{
-        "url":"www.breitbart.com/big-government/2018/09/14/donald-trump-jr-kimberly-guilfoyle-hit-campaign-trail-in-ohio-to-keep-state-red-in-2018/",
-        "flags" : [{
-          "flagId" : "abc123",
-          "divId" : "MainW"
-        },{
-          "flagId" : "abc124",
-          "divId" : "MainW"
-        }]
-      },{
-        "url":"www.breitbart.com/big-government/2018/10/06/kavanaugh-confirmed-possibly-most-conservative-supreme-court-since-1934/",
-        "flags" : [{
-          "flagId" : "abc123",
-          "divId" : "MainW"
-        },{
-          "flagId" : "abc124",
-          "divId" : "MainW"
-        }]
-      }]
-    }
-  ],
-  "flagged" :
-  [
-    {
-      "domain" : "dirkdiggler.com",
-      "urls" :
-      [{
-        "url":"dirkdiggler.com/big-government/2018/09/14/donald-trump-jr-kimberly-guilfoyle-hit-campaign-trail-in-ohio-to-keep-state-red-in-2018/",
-        "flags" : ["abc1238172, abc1247318"]
-      },{
-        "url":"dirkdiggler.com/38822.html",
-        "flags" : ["abc1239182, abc12498128"]
-      }]
-    },
-    {
-      "domain" : "thisisbullshit.com",
-      "urls" :
-      [{
-        "url":"thisisbullshit.com/big-government/2018/09/14/donald-trump-jr-kimberly-guilfoyle-hit-campaign-trail-in-ohio-to-keep-state-red-in-2018/",
-        "flags" : ["abc1238172, abc1247318"]
-      },{
-        "url":"thisisbullshit.com/38822.html",
-        "flags" : ["abc1239182, abc12498128"]
-      }]
-    },
-    {
-      "domain" : "stackoverflow.com",
-      "urls" :
-      [{
-        "url":"stackoverflow.com/someUrl.html",
-        "flags" : ["abc1238172, abc1247318"]
-      },{
-        "url":"stackoverflow.com/someUrl2.html",
-        "flags" : ["abc1239182, abc12498128"]
-      }]
-    }
-  ]
-}
+// var sample_data = {
+//   "verified":
+//   [ "en.wikipedia.org", "alexmorris.com" ],
+//   "banned" :
+//   [
+//     {
+//       "domain" : "coinflashapp.com",
+//       "urls" :
+//       [{
+//         "url":"coinflashapp.com/verified.html",
+//         "flags" : []
+//       },{
+//         "url":"coinflashapp.com/verified2.html",
+//         "flags" : []
+//       }]
+//     },
+//     {
+//       "domain" : "www.breitbart.com",
+//       "urls" :
+//       [{
+//         "url":"www.breitbart.com/big-government/2018/09/14/donald-trump-jr-kimberly-guilfoyle-hit-campaign-trail-in-ohio-to-keep-state-red-in-2018/",
+//         "flags" : [{
+//           "flagId" : "abc123",
+//           "divId" : "MainW"
+//         },{
+//           "flagId" : "abc124",
+//           "divId" : "MainW"
+//         }]
+//       },{
+//         "url":"www.breitbart.com/big-government/2018/10/06/kavanaugh-confirmed-possibly-most-conservative-supreme-court-since-1934/",
+//         "flags" : [{
+//           "flagId" : "abc123",
+//           "divId" : "MainW"
+//         },{
+//           "flagId" : "abc124",
+//           "divId" : "MainW"
+//         }]
+//       }]
+//     }
+//   ],
+//   "flagged" :
+//   [
+//     {
+//       "domain" : "dirkdiggler.com",
+//       "urls" :
+//       [{
+//         "url":"dirkdiggler.com/big-government/2018/09/14/donald-trump-jr-kimberly-guilfoyle-hit-campaign-trail-in-ohio-to-keep-state-red-in-2018/",
+//         "flags" : ["abc1238172, abc1247318"]
+//       },{
+//         "url":"dirkdiggler.com/38822.html",
+//         "flags" : ["abc1239182, abc12498128"]
+//       }]
+//     },
+//     {
+//       "domain" : "thisisbullshit.com",
+//       "urls" :
+//       [{
+//         "url":"thisisbullshit.com/big-government/2018/09/14/donald-trump-jr-kimberly-guilfoyle-hit-campaign-trail-in-ohio-to-keep-state-red-in-2018/",
+//         "flags" : ["abc1238172, abc1247318"]
+//       },{
+//         "url":"thisisbullshit.com/38822.html",
+//         "flags" : ["abc1239182, abc12498128"]
+//       }]
+//     },
+//     {
+//       "domain" : "stackoverflow.com",
+//       "urls" :
+//       [{
+//         "url":"stackoverflow.com/someUrl.html",
+//         "flags" : ["abc1238172, abc1247318"]
+//       },{
+//         "url":"stackoverflow.com/someUrl2.html",
+//         "flags" : ["abc1239182, abc12498128"]
+//       }]
+//     }
+//   ]
+// }
 
-var sample_flags = {
-  "flags" : [{
-    "id" : "abc123",
-    "parentNode" : "MainW",
-    "selectedText" : "hysteria is the key to destruction"
-  }]
-}
+// var sample_flags = {
+//   "flags" : [{
+//     "id" : "abc123",
+//     "parentNode" : "MainW",
+//     "selectedText" : "hysteria is the key to destruction"
+//   }]
+// }
 
 if (!mousePoint) {
   var mousePoint = {};
@@ -108,6 +108,7 @@ var config = {
 chrome.runtime.onStartup.addListener(function () {
   runTimeTasks()
 });
+
 chrome.runtime.onInstalled.addListener(function(details){
   runTimeTasks()
 });
@@ -325,7 +326,7 @@ function setFlag (currentUrl) {
         if ( listings.banned[i].domain === domain ) {
           // here we'll need to index through the urls to identify if this url is flagged or banned
           for ( var u = 0; u < listings.banned[i].urls.length; u ++ ) {
-            if ( listings.banned[i].urls[u].url === rawUrl ) {
+            if ( getRawUrl(listings.banned[i].urls[u].url) === rawUrl ) {
               // here we'll need to index through the urls to identify if this url is flagged or banned
 
                console.log ('url matches banned', listings.banned[i], domain)
@@ -356,7 +357,7 @@ function setFlag (currentUrl) {
           // here we'll need to index through the urls to identify if this url is flagged or banned
           for ( var u = 0; u < listings.flagged[i].urls.length; u ++ ) {
             console.log("checking url:"+listings.flagged[i].urls[u].url)
-            if ( listings.flagged[i].urls[u].url === rawUrl ) {
+            if ( getRawUrl(listings.flagged[i].urls[u].url) === rawUrl ) {
               // here we'll need to index through the urls to identify if this url is flagged or banned
               console.log ('url matches flagged', listings.flagged[i].urls[u], rawUrl)
               return setIcon('yellow', listings.flagged[i].urls[u].flagArray.length)
@@ -440,19 +441,10 @@ function setData () {
   console.log('setdata running')
   firebase.functions().httpsCallable('getData')({})
   .then( function(result) {
-    console.log(result);
+    console.log('fetched data and setting ', result);
     chrome.storage.sync.set({data: result}, function() {
     });
   });
-  /*firebase.functions().httpsCallable('getData')(payload)
-  .then( function(result) {
-    console.log(result);
-    //chrome.storage.sync.set({data: result}, function() {
-    //  console.log("data set")
-    //});
-  });*/
-  //chrome.storage.sync.set({data: sample_data}, function() {
-  //  });
 }
 
 function getData (cb) {
