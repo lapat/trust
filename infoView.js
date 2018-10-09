@@ -236,7 +236,7 @@ function showFlags (flags) {
 
 function moreInfo (div) {
   var id = div.parentNode.id
-  var url = "https://breadcrumbsapp.com/" + id
+  var url = "https://trust-f0fdc.firebaseapp.com/#/getinfo?i=" + id
   window.open( url , '_newtab');
 }
 
