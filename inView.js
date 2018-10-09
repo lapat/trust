@@ -56,10 +56,16 @@ chrome.runtime.onMessage.addListener( function(request, sender, sendResponse) {
 	if ( request.actionType === "newFlag" ) {
 	    addNewFlagForm (request.point, request.selectedText)
 	}
+	
 	// else if ( request.actionType === "setFlags" ) {
 	// 	console.log("setting flags", request)
 	// 	addFlagsToPage(request)
 	// }
+
+	if ( request.actionType === "error" ) {
+		console.log(request)
+	    alert(request.message)
+	}
 
 });
 

@@ -120,6 +120,7 @@ function runTimeTasks () {
   setData();
   configureContextMenus();
   chrome.contextMenus.onClicked.addListener(onClickHandler);
+
 }
 
 // 2. Right click menu setup
@@ -170,9 +171,19 @@ chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
 function callAPIForNewFlag (payload) {
   firebase.functions().httpsCallable('flag')(payload)
   .then( function(result) {
-    console.log(result);
+    console.log('flag submitted, returned:', result);
     setData()
-  });
+  }).catch(exception => {
+
+    console.log('flag submission error!: ' + exception)
+
+    var payload = {
+      'actionType' : 'error',
+      'message' : exception.toString()
+    }
+
+    sendMessageToCurrentTab (payload)
+  })
 }
 
 // Set up context menu tree at install time.
@@ -223,36 +234,40 @@ function newFlag (tab, text) {
     "selectedText" : text,
     "actionType" : "newFlag"
   }
+  sendMessageToCurrentTab (payload)
+
+}
+
+function sendMessageToCurrentTab (payload) {
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
     chrome.tabs.sendMessage(tabs[0].id, payload, function(response) {
        console.log(response);
     });
   });
-
 }
 
 // function sendSetFlagsToView(flags) {
-//     console.log('sending set flags with ' + flags.count + " flags ")
+  //     console.log('sending set flags with ' + flags.count + " flags ")
 
-//     for (var l = 0; l < flags.length; l++ ){
-//         setFlagsInView(flags[l].flagId, flags[l].divId)
-//     }
-// }
+  //     for (var l = 0; l < flags.length; l++ ){
+  //         setFlagsInView(flags[l].flagId, flags[l].divId)
+  //     }
+  // }
 
-// function setFlagsInView (flagId, divId) {
+  // function setFlagsInView (flagId, divId) {
 
-//     console.log("set flags triggered for flag" + flagId, "setting to " + divId);
+  //     console.log("set flags triggered for flag" + flagId, "setting to " + divId);
 
-//       var payload = {
-//         "flagId" : flagId,
-//         "divId" : divId,
-//         "actionType" : "setFlags"
-//       }
-//     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-//       chrome.tabs.sendMessage(tabs[0].id, payload, function(response) {
-//         // console.log(response);
-//       });
-//     });
+  //       var payload = {
+  //         "flagId" : flagId,
+  //         "divId" : divId,
+  //         "actionType" : "setFlags"
+  //       }
+  //     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+  //       chrome.tabs.sendMessage(tabs[0].id, payload, function(response) {
+  //         // console.log(response);
+  //       });
+  //     });
 
 // }
 
@@ -275,8 +290,6 @@ function sendFlag () {
 
 function getInfo (url) {
   console.log("getInfo clicked for " + url, "mousePoint at ", mousePoint);
-
-
 }
 
 // 3. Icon Logic
