@@ -1,17 +1,17 @@
 {
   "manifest_version": 2,
 
-  "name": "eTrust",
+  "name": "BreadCrumbs",
   "description": "Verify before you believe. Blue : Good, Yellow : Debate, Red : Bad, Grey : Untracked",
   "version": "1.0",
       "background": {
-        "scripts": ["thirdParty/jquery-3.1.1.js", "background.js"],
+        "scripts": ["thirdParty/jquery-3.1.1.js","js/firebase.js","background.js"],
         "persistent": false
     },
 
   "browser_action": {
-    "default_icon": "images/blue.png"
-   
+    "default_icon": "images/red.png",
+    "default_popup": "infoView.html"
   },
   "permissions": [
     "storage",
@@ -22,6 +22,29 @@
     "contentSettings",
     "cookies",
     "geolocation",
-    "http://*/*"
-  ]
+    "*://*/*",
+    "identity"
+  ],
+  "web_accessible_resources": ["images/*"],
+  "content_scripts": [{
+    "matches": ["*://*/*","<all_urls>"],
+    "js": ["inView.js"],
+    "css": ["inView.css"],
+    "run_at": "document_end",
+    "all_frames": true
+    }],
+  "icons": {
+          "16": "images/red-16.png",
+          "48": "images/red-48.png",
+          "128": "images/red-128.png"
+        },
+  "content_security_policy" : "script-src 'self' https://www.gstatic.com/ https://*.firebaseio.com https://www.googleapis.com; object-src 'self'",
+  "oauth2": {
+    "client_id": "802077806931-h5n2kn7vq9c4sq9eogksir1348003pmr.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/auth/userinfo.email",
+      "https://www.googleapis.com/auth/userinfo.profile"
+    ]
+  },
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjVNjA5YQWAH2hd041KtEnkAh4VCdU5aKBpTx5AvV6ToKpBdBopLxMjpBZ8M1TvEwCMJ3f7ETq2pIE142J3i0yz6F/6MaZNPhQy5Q0EFvQXvH13wElpBygR2VgXdNYdxJI9kKaSfZfBkPMIg+tj34cBKn8sG1Xj7KoNGzc8MBoouRg9z2lmKKHkdRhwucUw53bimhHrPA09Wz8DlDBY1MMsfQPtzfvfG6w2YDPm+KFlNT8Qyt/yWAwj06BbqEXWalliUBXmzDZ/6wLmdAxCFIjEjxJqURv6yQBE3ToJ1NALwqyA/V3+SNUeXjje29faV9JjZ/fGn/wRaL4j/JaXZciwIDAQAB"
 }
