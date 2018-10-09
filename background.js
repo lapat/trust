@@ -288,13 +288,6 @@ function newFocusHandler (url) {
   var pUrl = setFlag(url)
 }
 
-function removeWww(theDomain){
-  if (theDomain.indexOf("www.") === 0){
-    return theDomain.replace("www.", "")
-  }else{
-    return theDomain;
-  }
-}
 
 function setFlag (currentUrl) {
   console.log('setFlag ran with url ', currentUrl)
@@ -326,7 +319,7 @@ function setFlag (currentUrl) {
         if ( listings.banned[i].domain === domain ) {
           // here we'll need to index through the urls to identify if this url is flagged or banned
           for ( var u = 0; u < listings.banned[i].urls.length; u ++ ) {
-            if ( getRawUrl(listings.banned[i].urls[u].url) === rawUrl ) {
+            if ( listings.banned[i].urls[u].url === rawUrl ) {
               // here we'll need to index through the urls to identify if this url is flagged or banned
 
                console.log ('url matches banned', listings.banned[i], domain)
@@ -352,12 +345,12 @@ function setFlag (currentUrl) {
 
          console.log ('checking domain', listings.flagged[i].domain, domain)
         if ( listings.flagged[i].domain === domain ) {
-          console.log("matched domain:"+domain)
-          console.log("listings.flagged[i].urls:"+listings.flagged[i].urls)
+          console.log("matched domain:",domain)
+          console.log("listings.flagged[i].urls:",listings.flagged[i].urls)
           // here we'll need to index through the urls to identify if this url is flagged or banned
           for ( var u = 0; u < listings.flagged[i].urls.length; u ++ ) {
-            console.log("checking url:"+listings.flagged[i].urls[u].url)
-            if ( getRawUrl(listings.flagged[i].urls[u].url) === rawUrl ) {
+            console.log("checking url:",listings.flagged[i].urls[u].url)
+            if ( listings.flagged[i].urls[u].url === rawUrl ) {
               // here we'll need to index through the urls to identify if this url is flagged or banned
               console.log ('url matches flagged', listings.flagged[i].urls[u], rawUrl)
               return setIcon('yellow', listings.flagged[i].urls[u].flagArray.length)
@@ -433,8 +426,16 @@ function setIcon(flag, count){
 }
 
 function getRawUrl (rawUrl) {
+  console.log('getting raw url of ', rawUrl)
   var url =  (rawUrl.split('?')[0]).split('//')[1] // remove get params and remove protocol header
   return url
+}
+
+function removeWww(rawUrl){
+  console.log('getting www-less url of ', rawUrl)
+  var noWww = rawUrl.split('www.')[1]
+  console.log('noWww', noWww)
+  return noWww
 }
 
 function setData () {
