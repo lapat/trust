@@ -111,6 +111,8 @@ button.flagInfo {
     padding: 3px;
     border: solid 1px grey;
     border-radius: 0.5em;
+    max-height: 500px;
+    overflow: auto;
 }
 p.flagStatus {
     display: inline-block;
