@@ -33,6 +33,8 @@ document.addEventListener('mousedown', function (event, mousePos) {
     }
 })
 
+
+
 // on final load, initiate onpage flag setup
 document.body.onload = function () {
 	console.log('onload ran')
@@ -334,13 +336,15 @@ function BC_submitNewFlagForm () {
 
     var msg = {payload: payload, from: 'newFlag'};
     console.log('msg ', msg)
+
     BC_hideElement ("testFlagForm")
-    
+
     chrome.runtime.sendMessage(msg, function(response) {
     	// console.log(response)
     });
 
 }
+
 
 // function appendFormContents (id, type) {
 // 	if ( type === "flag" ) {

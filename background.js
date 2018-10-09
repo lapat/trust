@@ -157,12 +157,21 @@ chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
 
   }
 
+  // if (msg.from == 'resetData') {
+  //   //storing position
+  //   console.log('received getflags ', msg)
+  //   setData()
+  //   return true
+
+  // }  
+
 })
 
 function callAPIForNewFlag (payload) {
   firebase.functions().httpsCallable('flag')(payload)
   .then( function(result) {
     console.log(result);
+    setData()
   });
 }
 
@@ -279,10 +288,14 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, updatedTab) {
 
 // On tab change, update icon
 chrome.tabs.onActivated.addListener(function(activeInfo) {
+  updateFlagForCurrentTab ()
+});
+
+function updateFlagForCurrentTab () {
   chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
     setFlag(tabs[0].url)
   });
-});
+}
 
 function newFocusHandler (url) {
   var pUrl = setFlag(url)
@@ -444,6 +457,7 @@ function setData () {
   .then( function(result) {
     console.log('fetched data and setting ', result);
     chrome.storage.sync.set({data: result}, function() {
+      updateFlagForCurrentTab ()
     });
   });
 }
