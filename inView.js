@@ -334,6 +334,8 @@ function BC_submitNewFlagForm () {
 
     var msg = {payload: payload, from: 'newFlag'};
     console.log('msg ', msg)
+    BC_hideElement ("testFlagForm")
+    
     chrome.runtime.sendMessage(msg, function(response) {
     	// console.log(response)
     });

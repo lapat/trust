@@ -304,12 +304,12 @@ function setFlag (currentUrl) {
     for ( var i = 0; i < listings.verified.length; i ++ ) {
        console.log('checking domain ' + listings.verified[i])
        console.log('currentDomain is ' + domain)
-      if ( listings.verified[i] === domain ) {
-        // if there's a match to a verified domain we stop here
-        console.log ('domain matches verified', listings.verified[i], domain)
-        return setIcon('blue')
-        setflag = 1;
-      }
+        if ( listings.verified[i] === domain ) {
+          // if there's a match to a verified domain we stop here
+          console.log ('domain matches verified', listings.verified[i], domain)
+          return setIcon('blue')
+          setflag = 1;
+        }
     }
 
     if ( setflag === 0 ) {
