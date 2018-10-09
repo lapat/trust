@@ -12,41 +12,45 @@ var config = {
 };
 //if (!firebase.apps.length) {
 //  console.log("initializingApp")
-  firebase.initializeApp(config);
+firebase.initializeApp(config);
 //}
 
-var sample_flags =  [{
-        "flagId" : "abc123",
-        "status" : "FLAG PENDING",
-        "selectedText" : "hysteria is the key to destruction",
-        "offense" : "False Information"
-    },{
-        "flagId" : "abc123",
-        "status" : "FLAG PENDING",
-        "selectedText" : "hysteria is the key to destruction",
-        "offense" : "False Information"
-    },{
-        "flagId" : "abc123",
-        "status" : "FLAG PENDING",
-        "selectedText" : "hysteria is the key to destruction",
-        "offense" : "False Information"
-    }]
+
+
+
+/*[{
+  "flagId" : "abc123",
+  "status" : "FLAG PENDING",
+  "selectedText" : "hysteria is the key to destruction",
+  "offense" : "False Information"
+},{
+  "flagId" : "abc123",
+  "status" : "FLAG PENDING",
+  "selectedText" : "hysteria is the key to destruction",
+  "offense" : "False Information"
+},{
+  "flagId" : "abc123",
+  "status" : "FLAG PENDING",
+  "selectedText" : "hysteria is the key to destruction",
+  "offense" : "False Information"
+}]
+*/
 
 
 /**
- * initApp handles setting up the Firebase context and registering
- * callbacks for the auth status.
- *
- * The core initialization is in firebase.App - this is the glue class
- * which stores configuration. We provide an app name here to allow
- * distinguishing multiple app instances.
- *
- * This method also registers a listener with firebase.auth().onAuthStateChanged.
- * This listener is called when the user is signed in or out, and that
- * is where we update the UI.
- *
- * When signed in, we also authenticate to the Firebase Realtime Database.
- */
+* initApp handles setting up the Firebase context and registering
+* callbacks for the auth status.
+*
+* The core initialization is in firebase.App - this is the glue class
+* which stores configuration. We provide an app name here to allow
+* distinguishing multiple app instances.
+*
+* This method also registers a listener with firebase.auth().onAuthStateChanged.
+* This listener is called when the user is signed in or out, and that
+* is where we update the UI.
+*
+* When signed in, we also authenticate to the Firebase Realtime Database.
+*/
 
 window.onload = function() {
   chrome.extension.getBackgroundPage().console.log("onLoad Worked");
@@ -96,46 +100,52 @@ function initApp() {
 function getFlags (cb) {
   // console.log('get flags ran')
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-      
+
     var url = getRawUrl(tabs[0].url)
-    
+
     console.log(url)
-    
-    var flags = fetchFlagsForUrl(url)
 
-    if ( flags.length > 0 ) {
+    fetchFlagsForUrl(url, function (result){
+      if ( flags.length > 0 ) {
 
-      cb(flags)
+        cb(flags)
 
-    } else {
+      } else {
 
-      var arr = []
-      cb(arr)
-    
-    }      
+        var arr = []
+        cb(arr)
+
+      }
+    })
+
+
 
   });
 
 }
 
 function getRawUrl (rawUrl) {
-    var url =  (rawUrl.split('?')[0]).split('//')[1] // remove get params and remove protocol header
-    return url
+  var url =  (rawUrl.split('?')[0]).split('//')[1] // remove get params and remove protocol header
+  return url
 }
 
-function fetchFlagsForUrl (url) {
+function fetchFlagsForUrl (url, cb) {
   console.log(url)
-  if ( url == "www.breitbart.com/big-government/2018/10/06/kavanaugh-confirmed-possibly-most-conservative-supreme-court-since-1934/") {
 
-    return sample_flags
-     
-  } else {
+    //url == "www.breitbart.com/big-government/2018/10/06/kavanaugh-confirmed-possibly-most-conservative-supreme-court-since-1934/") {
+    firebase.functions().httpsCallable('getShortDataForUrl')({'url' : url})
+      .then( function(result) {
+        console.log(result);
+        flags = result.data
 
-    var arr = []
-    return arr
-
-  }
-
+        if (flags.length) {
+          cb (flags)
+        } else {
+          var arr = []
+          cb(arr)
+        }
+        //chrome.storage.sync.set({data: result}, function() {
+      });
 }
 
 function loadFlags () {
@@ -157,71 +167,71 @@ function loadFlags () {
 
 function showNoFlagsMessage () {
   var flagContainer = document.getElementById("flagContainer");
-      flagContainer.className = "flagContainer noFlags"
+  flagContainer.className = "flagContainer noFlags"
 
-    var newFlag = document.createElement('div')
-        newFlag.id = "noFlags"
-        newFlag.className = "flagElement"
+  var newFlag = document.createElement('div')
+  newFlag.id = "noFlags"
+  newFlag.className = "flagElement"
 
-    var quoteR = returnRandomQuote()
+  var quoteR = returnRandomQuote()
 
-    var quote = document.createElement('i') 
-        quote.innerHTML = '"' + quoteR.quote + '" <br>- ' + quoteR.author
-        quote.id = "placeholder_quote"
-        quote.className = "flagText"   
+  var quote = document.createElement('i')
+  quote.innerHTML = '"' + quoteR.quote + '" <br>- ' + quoteR.author
+  quote.id = "placeholder_quote"
+  quote.className = "flagText"
 
-    var submitFlagMessage = document.createElement('p')
-        submitFlagMessage.innerHTML = 'No one has submitted any breadcrumbs on this page yet.' 
-        submitFlagMessage.className = "submitFlagMessage"
+  var submitFlagMessage = document.createElement('p')
+  submitFlagMessage.innerHTML = 'No one has submitted any breadcrumbs on this page yet.'
+  submitFlagMessage.className = "submitFlagMessage"
 
-    var submitFlagInstruction = document.createElement('p')
-        submitFlagInstruction.innerHTML = 'To submit a breadcrumb, just right click any text in the page and click the "Flag" option!' 
-        submitFlagInstruction.className = "submitFlagInstruction"        
+  var submitFlagInstruction = document.createElement('p')
+  submitFlagInstruction.innerHTML = 'To submit a breadcrumb, just right click any text in the page and click the "Flag" option!'
+  submitFlagInstruction.className = "submitFlagInstruction"
 
-    newFlag.appendChild(quote)
-    newFlag.appendChild(submitFlagMessage)
-    newFlag.appendChild(submitFlagInstruction)
-    flagContainer.appendChild(newFlag)  
+  newFlag.appendChild(quote)
+  newFlag.appendChild(submitFlagMessage)
+  newFlag.appendChild(submitFlagInstruction)
+  flagContainer.appendChild(newFlag)
 }
 
 function returnRandomQuote () {
-  var quote = { 
-      quote : "In vain have you acquired knowledge if you have not imparted it to others.",
-      author : "Deuteronomy Rabbah"
-    }
+  var quote = {
+    quote : "In vain have you acquired knowledge if you have not imparted it to others.",
+    author : "Deuteronomy Rabbah"
+  }
   return quote
 }
 
 function showFlags (flags) {
   var flagContainer = document.getElementById("flagContainer");
-      flagContainer.className = "flagContainer"
-
+  flagContainer.className = "flagContainer"
+  console.log('flags**'+JSON.stringify(flags))
   for ( var x = 0; x < flags.length; x++ ) {
 
     var newFlag = document.createElement('div')
-        newFlag.id = flags[x].flagId
-        newFlag.className = "flagElement"
+    newFlag.id = flags[x].flagId
+    newFlag.className = "flagElement"
 
-    var flagTitle = document.createElement('i') 
-        flagTitle.innerHTML = '"' + flags[x].selectedText + '"'
-        flagTitle.id = flags[x].flagId + "_div"
-        flagTitle.className = "flagText"
+    var flagTitle = document.createElement('i')
+    flagTitle.innerHTML = '"' + flags[x].selectedText + '"'
+    flagTitle.id = flags[x].flagId + "_div"
+    flagTitle.className = "flagText"
 
     var moreInfoButton = document.createElement('button')
-        moreInfoButton.innerHTML = "More Info"
-        moreInfoButton.className = "flagInfo"
-        moreInfoButton.onclick = function() { moreInfo (this) }
+    moreInfoButton.innerHTML = "More Info"
+    moreInfoButton.className = "flagInfo"
+    moreInfoButton.onclick = function() { moreInfo (this) }
 
     var flagStatus = document.createElement('p')
-        flagStatus.innerHTML = 'Status: ' + flags[x].status 
-        flagStatus.className = "flagStatus"
+    flagStatus.innerHTML = 'Status: ' + flags[x].status
+    flagStatus.className = "flagStatus"
 
     newFlag.appendChild(flagTitle)
     newFlag.appendChild(flagStatus)
     newFlag.appendChild(moreInfoButton)
     flagContainer.appendChild(newFlag)
 
-  }    
+  }
 }
 
 function moreInfo (div) {
@@ -235,9 +245,9 @@ function setupFlags () {
 }
 
 /**
- * Start the auth flow and authorizes to Firebase.
- * @param{boolean} interactive True if the OAuth flow should request with an interactive mode.
- */
+* Start the auth flow and authorizes to Firebase.
+* @param{boolean} interactive True if the OAuth flow should request with an interactive mode.
+*/
 function startAuth(interactive) {
   chrome.extension.getBackgroundPage().console.log("Starting Auth");
 
@@ -268,8 +278,8 @@ function startAuth(interactive) {
 }
 
 /**
- * Starts the sign-in process.
- */
+* Starts the sign-in process.
+*/
 function startSignIn() {
   chrome.extension.getBackgroundPage().console.log("start signIn");
   document.getElementById('quickstart-button').disabled = true;
@@ -279,4 +289,3 @@ function startSignIn() {
     startAuth(true);
   }
 }
-

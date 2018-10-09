@@ -438,7 +438,6 @@ function getRawUrl (rawUrl) {
 
 function setData () {
   console.log('setdata running')
-
   firebase.functions().httpsCallable('getData')({})
   .then( function(result) {
     console.log(result);
