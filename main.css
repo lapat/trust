@@ -22,6 +22,7 @@ body {
   /*min-height: 400px;*/
   margin: 0;
   padding: 5px;
+  background-color: #083b8a;
 }
 a {
   text-decoration: none;
@@ -77,28 +78,31 @@ p.submitFlagInstruction {
     height: 30px;
 }
 .header button {
-    display: inline-block;
-    float: right;
-    background: antiquewhite;
-    border-radius: 5px;
-    padding: 5px;
+  display: inline-block;
+  position: absolute;
+  left: 79%;
+  float: right;
+  background: antiquewhite;
+  border-radius: 5px;
+  padding: 5px;
+  margin-top: 5px;
 }
 .flagElement {
-    width: 92%;
-    margin: auto;
-    border-radius: 5px;
-    padding: 10px;
-    background-color: aliceblue;
-    box-shadow: 0 0 1px 0.5px lightgrey;
-    margin-top: 5px;
-    margin-bottom: 5px;
+  width: 92%;
+  margin: auto;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: aliceblue;
+  box-shadow: 0 0 1px 0.5px lightgrey;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 .flagText {
-    width: 100%;
-    display: inline-block;
-    color: black;
-    font-size: 11pt;
-    margin-bottom: 5px;
+  width: 100%;
+  display: inline-block;
+  color: black;
+  font-size: 11pt;
+  margin-bottom: 5px;
 
 }
 button.flagInfo {
@@ -109,7 +113,6 @@ button.flagInfo {
 }
 .flagContainer {
     padding: 3px;
-    border: solid 1px grey;
     border-radius: 0.5em;
     max-height: 500px;
     overflow: auto;
@@ -125,10 +128,26 @@ table {
 footer td {
     width: 33%;
 }
+td.left {
+    text-align: center;
+}
 td.middle {
     text-align: center;
 }
 td.right {
-    text-align: right;
+    text-align: center;
 }
-
+img.logoImage {
+  display: inline-block;
+  float: left;
+  width: 70%;
+}
+footer a {
+    color: #083b8a;
+}
+footer {
+    background-color: white;
+    margin-left: -10px;
+    margin-right: -10px;
+    margin-bottom: -10px;
+}

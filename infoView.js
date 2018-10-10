@@ -1,6 +1,6 @@
 // TODO(DEVELOPER): Change the values below using values from the initialization snippet: Firebase Console > Overview > Add Firebase to your web app.
 // Initialize Firebase
-chrome.extension.getBackgroundPage().console.log("credentials.js loaded");
+// chrome.extension.getBackgroundPage().console.log("credentials.js loaded");
 
 var config = {
   apiKey: "AIzaSyCvj82G5ClLtYQmOYC9W_dPzgeMMmPcS58",
@@ -85,7 +85,7 @@ function initApp() {
       // [START_EXCLUDE]
       chrome.extension.getBackgroundPage().console.log("Could not get user");
 
-      document.getElementById('quickstart-button').textContent = 'Sign-in with Google';
+      document.getElementById('quickstart-button').textContent = 'Sign in';
       // document.getElementById('quickstart-sign-in-status').textContent = 'Signed out';
       // document.getElementById('quickstart-account-details').textContent = 'null';
       // [END_EXCLUDE]
