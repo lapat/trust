@@ -106,21 +106,21 @@ p.submitFlagInstruction {
 
 }
 button.flagInfo {
-    float: right;
-    padding: 5px;
-    background-color: lightgray;
-    border-radius: 5px;
+  float: right;
+  padding: 5px;
+  background-color: lightgray;
+  border-radius: 5px;
 }
 .flagContainer {
-    padding: 3px;
-    border-radius: 0.5em;
-    max-height: 500px;
-    overflow: auto;
+  padding: 3px;
+  border-radius: 0.5em;
+  max-height: 500px;
+  overflow: auto;
 }
 p.flagStatus {
-    display: inline-block;
-    margin-bottom: 0;
-    color: darkgrey;
+  display: inline-block;
+  margin-bottom: 0;
+  color: darkgrey;
 }
 table {
     width: 100%;
@@ -143,11 +143,12 @@ img.logoImage {
   width: 70%;
 }
 footer a {
-    color: #083b8a;
+  color: #083b8a;
 }
 footer {
-    background-color: white;
-    margin-left: -10px;
-    margin-right: -10px;
-    margin-bottom: -10px;
+  background-color: white;
+  margin-left: -10px;
+  margin-right: -10px;
+  margin-bottom: -10px;
+  padding: 10px;
 }
