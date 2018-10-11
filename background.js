@@ -468,15 +468,16 @@ function setData () {
   console.log('setdata running')
   firebase.functions().httpsCallable('getData')({})
   .then( function(result) {
+    console.log('size of', JSON.stringify(result).length)
     console.log('fetched data and setting ', result);
-    chrome.storage.sync.set({data: result}, function() {
+    chrome.storage.local.set({data: result}, function() {
       updateFlagForCurrentTab ()
     });
   });
 }
 
 function getData (cb) {
-  chrome.storage.sync.get(['data'], function(result) {
+  chrome.storage.local.get(['data'], function(result) {
     console.log("data loaded", result.data)
     cb (result.data)
   });
@@ -485,34 +486,34 @@ function getData (cb) {
 
 function setDiscreteData () {
   // insert api call to fetch flag data here
-  chrome.storage.sync.set({verified: sample_data.verified}, function() {
+  chrome.storage.local.set({verified: sample_data.verified}, function() {
     console.log('Verified set is ' + sample_data.verified);
   });
 
-  chrome.storage.sync.set({banned: sample_data.banned}, function() {
+  chrome.storage.local.set({banned: sample_data.banned}, function() {
     console.log('Banned set is ' + sample_data.banned);
   });
 
-  chrome.storage.sync.set({flagged: sample_data.flagged}, function() {
+  chrome.storage.local.set({flagged: sample_data.flagged}, function() {
     console.log('Flagged set is ' + sample_data.flagged);
   });
 }
 
 
 function getVerified () {
-  return chrome.storage.sync.get(['verified'], function(result) {
+  return chrome.storage.local.get(['verified'], function(result) {
     console.log('retrieved verified data')
     return result
   });
 }
 function getBanned () {
-  return chrome.storage.sync.get(['banned'], function(result) {
+  return chrome.storage.local.get(['banned'], function(result) {
     console.log('retrieved banned data')
     return result
   });
 }
 function getFlagged () {
-  return chrome.storage.sync.get(['flagged'], function(result) {
+  return chrome.storage.local.get(['flagged'], function(result) {
     console.log('retrieved flagged data')
     return result
   });

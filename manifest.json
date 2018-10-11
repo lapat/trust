@@ -23,7 +23,8 @@
     "cookies",
     "geolocation",
     "*://*/*",
-    "identity"
+    "identity",
+    "unlimitedStorage"
   ],
   "web_accessible_resources": ["images/*"],
   "content_scripts": [{
