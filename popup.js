@@ -176,6 +176,7 @@ function setNavListeners() {
   document.getElementById('_settings').addEventListener('click', navSettings)
   document.getElementById('_main').addEventListener('click', navHome)
   document.getElementById('_newFlag').addEventListener('click', navNewFlag)
+  document.getElementById('BC_nf_submitNewFlagForm').addEventListener('click', BC_submitNewFlagForm)
 }
 
 function navSettings () {
@@ -302,6 +303,34 @@ function startAuth(interactive) {
       chrome.extension.getBackgroundPage().console.log("The OAuth Token was null");
     }
   });
+}
+
+
+// send flag to background.js
+function BC_submitNewFlagForm () {
+  alert('Thanks!')
+  navHome()
+  // console.log('submitted!')
+
+  // temporarily hardcoding subject_id to 1 to avoid bugs
+  var payload = {
+    "source":document.getElementById("BC_nf_sourceUrl").value,
+    "offense_type":document.getElementById("BC_nf_offenseSelect").value,
+    "selected_text":document.getElementById("BC_nf_selectedText").value,
+    "description":document.getElementById("BC_nf_description").value,
+    "subject":document.getElementById("BC_nf_subjectSelect").value,
+    "subject_id":"1"
+  }
+
+    var msg = {payload: payload, from: 'newFlag'};
+    // console.log('msg ', msg)
+
+    // BC_hideElement ("testFlagForm")
+
+    chrome.runtime.sendMessage(msg, function(response) {
+      // console.log(response)
+    });
+
 }
 
 /**

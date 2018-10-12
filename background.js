@@ -136,7 +136,7 @@ chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
 
   if ( msg.from == 'newFlag' ) {
 
-    console.log('new Flag submit received')
+    console.log('new Flag submit received', payload)
 
     var payload = msg.payload;
 
