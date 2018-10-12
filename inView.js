@@ -19,14 +19,14 @@ var sample_flag = {
 
 //when mouse up, send message to background.js with this position
 document.addEventListener('mousedown', function (event, mousePos) {
-	console.log(event)
+	// console.log(event)
 	var divId = getClosestDiv(event.path)
-	console.log('click on ', event, "button", event.button, "event", event, divId)
+	// console.log('click on ', event, "button", event.button, "event", event, divId)
 
     if (event.button == 2) {
         var p = {clientX: event.pageX, clientY: event.pageY};
         var msg = {text: 'example', point: p, from: 'rightclick', parentNode: divId };
-        console.log('msg ', msg)
+        // console.log('msg ', msg)
         chrome.runtime.sendMessage(msg, function(response) {
         	// console.log(response)
         });
@@ -37,7 +37,7 @@ document.addEventListener('mousedown', function (event, mousePos) {
 
 // on final load, initiate onpage flag setup
 document.body.onload = function () {
-	console.log('onload ran')
+	// console.log('onload ran')
 	getData(function (data) {
 		// console.log("data", data)
 		var links = getAllLinks()
@@ -51,28 +51,28 @@ document.body.onload = function () {
 
 // Handlers for return messages from background.js
 chrome.runtime.onMessage.addListener( function(request, sender, sendResponse) {
-	console.log('message received', request)
+	// console.log('message received', request)
 
 	if ( request.actionType === "newFlag" ) {
 	    addNewFlagForm (request.point, request.selectedText)
 	}
 	
 	// else if ( request.actionType === "setFlags" ) {
-	// 	console.log("setting flags", request)
+		// console.log("setting flags", request)
 	// 	addFlagsToPage(request)
 	// }
 
 	if ( request.actionType === "error" ) {
-		console.log(request)
+		// console.log(request)
 	    alert(request.message)
 	}
 
 });
 
 function setIcon (color, div) {
-	console.log('setIcon hit', color, div)
+	// console.log('setIcon hit', color, div)
 	var coords = div.getBoundingClientRect()
-	console.log('coords are', coords)
+	// console.log('coords are', coords)
 	insertFlagAtCoords(coords, color)
 }
 
@@ -83,7 +83,7 @@ function setUrlStatus (div, listings) {
     // console.log('setFlag ran with url ', url)
     var rawUrl = getRawUrl(url)
     var domain = rawUrl.split("/")[0]
-    console.log("checking ", rawUrl, domain)
+    // console.log("checking ", rawUrl, domain)
     var setflag = 0;
 
     // console.log('checking against data ', listings)
@@ -132,7 +132,7 @@ function setUrlStatus (div, listings) {
 
         for ( var i = 0; i < listings.flagged.length; i ++ ) {
 
-            console.log ('checking domain', listings.flagged[i], domain)
+            // console.log ('checking domain', listings.flagged[i], domain)
             if ( listings.flagged[i].domain === domain ) {
                 // here we'll need to index through the urls to identify if this url is flagged or banned
                     for ( var u = 0; u < listings.flagged[i].urls.length; u ++ ) {
@@ -164,7 +164,7 @@ function setUrlStatus (div, listings) {
 
 // function addFlagsToPage (divId, flag) {
 // 	var coords = document.querySelector(request.divId).getBoundingClientRect()
-// 	console.log("coords", coords)
+	console.log("coords", coords)
 // }
 
 function getRawUrl (rawUrl) {
@@ -186,12 +186,12 @@ function getClosestDiv (path) {
 
 function adjustXCoord (xcoord) {
 	var xcoord_adjusted = xcoord - 5
-	console.log('adjusted ' + xcoord + ' to ' + xcoord_adjusted)
+	// console.log('adjusted ' + xcoord + ' to ' + xcoord_adjusted)
 	return xcoord_adjusted
 }
 
 function insertFlagAtCoords (coordinates, color) {
-	console.log('insert flag triggered', coordinates, color)
+	// console.log('insert flag triggered', coordinates, color)
 
 	// coordinates.x = adjustXCoord(coordinates.x)
 
@@ -201,7 +201,7 @@ function insertFlagAtCoords (coordinates, color) {
 	}
 
 	var imagePath = chrome.extension.getURL('images/' + color + '.png')
-	console.log(imagePath)
+	// console.log(imagePath)
 
 	var img = document.createElement('img')
 		img.src = imagePath
@@ -216,7 +216,7 @@ function insertFlagAtCoords (coordinates, color) {
 }
 
 function addNewFlagForm (coordinates, selectedText) {
-	console.log('newFlagForm triggered')
+	// console.log('newFlagForm triggered')
 	var box = document.createElement('div')
 		// box.style.width = "200px"
 		// box.style.height = "200px"
@@ -312,14 +312,14 @@ function addNewFlagForm (coordinates, selectedText) {
 		form.appendChild(document.createElement("br"))
 		form.appendChild(submit)
 
-	console.log( 'Appending new child form')
+	// console.log( 'Appending new child form')
 
 	// Append the Box
 	box.appendChild(form)
 	document.body.appendChild(box)
 
 	// Add onclick listeners to the box
-	console.log(document.getElementById('BC_submitNewFlagForm'))
+	// console.log(document.getElementById('BC_submitNewFlagForm'))
 
 	// appendFormContents(form.id, "flag")
 	setElementPosition(box.id, coordinates)
@@ -328,7 +328,7 @@ function addNewFlagForm (coordinates, selectedText) {
 
 function BC_submitNewFlagForm () {
 	alert('Thanks!')
-	console.log('submitted!')
+	// console.log('submitted!')
 
 	// temporarily hardcoding subject_id to 1 to avoid bugs
 	var payload = {
@@ -341,7 +341,7 @@ function BC_submitNewFlagForm () {
 	}
 
     var msg = {payload: payload, from: 'newFlag'};
-    console.log('msg ', msg)
+    // console.log('msg ', msg)
 
     BC_hideElement ("testFlagForm")
 
@@ -370,13 +370,13 @@ function BC_submitNewFlagForm () {
 
 function getData (cb) {
     chrome.storage.sync.get(['data'], function(result) {
-        console.log("data loaded", result.data)
+        // console.log("data loaded", result.data)
         cb (result.data)
     });
 }
 
 function setElementPosition (id, position) {
-	console.log( 'setting element with id ' + id + " to position ", position )
+	// console.log( 'setting element with id ' + id + " to position ", position )
 	document.getElementById( id ).style.top = position.clientY.toString() + "px";
 	document.getElementById( id ).style.left = position.clientX.toString() + "px";
 }

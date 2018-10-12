@@ -1,54 +1,76 @@
-</body>
 <!DOCTYPE html>
+<!--
+Copyright (c) 2016 Google Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
 <html>
-    <head>
-        <style>
-            body { 
-                min-width: 420px; 
-                overflow-x: hidden; 
-                font-family: Arial, sans-serif; 
-                font-size: 12px; 
-            }
-            input, textarea { 
-                width: 420px; 
-            }
-            input#save { 
-                font-weight: bold; width: auto; 
-            }
-        </style>
-        <script src="popup.js"></script>
-        <script src="addInput.js" language="Javascript" type="text/javascript"></script>
+<head>
+  <meta charset=utf-8 />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>eTrust Sign In</title>
+
+  <link rel="stylesheet" href="main.css">
+
+  <!-- ***************************************************************************************
+       * TODO(DEVELOPER): Make sure you are importing the latest version of the Firebase JS. *
+       *************************************************************************************** -->
+  <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js" integrity="sha384-kW+oWsYx3YpxvjtZjFXqazFpA7UP/MbiY4jvs+RWZo2+N94PFZ36T6TFkc9O3qoB" crossorigin="anonymous"></script>     
+  <script src="https://www.gstatic.com/firebasejs/5.5.1/firebase.js"></script>
+  <script src="popup.js"></script>
+
+</head>
+<body>
+  
+  <div class="header">
+    <h3><img class="logoImage" src="images/logo.png" alt="Breadcrumbs"></img></h3>
+    <button id="quickstart-button">Sign In</button>
+  </div>
+  
+  <div id="home">
+    <div id="noFlags" class="flagElement">
+      <i id="placeholder_quote" class="flagText">
+        "In vain have you acquired knowledge if you have not imparted it to others." <br>- Deuteronomy Rabbah
+      </i>
+      <p class="submitFlagMessage">
+        No one has submitted any breadcrumbs on this page yet.
+      </p>
+      <p class="submitFlagInstruction">
+        To submit a breadcrumb, just right click any text in the page and click the "Flag" option!
+      </p>
+    </div>
+  </div>
+  
+  <div id="settings">
+    Settings
+  </div>
+  
+  <div id="flagContainer">
     
+  </div>
 
-    <body>
-            <div id="wrapper">
-        <h1>Hi!</h1>
+  <div id="newFlag">
+    NewFlag
+  </div>  
 
-         <div id = "comments">
-                <p>This is where the comments will go. This is also where the voting buttons will be (next to the comments).</p>
-         </div>
-
-         <div id="addComment">
-                <input type="button" value="+ Comment" onClick="addComment('addComment');"><input type="button" id="cancel" value="Cancel" onClick="drop('cplus');">
-         <div id="cplus"></div>
-         </div>
-
-        </div>
-
-
-    </body>
-  <script src="https://www.gstatic.com/firebasejs/5.5.1/firebase.js"></script>    
+</body>
+<footer>
+  <table>
+    <tr>
+      <td class="left" id="_settings"><a class="moreLink" href="#">Settings</a></td>
+      <td class="middle" id="_main"><a class="moreLink" href="#">Main</a></td>
+      <td class="right" id="_newFlag"><a class="moreLink" href="#">New</a></td>
+    </tr>
+  </table>
+</footer>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
