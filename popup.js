@@ -240,23 +240,47 @@ function showFlags (flags) {
     newFlag.id = flags[x].flagId
     newFlag.className = "flagElement"
 
-    var flagTitle = document.createElement('i')
-    flagTitle.innerHTML = '"' + flags[x].selectedText + '"'
-    flagTitle.id = flags[x].flagId + "_div"
-    flagTitle.className = "flagText"
+    var flagHeader = document.createElement('div')
+        flagHeader.id = "flagHeader_" + flags[x].flagId
+        flagHeader.className = "flagHeader"
+
+    var flagFooter = document.createElement('div')
+        flagFooter.id = flags[x].flagId
+        flagFooter.className = "flagFooter"
+
+    var flagText = document.createElement('i')
+        flagText.innerHTML = '"' + flags[x].selectedText + '"'
+        flagText.id = flags[x].flagId + "_div"
+        flagText.className = "flagText"
 
     var moreInfoButton = document.createElement('button')
-    moreInfoButton.innerHTML = "More Info"
-    moreInfoButton.className = "flagInfo"
-    moreInfoButton.onclick = function() { moreInfo (this) }
+        moreInfoButton.innerHTML = "i"
+        moreInfoButton.className = "flagInfo"
+        moreInfoButton.onclick = function() { moreInfo (this) }
 
     var flagStatus = document.createElement('p')
-    flagStatus.innerHTML = 'Status: ' + flags[x].status
-    flagStatus.className = "flagStatus"
+        flagStatus.innerHTML = flags[x].status.split("FLAG ")[1]
+        flagStatus.className = "flagStatus"
 
-    newFlag.appendChild(flagTitle)
-    newFlag.appendChild(flagStatus)
-    newFlag.appendChild(moreInfoButton)
+    var flagCategory = document.createElement('p')
+        flagCategory.innerHTML = flags[x].flagSubject
+        flagCategory.className = "flagSubject"
+
+    var flagOffense = document.createElement('p')
+        flagOffense.innerHTML = flags[x].offense
+        flagOffense.className = "flagOffense"                
+
+    // flagHeader.appendChild(status)
+    flagHeader.appendChild(flagOffense)
+    flagHeader.appendChild(flagCategory)
+
+    flagFooter.appendChild(flagStatus)
+    flagFooter.appendChild(moreInfoButton)
+
+    newFlag.appendChild(flagHeader)
+    newFlag.appendChild(flagText)
+    newFlag.appendChild(flagFooter)
+
     flagContainer.appendChild(newFlag)
 
   }
@@ -264,7 +288,7 @@ function showFlags (flags) {
 
 function moreInfo (div) {
   var id = div.parentNode.id
-  var url = "https://trust-f0fdc.firebaseapp.com/#/getinfo?i=" + id
+  var url = "https://downloadbreadcrumbs.com/#/getinfo?i=" + id
   window.open( url , '_newtab');
 }
 
