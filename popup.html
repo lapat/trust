@@ -59,8 +59,30 @@ limitations under the License.
     
   </div>
 
-  <div id="newFlag">
-    NewFlag
+  <div id="newFlag" class="flagform">
+    <div class="bc_header">
+      <h3 class="bc_header">New Flag:</h3>
+    </div>
+    <textarea class="bc_input" id="BC_nf_selectedText" placeholder="Enter the offending text here"></textarea>
+    
+    <input type="text" id="BC_nf_sourceUrl" class="bc_input" placeholder="Enter a citation url to expedite approval">
+    
+    <select class="bc_input offense" id="BC_nf_offenseSelect">
+      <option value="Slander">Slander</option>
+      <option value="Fraud / Misleading">Fraud / Misleading</option>
+      <option value="Offensive">Offensive</option>
+    </select>
+
+    <select class="bc_input subject" id="BC_nf_subjectSelect">
+      <option value="Medical">Medical</option>
+      <option value="General Science">General Science</option>
+      <option value="History">History</option>
+    </select>
+
+    <textarea class="bc_input bc_description" id="BC_nf_description" placeholder="Leave a comment (optional)"></textarea>
+    <br>
+
+    <button id="BC_nf_submitNewFlagForm" class="bc_input submit">Submit Flag</button>
   </div>  
 
 </body>

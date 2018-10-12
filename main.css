@@ -157,3 +157,36 @@ footer {
 .hidden {
   display: none !important;
 }
+
+/* Flag Form */
+.flagform {
+    background-color: lightgrey;
+    border-radius: 5px;
+    padding: 5px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+h3.bc_header {
+    border-bottom: solid white 1px;
+    padding-bottom: 5px;
+    text-transform: uppercase;
+}
+.bc_header {
+    width: 100%;
+}
+.bc_input {
+    width: 285px;
+    margin-top: 5px;
+}
+select.bc_input {
+    width: 290px;
+}
+.bc_input.submit {
+    width: 100%;
+    background-color: #2196F3;
+    padding: 5px;
+    border-radius: 5px;
+    color: white;
+    font-size: 9pt;
+    text-transform: uppercase;
+}

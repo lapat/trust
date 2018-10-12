@@ -194,12 +194,27 @@ function navNewFlag () {
   document.getElementById('newFlag').className = document.getElementById('newFlag').className.split('hidden').join(' ')       
 }
 
+function navFlagContainer () {
+  console.log('nav to new flag')
+  document.getElementById('home').className += " hidden"
+  document.getElementById('newFlag').className += " hidden"
+  document.getElementById('settings').className += " hidden"
+  document.getElementById('flagContainer').className = document.getElementById('flagContainer').className.split('hidden').join(' ')       
+}
+
 function navHome () {
   console.log('nav to home')
-  document.getElementById('settings').className += " hidden"
-  document.getElementById('flagContainer').className += " hidden"
-  document.getElementById('newFlag').className += " hidden"
-  document.getElementById('home').className = document.getElementById('home').className.split('hidden').join(' ')       
+  // loadFlags()
+  if(document.getElementById('flagContainer').children.length > 0) {
+    console.log('flagContainer has children - navigating to flagContainer')
+    navFlagContainer()
+  } else {
+    console.log('flagContainer has no children - navigating to home')
+    document.getElementById('settings').className += " hidden"
+    document.getElementById('flagContainer').className += " hidden"
+    document.getElementById('newFlag').className += " hidden"
+    document.getElementById('home').className = document.getElementById('home').className.split('hidden').join(' ')       
+  }
 }
 
 function showNoFlagsMessage () {
