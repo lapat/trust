@@ -158,6 +158,21 @@ chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
 
   }
 
+  if (msg.from == 'search') {
+    //storing position
+    console.log('received search request ', msg)
+    sendResponse = "OK"
+
+    var request = {
+      'actionType' : 'search',
+      'searchText' : msg.payload.searchText
+    }
+
+    sendMessageToCurrentTab(request)
+    return sendResponse
+
+  }
+
   // if (msg.from == 'resetData') {
   //   //storing position
   //   console.log('received getflags ', msg)
@@ -234,11 +249,13 @@ function newFlag (tab, text) {
     "selectedText" : text,
     "actionType" : "newFlag"
   }
-  sendMessageToCurrentTab (payload)
+  window.open("flagForm.html", "extension_popup", "width=300,status=no,scrollbars=yes,resizable=no");
+  // sendMessageToCurrentTab (payload)
 
 }
 
 function sendMessageToCurrentTab (payload) {
+  console.log('sendMessageToCurrentTab', payload)
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
     chrome.tabs.sendMessage(tabs[0].id, payload, function(response) {
        console.log(response);

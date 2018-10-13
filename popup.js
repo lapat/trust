@@ -253,6 +253,12 @@ function showFlags (flags) {
         flagText.id = flags[x].flagId + "_div"
         flagText.className = "flagText"
 
+    var searchButton = document.createElement('button')
+        searchButton.innerHTML = "s"
+        searchButton.className = "flagInfo"
+        searchButton.value = flags[x].selectedText
+        searchButton.onclick = function() { searchPageAndNav (this.value) }
+
     var moreInfoButton = document.createElement('button')
         moreInfoButton.innerHTML = "i"
         moreInfoButton.className = "flagInfo"
@@ -275,6 +281,7 @@ function showFlags (flags) {
     flagHeader.appendChild(flagCategory)
 
     flagFooter.appendChild(flagStatus)
+    flagFooter.appendChild(searchButton)
     flagFooter.appendChild(moreInfoButton)
 
     newFlag.appendChild(flagHeader)
@@ -348,6 +355,27 @@ function BC_submitNewFlagForm () {
 
     var msg = {payload: payload, from: 'newFlag'};
     // console.log('msg ', msg)
+
+    // BC_hideElement ("testFlagForm")
+
+    chrome.runtime.sendMessage(msg, function(response) {
+      // console.log(response)
+    });
+
+}
+
+function searchPageAndNav (text) {
+ 
+  
+  console.log('search request sent to background for text', text)
+
+  // temporarily hardcoding subject_id to 1 to avoid bugs
+  var payload = {
+    "searchText": text
+  }
+
+    var msg = {payload: payload, from: 'search'};
+    console.log('msg ', msg)
 
     // BC_hideElement ("testFlagForm")
 

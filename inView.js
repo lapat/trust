@@ -67,7 +67,56 @@ chrome.runtime.onMessage.addListener( function(request, sender, sendResponse) {
 	    alert(request.message)
 	}
 
+	if ( request.actionType === "search" ) {
+		console.log('search request received', request.searchText)
+	    searchAndScroll(request.searchText)
+	}
+
 });
+
+function searchAndScroll (text) {
+
+	getAllParagraphs (function (result) {
+		console.log('found paragraphs', result)
+		for ( var i = 0; i < result.length; i++ ) {
+			console.log('checking if div', result[i], 'contains', text)
+			if (result[i].textContent.includes(text)) {
+				handleFound(result[i])
+			}
+		}
+	}) 
+	getAllSpans (function (result) {
+		console.log('found spans', result)
+		for ( var i = 0; i < result.length; i++ ) {
+			console.log('checking if div', result[i], 'contains', text)
+			if (result[i].textContent.includes(text)) {
+				handleFound(result[i])
+			}
+		}
+	}) 	
+
+}
+
+function handleFound (div) {
+	highlightText(div)
+	scrollToDiv(div)
+}
+
+function getAllParagraphs (cb) {
+	cb(document.getElementsByTagName("p"))
+}
+
+function getAllSpans (cb) {
+	cb(document.getElementsByTagName("span"))
+}
+
+function highlightText (div) {
+	div.style.background = "yellow";
+}
+
+function scrollToDiv (div) {
+	div.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
+}
 
 function setIcon (color, div) {
 	// console.log('setIcon hit', color, div)

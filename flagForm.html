@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<!-- saved from url=(0063)chrome-extension://hegaekoclnmggbgbmgfjkgofifocfhef/popup.html# -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>eTrust Sign In</title>
+
+  <link rel="stylesheet" href="chrome-extension://hegaekoclnmggbgbmgfjkgofifocfhef/main.css">
+  <script defer="" src="./flagForm_files/all.js" integrity="sha384-kW+oWsYx3YpxvjtZjFXqazFpA7UP/MbiY4jvs+RWZo2+N94PFZ36T6TFkc9O3qoB" crossorigin="anonymous"></script>     
+  <script src="./flagForm_files/firebase.js"></script>
+  <script src="chrome-extension://hegaekoclnmggbgbmgfjkgofifocfhef/popup.js"></script>
+
+</head>
+<body>
+  
+  <div class="header">
+    <h3><img class="logoImage" src="chrome-extension://hegaekoclnmggbgbmgfjkgofifocfhef/images/logo.png" alt="Breadcrumbs"></h3>
+    <button id="quickstart-button">Sign out</button>
+  </div>
+
+  <div id="newFlag" class="flagform">
+    <div class="bc_header">
+      <h3 class="bc_header">New Flag:</h3>
+    </div>
+    <textarea class="bc_input" id="BC_nf_selectedText" placeholder="Enter the offending text here"></textarea>
+    
+    <input type="text" id="BC_nf_sourceUrl" class="bc_input" placeholder="Enter a citation url to expedite approval">
+    
+    <select class="bc_input offense" id="BC_nf_offenseSelect">
+      <option value="Slander" selected="">Select Offense</option>
+      <option value="Slander">Slander</option>
+      <option value="Fraud / Misleading">Fraud / Misleading</option>
+      <option value="Offensive">Offensive</option>
+    </select>
+
+    <select class="bc_input subject" id="BC_nf_subjectSelect">
+      <option value="Slander" selected="">Select Category</option>
+      <option value="Medical">Medical</option>
+      <option value="General Science">General Science</option>
+      <option value="History">History</option>
+    </select>
+
+    <textarea class="bc_input bc_description" id="BC_nf_description" placeholder="Leave a comment (optional)"></textarea>
+    <br>
+
+    <button id="BC_nf_submitNewFlagForm" class="bc_input submit">Submit Flag</button>
+  </div>  
+
+
+
+
+</body></html>
