@@ -51,15 +51,26 @@ limitations under the License.
     </div>
   </div>
   
-  <div id="settings">
-    Settings
+  <div id="settings" class="flagform hidden">
+    <div class="bc_header">
+      <h3 class="bc_header">Settings:</h3>
+    </div>
+    
+    <input type="text" id="BC_nf_sourceUrl" class="bc_input" placeholder="Enter a citation url to expedite approval">
+    
+    <select class="bc_input colorScheme" id="BC_nf_offenseSelect">
+      <option value="Light" selected>Light</option>
+      <option value="Dark">Dark</option>
+    </select>
+
+    <button id="BC_SaveSettings" class="bc_input submit">Save</button>    
   </div>
   
   <div id="flagContainer">
     
   </div>
 
-  <div id="newFlag" class="flagform">
+  <div id="newFlag" class="flagform hidden">
     <div class="bc_header">
       <h3 class="bc_header">New Flag:</h3>
     </div>
@@ -68,12 +79,14 @@ limitations under the License.
     <input type="text" id="BC_nf_sourceUrl" class="bc_input" placeholder="Enter a citation url to expedite approval">
     
     <select class="bc_input offense" id="BC_nf_offenseSelect">
+      <option value="Slander" selected>Select Offense</option>
       <option value="Slander">Slander</option>
       <option value="Fraud / Misleading">Fraud / Misleading</option>
       <option value="Offensive">Offensive</option>
     </select>
 
     <select class="bc_input subject" id="BC_nf_subjectSelect">
+      <option value="Slander" selected>Select Category</option>
       <option value="Medical">Medical</option>
       <option value="General Science">General Science</option>
       <option value="History">History</option>
