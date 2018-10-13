@@ -136,18 +136,12 @@ chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
 
   if ( msg.from == 'newFlag' ) {
 
-    console.log('new Flag submit received', payload)
-
     var payload = msg.payload;
+    console.log('new Flag submit received', msg)
 
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+    callAPIForNewFlag(msg.payload)
 
-      payload.url = tabs[0].url
-      console.log(payload)
-      callAPIForNewFlag(payload)
-
-    });
-
+    
   }
 
   if (msg.from == 'getFlags') {
@@ -249,8 +243,18 @@ function newFlag (tab, text) {
     "selectedText" : text,
     "actionType" : "newFlag"
   }
-  window.open("flagForm.html", "extension_popup", "width=300,status=no,scrollbars=yes,resizable=no");
-  // sendMessageToCurrentTab (payload)
+  
+  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+
+    var url = tabs[0].url
+
+    var paramString = "url=" + encodeURIComponent(url) + "&text=" + encodeURIComponent(text)
+
+    window.open("flagForm.html?" + paramString, "extension_popup", "width=300,status=no,scrollbars=yes,resizable=no");
+    // sendMessageToCurrentTab (payload)
+
+
+  });
 
 }
 
@@ -333,30 +337,30 @@ function newFocusHandler (url) {
 
 
 function setFlag (currentUrl) {
-  console.log('setFlag ran with url ', currentUrl)
+  // console.log('setFlag ran with url ', currentUrl)
   var rawUrl = getRawUrl(currentUrl)
   var domain = rawUrl.split("/")[0]
   var domain = removeWww(domain);
-   console.log(rawUrl, domain)
+   // console.log(rawUrl, domain)
   var setflag = 0;
 
   getData( function(listings) {
-    console.log('checking against data ', listings)
+    // console.log('checking against data ', listings)
 
     listings=listings.data;
     for ( var i = 0; i < listings.verified.length; i ++ ) {
-       console.log('checking domain ' + listings.verified[i])
-       console.log('currentDomain is ' + domain)
+       // console.log('checking domain ' + listings.verified[i])
+       // console.log('currentDomain is ' + domain)
         if ( listings.verified[i] === domain ) {
           // if there's a match to a verified domain we stop here
-          console.log ('domain matches verified', listings.verified[i], domain)
+          // console.log ('domain matches verified', listings.verified[i], domain)
           return setIcon('blue')
           setflag = 1;
         }
     }
 
     if ( setflag === 0 ) {
-       console.log('no verified URLs found, checking for banned domains')
+       // console.log('no verified URLs found, checking for banned domains')
 
       for ( var i = 0; i < listings.banned.length; i ++ ) {
         if ( listings.banned[i].domain === domain ) {
@@ -365,7 +369,7 @@ function setFlag (currentUrl) {
             if ( listings.banned[i].urls[u].url === rawUrl ) {
               // here we'll need to index through the urls to identify if this url is flagged or banned
 
-               console.log ('url matches banned', listings.banned[i], domain)
+               // console.log ('url matches banned', listings.banned[i], domain)
               return setIcon('red', listings.banned[i].urls[u].flagArray.length)
 
               // sendSetFlagsToView(listings.banned[i].urls[u].flags)
@@ -374,7 +378,7 @@ function setFlag (currentUrl) {
             }
 
           }
-          console.log ('domain is flagged but this URL didn\'t match a known banned site', listings.verified[i], rawUrl)
+          // console.log ('domain is flagged but this URL didn\'t match a known banned site', listings.verified[i], rawUrl)
           return setIcon('yellow')
           setflag = 1;
         }
@@ -382,20 +386,20 @@ function setFlag (currentUrl) {
       }
 
 
-       console.log('no banned URLs found, checking for flagged domains rawUrl:'+rawUrl)
+       // console.log('no banned URLs found, checking for flagged domains rawUrl:'+rawUrl)
 
       for ( var i = 0; i < listings.flagged.length; i ++ ) {
 
-         console.log ('checking domain', listings.flagged[i].domain, domain)
+         // console.log ('checking domain', listings.flagged[i].domain, domain)
         if ( listings.flagged[i].domain === domain ) {
-          console.log("matched domain:",domain)
-          console.log("listings.flagged[i].urls:",listings.flagged[i].urls)
+          // console.log("matched domain:",domain)
+          // console.log("listings.flagged[i].urls:",listings.flagged[i].urls)
           // here we'll need to index through the urls to identify if this url is flagged or banned
           for ( var u = 0; u < listings.flagged[i].urls.length; u ++ ) {
-            console.log("checking url:",listings.flagged[i].urls[u].url)
+            // console.log("checking url:",listings.flagged[i].urls[u].url)
             if ( listings.flagged[i].urls[u].url === rawUrl ) {
               // here we'll need to index through the urls to identify if this url is flagged or banned
-              console.log ('url matches flagged', listings.flagged[i].urls[u], rawUrl)
+              // console.log ('url matches flagged', listings.flagged[i].urls[u], rawUrl)
               return setIcon('yellow', listings.flagged[i].urls[u].flagArray.length)
               // sendSetFlagsToView(listings.flagged[i].urls[u].flags)
               setflag = 1;

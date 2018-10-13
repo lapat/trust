@@ -15,43 +15,6 @@ var config = {
 firebase.initializeApp(config);
 //}
 
-
-
-
-/*[{
-  "flagId" : "abc123",
-  "status" : "FLAG PENDING",
-  "selectedText" : "hysteria is the key to destruction",
-  "offense" : "False Information"
-},{
-  "flagId" : "abc123",
-  "status" : "FLAG PENDING",
-  "selectedText" : "hysteria is the key to destruction",
-  "offense" : "False Information"
-},{
-  "flagId" : "abc123",
-  "status" : "FLAG PENDING",
-  "selectedText" : "hysteria is the key to destruction",
-  "offense" : "False Information"
-}]
-*/
-
-
-/**
-* initApp handles setting up the Firebase context and registering
-* callbacks for the auth status.
-*
-* The core initialization is in firebase.App - this is the glue class
-* which stores configuration. We provide an app name here to allow
-* distinguishing multiple app instances.
-*
-* This method also registers a listener with firebase.auth().onAuthStateChanged.
-* This listener is called when the user is signed in or out, and that
-* is where we update the UI.
-*
-* When signed in, we also authenticate to the Firebase Realtime Database.
-*/
-
 window.onload = function() {
   chrome.extension.getBackgroundPage().console.log("onLoad Worked");
   initApp();
@@ -342,26 +305,40 @@ function BC_submitNewFlagForm () {
   alert('Thanks!')
   navHome()
   // console.log('submitted!')
+  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) { 
+    // temporarily hardcoding subject_id to 1 to avoid bugs
+    var payload = {
+      "url" : getRawUrl(tabs[0].url),
+      "source":document.getElementById("BC_nf_sourceUrl").value,
+      "offense_type":document.getElementById("BC_nf_offenseSelect").value,
+      "selected_text":document.getElementById("BC_nf_selectedText").value,
+      "description":document.getElementById("BC_nf_description").value,
+      "subject":document.getElementById("BC_nf_subjectSelect").value,
+      "subject_id":"1"
+    }
 
-  // temporarily hardcoding subject_id to 1 to avoid bugs
-  var payload = {
-    "source":document.getElementById("BC_nf_sourceUrl").value,
-    "offense_type":document.getElementById("BC_nf_offenseSelect").value,
-    "selected_text":document.getElementById("BC_nf_selectedText").value,
-    "description":document.getElementById("BC_nf_description").value,
-    "subject":document.getElementById("BC_nf_subjectSelect").value,
-    "subject_id":"1"
-  }
+      var msg = {payload: payload, from: 'newFlag'};
+      // console.log('msg ', msg)
 
-    var msg = {payload: payload, from: 'newFlag'};
-    // console.log('msg ', msg)
+      // BC_hideElement ("testFlagForm")
 
-    // BC_hideElement ("testFlagForm")
+      chrome.runtime.sendMessage(msg, function(response) {
+        // console.log(response)
+      });
+  })
+}
 
-    chrome.runtime.sendMessage(msg, function(response) {
-      // console.log(response)
-    });
+function getRawUrl (rawUrl) {
+  console.log('getting raw url of ', rawUrl)
+  var url =  (rawUrl.split('?')[0]).split('//')[1] // remove get params and remove protocol header
+  return url
+}
 
+function removeWww(rawUrl){
+  console.log('getting www-less url of ', rawUrl)
+  var noWww = rawUrl.split('www.')[1]
+  console.log('noWww', noWww)
+  return noWww
 }
 
 function searchPageAndNav (text) {

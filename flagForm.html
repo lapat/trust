@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="chrome-extension://hegaekoclnmggbgbmgfjkgofifocfhef/main.css">
   <script defer="" src="./flagForm_files/all.js" integrity="sha384-kW+oWsYx3YpxvjtZjFXqazFpA7UP/MbiY4jvs+RWZo2+N94PFZ36T6TFkc9O3qoB" crossorigin="anonymous"></script>     
   <script src="./flagForm_files/firebase.js"></script>
-  <script src="chrome-extension://hegaekoclnmggbgbmgfjkgofifocfhef/popup.js"></script>
+  <script src="flagForm.js"></script>
 
 </head>
 <body>
@@ -23,7 +23,7 @@
       <h3 class="bc_header">New Flag:</h3>
     </div>
     <textarea class="bc_input" id="BC_nf_selectedText" placeholder="Enter the offending text here"></textarea>
-    
+    <input type="text" id="BC_nf_url" class="bc_input" placeholder="Enter the Url of the page with the content you're flagging">    
     <input type="text" id="BC_nf_sourceUrl" class="bc_input" placeholder="Enter a citation url to expedite approval">
     
     <select class="bc_input offense" id="BC_nf_offenseSelect">
