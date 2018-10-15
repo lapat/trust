@@ -29,8 +29,7 @@
   "web_accessible_resources": ["images/*"],
   "content_scripts": [{
     "matches": ["*://*/*","<all_urls>"],
-    "js": ["inView.js"],
-    "css": ["inView.css"],
+    "js": ["inViewHandler.js"],
     "run_at": "document_end",
     "all_frames": true
     }],

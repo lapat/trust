@@ -178,21 +178,22 @@ chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
 })
 
 function callAPIForNewFlag (payload) {
-  firebase.functions().httpsCallable('flag')(payload)
-  .then( function(result) {
-    console.log('flag submitted, returned:', result);
-    setData()
-  }).catch(exception => {
 
-    console.log('flag submission error!: ' + exception)
+    firebase.functions().httpsCallable('flag')(payload)
+    .then( function(result) {
+      console.log('flag submitted, returned:', result);
+      setData()
+    }).catch( function(error){
 
-    var payload = {
-      'actionType' : 'error',
-      'message' : exception.toString()
-    }
+      console.log('flag submission error!: ' + exception)
 
-    sendMessageToCurrentTab (payload)
-  })
+      var payload = {
+        'actionType' : 'error',
+        'message' : exception.toString()
+      }
+
+      sendMessageToCurrentTab (payload)
+    })
 }
 
 // Set up context menu tree at install time.
@@ -250,7 +251,7 @@ function newFlag (tab, text) {
 
     var paramString = "url=" + encodeURIComponent(url) + "&text=" + encodeURIComponent(text)
 
-    window.open("flagForm.html?" + paramString, "extension_popup", "width=300,status=no,scrollbars=yes,resizable=no");
+    window.open("flagForm.html?" + paramString, "extension_popup", "width=300px,status=no,scrollbars=yes,resizable=no");
     // sendMessageToCurrentTab (payload)
 
 

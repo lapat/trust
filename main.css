@@ -210,3 +210,11 @@ p.flagOffense {
   margin-bottom: 2px;
   text-transform: capitalize;
 }
+.settings {
+    height: 250px;
+    text-align: center;
+    vertical-align: middle;
+}
+.settings h3.bc_header {
+    margin-top: 20%;
+}
