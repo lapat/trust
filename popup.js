@@ -23,6 +23,7 @@ window.onload = function() {
 };
 
 
+
 function initApp() {
   chrome.extension.getBackgroundPage().console.log("initApp Called");
   // Listen for auth state changes.
@@ -60,6 +61,15 @@ function initApp() {
 
   document.getElementById('quickstart-button').addEventListener('click', startSignIn, false);
   document.getElementById('refresh-button').addEventListener('click', getFlags);
+
+  chrome.runtime.onMessage.addListener(
+    function(request, sender, sendResponse) {
+      if (request.msg === "refresh") {
+        getFlags()
+      }
+
+    }
+  )
 
 }
 
