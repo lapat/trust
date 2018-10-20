@@ -164,7 +164,7 @@ footer {
 
 /* Flag Form */
 .flagform {
-  background-color: lightgrey;
+  background-color: aliceblue;
   border-radius: 5px;
   padding: 5px;
   margin-bottom: 5px;
@@ -210,6 +210,8 @@ p.flagOffense {
   margin-bottom: 2px;
   text-transform: capitalize;
 }
+
+/* Settings */
 .settings {
     height: 250px;
     text-align: center;
@@ -217,4 +219,22 @@ p.flagOffense {
 }
 .settings h3.bc_header {
     margin-top: 20%;
+}
+tr#settingsHeader {
+    float: left;
+    font-weight: bold;
+    margin-top: 15px;
+}
+tr.settingsItem {
+    width: -webkit-fill-available;
+    vertical-align: text-top;
+}
+td.settingsOption {
+    float: right;
+    width: max-content;
+    display: block;
+}
+td.settingsLabel {
+    float: left;
+    width: max-content;
 }

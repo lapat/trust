@@ -52,9 +52,40 @@ limitations under the License.
   </div>
   
   <div id="settings" class="flagform settings hidden">
-    <div class="bc_header">
-        <button id="quickstart-button">Sign In</button>        
-      <h3 class="bc_header">Settings Coming Soon</h3>
+    <div class="bc_header">  
+        <table id="settingsPanel" class="settingsPanel">
+          <tr>
+            <td>
+              <h3 id="userName" class="userName">Sign in to View User Info</h3>
+              <i id="userScore" class="userScore"></i>
+            </td>
+            <td>
+              <button id="quickstart-button">Sign In</button> 
+            </td>
+          </tr>
+          <tr id="settingsHeader"><td>Settings:</td></tr>
+          <tr class="settingsItem">
+            <td class="settingsLabel">Color Scheme</td>
+            <td class="settingsOption">
+              <select class="colorScheme" id="colorScheme">
+                <option value="Light" selected>Light</option>
+                <option value="Dark">Dark</option>
+              </select>              
+            </td>
+          <tr>
+          <tr class="settingsItem">
+            <td class="settingsLabel">Auto-Highlighting</td>
+            <td class="settingsOption">
+              <input type="checkbox" id="autoHighlighting">
+            </td>
+          <tr>
+          <tr class="settingsItem">
+            <td class="settingsLabel">Show Pending Flags</td>
+            <td class="settingsOption">
+              <input type="checkbox" id="showPendingFlags">
+            </td>
+          <tr> 
+        </table>
     </div>
     <!-- 
     <input type="text" id="BC_nf_sourceUrl" class="bc_input" placeholder="Enter a citation url to expedite approval">
@@ -80,16 +111,19 @@ limitations under the License.
     <input type="text" id="BC_nf_sourceUrl" class="bc_input" placeholder="Enter a citation url to expedite approval">
     
     <select class="bc_input offense" id="BC_nf_offenseSelect">
-      <option value="Slander" selected>Select Offense</option>
+      <option value="Misleading" selected>Select Offense</option>
       <option value="Slander">Slander</option>
-      <option value="Fraud / Misleading">Fraud / Misleading</option>
+      <option value="Fraud">Fraud</option>
+      <option value="Misleading">Misleading</option>
       <option value="Offensive">Offensive</option>
     </select>
 
     <select class="bc_input subject" id="BC_nf_subjectSelect">
-      <option value="Slander" selected>Select Category</option>
+      <option value="General" selected>General</option>
       <option value="Medical">Medical</option>
-      <option value="General Science">General Science</option>
+      <option value="Science">Science</option>
+      <option value="Chemistry">Chemistry</option>
+      <option value="Economics">Economics</option>
       <option value="History">History</option>
     </select>
 
