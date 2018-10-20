@@ -1,91 +1,5 @@
 
 console.log("background.js");
-// Sample data:
-// var sample_data = {
-//   "verified":
-//   [ "en.wikipedia.org", "alexmorris.com" ],
-//   "banned" :
-//   [
-//     {
-//       "domain" : "coinflashapp.com",
-//       "urls" :
-//       [{
-//         "url":"coinflashapp.com/verified.html",
-//         "flags" : []
-//       },{
-//         "url":"coinflashapp.com/verified2.html",
-//         "flags" : []
-//       }]
-//     },
-//     {
-//       "domain" : "www.breitbart.com",
-//       "urls" :
-//       [{
-//         "url":"www.breitbart.com/big-government/2018/09/14/donald-trump-jr-kimberly-guilfoyle-hit-campaign-trail-in-ohio-to-keep-state-red-in-2018/",
-//         "flags" : [{
-//           "flagId" : "abc123",
-//           "divId" : "MainW"
-//         },{
-//           "flagId" : "abc124",
-//           "divId" : "MainW"
-//         }]
-//       },{
-//         "url":"www.breitbart.com/big-government/2018/10/06/kavanaugh-confirmed-possibly-most-conservative-supreme-court-since-1934/",
-//         "flags" : [{
-//           "flagId" : "abc123",
-//           "divId" : "MainW"
-//         },{
-//           "flagId" : "abc124",
-//           "divId" : "MainW"
-//         }]
-//       }]
-//     }
-//   ],
-//   "flagged" :
-//   [
-//     {
-//       "domain" : "dirkdiggler.com",
-//       "urls" :
-//       [{
-//         "url":"dirkdiggler.com/big-government/2018/09/14/donald-trump-jr-kimberly-guilfoyle-hit-campaign-trail-in-ohio-to-keep-state-red-in-2018/",
-//         "flags" : ["abc1238172, abc1247318"]
-//       },{
-//         "url":"dirkdiggler.com/38822.html",
-//         "flags" : ["abc1239182, abc12498128"]
-//       }]
-//     },
-//     {
-//       "domain" : "thisisbullshit.com",
-//       "urls" :
-//       [{
-//         "url":"thisisbullshit.com/big-government/2018/09/14/donald-trump-jr-kimberly-guilfoyle-hit-campaign-trail-in-ohio-to-keep-state-red-in-2018/",
-//         "flags" : ["abc1238172, abc1247318"]
-//       },{
-//         "url":"thisisbullshit.com/38822.html",
-//         "flags" : ["abc1239182, abc12498128"]
-//       }]
-//     },
-//     {
-//       "domain" : "stackoverflow.com",
-//       "urls" :
-//       [{
-//         "url":"stackoverflow.com/someUrl.html",
-//         "flags" : ["abc1238172, abc1247318"]
-//       },{
-//         "url":"stackoverflow.com/someUrl2.html",
-//         "flags" : ["abc1239182, abc12498128"]
-//       }]
-//     }
-//   ]
-// }
-
-// var sample_flags = {
-//   "flags" : [{
-//     "id" : "abc123",
-//     "parentNode" : "MainW",
-//     "selectedText" : "hysteria is the key to destruction"
-//   }]
-// }
 
 if (!mousePoint) {
   var mousePoint = {};
@@ -167,33 +81,9 @@ chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
 
   }
 
-  if (msg.from == 'refresh') {
-    //storing position
-    console.log('received refresh request ')
-    sendResponse = "OK"
-
-    var request = {
-      'actionType' : 'search',
-      'searchText' : msg.payload.searchText
-    }
-
-    sendMessageToCurrentTab(request)
-    return sendResponse
-
-  }  
-
-  // if (msg.from == 'resetData') {
-  //   //storing position
-  //   console.log('received getflags ', msg)
-  //   setData()
-  //   return true
-
-  // }  
-
 })
 
 function callAPIForNewFlag (payload) {
-    updateLocalArray(payload)
     firebase.functions().httpsCallable('flag')(payload)
     .then( function(result) {
       console.log('flag submitted, returned:', result);
@@ -209,84 +99,6 @@ function callAPIForNewFlag (payload) {
 
       sendMessageToCurrentTab (payload)
     })
-}
-
-function updateLocalArray (payload) {
-    // Template:
-    // var payload = {
-    //   "url" : getRawUrl(tabs[0].url),
-    //   "source":document.getElementById("BC_nf_sourceUrl").value,
-    //   "offense_type":document.getElementById("BC_nf_offenseSelect").value,
-    //   "selected_text":document.getElementById("BC_nf_selectedText").value,
-    //   "description":document.getElementById("BC_nf_description").value,
-    //   "subject":document.getElementById("BC_nf_subjectSelect").value,
-    //   "subject_id":"1"
-    // }
-
-  console.log('update local tmp array triggered')
-
-  var newFlag = {
-    id : "tmp",
-    status : "FLAG PENDING"
-  }
-
-  chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
-    var url = getRawUrl(tabs[0].url)
-    var domain = url.split("/")[0]
-
-    console.log('checking all known listings for url ', url)
-    getData ( function (listings) {
-      // index through all flagged listings and push new flag for current url
-      for ( var i = 0; i < listings.flagged.length; i++ ) {
-        if (listings.flagged[i].domain === domain ) {
-          console.log('domain matched', listings.flagged.domain, domain, "indexing through urls")
-          var found = 0;
-          for (var x = 0; x < listings.flagged[i].urls.length; x++ ){
-
-            if (listings.flagged[i].urls[x].url === url) {
-              console.log('found matching url', listings.flagged[i].urls[x].url, url, 'pushing url')
-              listings.flagged[i].urls[x].flagArray.push(newFlag)
-              updateTmpListings(listings)  
-              updatePopupInfo(newFlag)            
-              found = 1
-            }
-
-          }
-          if ( found = 0 ) {
-            console.log("didn't find matching url - pushing new urls entry instead")
-            var newUrl = {
-              status : "FLAG PENDING",
-              url : url,
-              flagArray : [newFlag]
-            }
-            listings.flagged[i].push(newUrl);
-            updateTmpListings(listings)
-            updatePopupInfo(newFlag)
-          }
-        } else {
-          console.log('domain not matched', listings.flagged.domain, domain)  
-        }
-                
-      } 
-
-    })    
-  });
-
-
-}
-
-function updateTmpListings (listings) {
-  console.log('updateTmpListings triggered')
-  chrome.storage.local.set({data: listings}, function() {
-    updateFlagForCurrentTab ()
-    updatePopupInfo()
-  });
-}
-
-  
-function updatePopupInfo(newFlag) {
-  console.log('refresh triggered')
-  chrome.runtime.sendMessage({msg : "refresh", payload : newFlag});  
 }
 
 // Set up context menu tree at install time.

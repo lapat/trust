@@ -60,17 +60,15 @@ function initApp() {
   // [END authstatelistener]
 
   document.getElementById('quickstart-button').addEventListener('click', startSignIn, false);
-  document.getElementById('refresh-button').addEventListener('click', getFlags);
+  document.getElementById('refresh-button').addEventListener('click', refreshData);
 
-  chrome.runtime.onMessage.addListener(
-    function(request, sender, sendResponse) {
-      if (request.msg === "refresh") {
-        getFlags()
-      }
+}
 
-    }
-  )
-
+function refreshData () {
+  console.log('refresh data called')
+  getFlags(function(flags) {
+    showFlags(flags)
+  })
 }
 
 function getFlags (cb) {
@@ -83,21 +81,9 @@ function getFlags (cb) {
 
     fetchFlagsForUrl(url, function (result){
       if ( flags.length > 0 ) {
-
-        if ( typeof cb === "function" ) {
-          cb(flags)
-        } else {
-          return
-        }
-
+        cb(flags)
       } else {
-        if ( typeof cb === "function" ) {
-          var arr = []
-          cb(arr)
-        } else {
-          return
-        }
-
+        cb(arr)
       }
     })
 
@@ -213,64 +199,78 @@ function returnRandomQuote () {
 }
 
 function showFlags (flags) {
+
+  // Retrieve Flag Container
   var flagContainer = document.getElementById("flagContainer");
   flagContainer.className = "flagContainer"
+
+  // Fill Flag Container
   console.log('flags**'+JSON.stringify(flags))
   for ( var x = 0; x < flags.length; x++ ) {
 
-    var newFlag = document.createElement('div')
-    newFlag.id = flags[x].flagId
-    newFlag.className = "flagElement"
+    // Check if flag is already present
+    var fCheck = document.getElementById("flagHeader_" + flags[x].flagId)
 
-    var flagHeader = document.createElement('div')
-        flagHeader.id = "flagHeader_" + flags[x].flagId
-        flagHeader.className = "flagHeader"
+    if (fCheck != null) {
+      // skip this flag as it's already loaded
+    
+    } else {
 
-    var flagFooter = document.createElement('div')
-        flagFooter.id = flags[x].flagId
-        flagFooter.className = "flagFooter"
+      // If not, then add it
+      var newFlag = document.createElement('div')
+      newFlag.id = flags[x].flagId
+      newFlag.className = "flagElement"
 
-    var flagText = document.createElement('i')
-        flagText.innerHTML = '"' + flags[x].selectedText + '"'
-        flagText.id = flags[x].flagId + "_div"
-        flagText.className = "flagText"
+      var flagHeader = document.createElement('div')
+          flagHeader.id = "flagHeader_" + flags[x].flagId
+          flagHeader.className = "flagHeader"
 
-    var searchButton = document.createElement('button')
-        searchButton.innerHTML = "s"
-        searchButton.className = "flagInfo"
-        searchButton.value = flags[x].selectedText
-        searchButton.onclick = function() { searchPageAndNav (this.value) }
+      var flagFooter = document.createElement('div')
+          flagFooter.id = flags[x].flagId
+          flagFooter.className = "flagFooter"
 
-    var moreInfoButton = document.createElement('button')
-        moreInfoButton.innerHTML = "i"
-        moreInfoButton.className = "flagInfo"
-        moreInfoButton.onclick = function() { moreInfo (this) }
+      var flagText = document.createElement('i')
+          flagText.innerHTML = '"' + flags[x].selectedText + '"'
+          flagText.id = flags[x].flagId + "_div"
+          flagText.className = "flagText"
 
-    var flagStatus = document.createElement('p')
-        flagStatus.innerHTML = flags[x].status.split("FLAG ")[1]
-        flagStatus.className = "flagStatus"
+      var searchButton = document.createElement('button')
+          searchButton.innerHTML = "s"
+          searchButton.className = "flagInfo"
+          searchButton.value = flags[x].selectedText
+          searchButton.onclick = function() { searchPageAndNav (this.value) }
 
-    var flagCategory = document.createElement('p')
-        flagCategory.innerHTML = flags[x].flagSubject
-        flagCategory.className = "flagSubject"
+      var moreInfoButton = document.createElement('button')
+          moreInfoButton.innerHTML = "i"
+          moreInfoButton.className = "flagInfo"
+          moreInfoButton.onclick = function() { moreInfo (this) }
 
-    var flagOffense = document.createElement('p')
-        flagOffense.innerHTML = flags[x].offense
-        flagOffense.className = "flagOffense"                
+      var flagStatus = document.createElement('p')
+          flagStatus.innerHTML = flags[x].status.split("FLAG ")[1]
+          flagStatus.className = "flagStatus"
 
-    // flagHeader.appendChild(status)
-    flagHeader.appendChild(flagOffense)
-    flagHeader.appendChild(flagCategory)
+      var flagCategory = document.createElement('p')
+          flagCategory.innerHTML = flags[x].flagSubject
+          flagCategory.className = "flagSubject"
 
-    flagFooter.appendChild(flagStatus)
-    flagFooter.appendChild(searchButton)
-    flagFooter.appendChild(moreInfoButton)
+      var flagOffense = document.createElement('p')
+          flagOffense.innerHTML = flags[x].offense
+          flagOffense.className = "flagOffense"                
 
-    newFlag.appendChild(flagHeader)
-    newFlag.appendChild(flagText)
-    newFlag.appendChild(flagFooter)
+      // flagHeader.appendChild(status)
+      flagHeader.appendChild(flagOffense)
+      flagHeader.appendChild(flagCategory)
 
-    flagContainer.appendChild(newFlag)
+      flagFooter.appendChild(flagStatus)
+      flagFooter.appendChild(searchButton)
+      flagFooter.appendChild(moreInfoButton)
+
+      newFlag.appendChild(flagHeader)
+      newFlag.appendChild(flagText)
+      newFlag.appendChild(flagFooter)
+
+      flagContainer.appendChild(newFlag)
+    }
 
   }
 }
