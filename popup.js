@@ -59,6 +59,8 @@ function initApp() {
   // [END authstatelistener]
 
   document.getElementById('quickstart-button').addEventListener('click', startSignIn, false);
+  document.getElementById('refresh-button').addEventListener('click', getFlags);
+
 }
 
 function getFlags (cb) {
@@ -66,18 +68,25 @@ function getFlags (cb) {
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 
     var url = getRawUrl(tabs[0].url)
-
+    console.log('cb', cb)
     console.log(url)
 
     fetchFlagsForUrl(url, function (result){
       if ( flags.length > 0 ) {
 
-        cb(flags)
+        if ( typeof cb === "function" ) {
+          cb(flags)
+        } else {
+          return
+        }
 
       } else {
-
-        var arr = []
-        cb(arr)
+        if ( typeof cb === "function" ) {
+          var arr = []
+          cb(arr)
+        } else {
+          return
+        }
 
       }
     })

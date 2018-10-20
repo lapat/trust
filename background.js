@@ -167,6 +167,21 @@ chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
 
   }
 
+  if (msg.from == 'refresh') {
+    //storing position
+    console.log('received refresh request ')
+    sendResponse = "OK"
+
+    var request = {
+      'actionType' : 'search',
+      'searchText' : msg.payload.searchText
+    }
+
+    sendMessageToCurrentTab(request)
+    return sendResponse
+
+  }  
+
   // if (msg.from == 'resetData') {
   //   //storing position
   //   console.log('received getflags ', msg)
