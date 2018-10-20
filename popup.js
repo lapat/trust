@@ -202,7 +202,7 @@ function showFlags (flags) {
 
   // Retrieve Flag Container
   var flagContainer = document.getElementById("flagContainer");
-  flagContainer.className = "flagContainer"
+  // flagContainer.className = "flagContainer"
 
   // Fill Flag Container
   console.log('flags**'+JSON.stringify(flags))
