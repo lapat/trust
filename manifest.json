@@ -1,5 +1,5 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 2.1,
 
   "name": "BreadCrumbs",
   "description": "Verify before you believe. Blue : Good, Yellow : Debate, Red : Bad, Grey : Untracked",
@@ -11,7 +11,7 @@
 
   "browser_action": {
     "default_icon": "images/red.png",
-    "default_popup": "infoView.html"
+    "default_popup": "popup.html"
   },
   "permissions": [
     "storage",
@@ -29,8 +29,7 @@
   "web_accessible_resources": ["images/*"],
   "content_scripts": [{
     "matches": ["*://*/*","<all_urls>"],
-    "js": ["inView.js"],
-    "css": ["inView.css"],
+    "js": ["inViewHandler.js"],
     "run_at": "document_end",
     "all_frames": true
     }],

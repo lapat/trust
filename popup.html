@@ -1,54 +1,146 @@
-</body>
 <!DOCTYPE html>
+<!--
+Copyright (c) 2016 Google Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
 <html>
-    <head>
-        <style>
-            body { 
-                min-width: 420px; 
-                overflow-x: hidden; 
-                font-family: Arial, sans-serif; 
-                font-size: 12px; 
-            }
-            input, textarea { 
-                width: 420px; 
-            }
-            input#save { 
-                font-weight: bold; width: auto; 
-            }
-        </style>
-        <script src="popup.js"></script>
-        <script src="addInput.js" language="Javascript" type="text/javascript"></script>
+<head>
+  <meta charset=utf-8 />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>eTrust Sign In</title>
+
+  <link rel="stylesheet" href="main.css">
+
+  <!-- ***************************************************************************************
+       * TODO(DEVELOPER): Make sure you are importing the latest version of the Firebase JS. *
+       *************************************************************************************** -->
+  <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js" integrity="sha384-kW+oWsYx3YpxvjtZjFXqazFpA7UP/MbiY4jvs+RWZo2+N94PFZ36T6TFkc9O3qoB" crossorigin="anonymous"></script>     
+  <script src="https://www.gstatic.com/firebasejs/5.5.1/firebase.js"></script>
+  <script src="popup.js"></script>
+
+</head>
+<body>
+  
+  <div class="header">
+    <h3><img class="logoImage" src="images/logo.png" alt="Breadcrumbs"></img></h3>
+    <button id="refresh-button">Refresh</button>    
+  </div>
+  
+  <div id="home">
+    <div id="noFlags" class="flagElement">
+      <i id="placeholder_quote" class="flagText">
+        "In vain have you acquired knowledge if you have not imparted it to others." <br>- Deuteronomy Rabbah
+      </i>
+      <p class="submitFlagMessage">
+        There are no verified breadcrumbs on this page yet. Turn on 'Show Pending' in settings to see all breadcrumbs (not just verified ones).
+      </p>
+      <p class="submitFlagInstruction">
+        To submit a breadcrumb, just right click any text in the page and click the "Flag" option!
+      </p>
+    </div>
+  </div>
+  
+  <div id="settings" class="flagform settings hidden">
+    <div class="bc_header">  
+        <table id="settingsPanel" class="settingsPanel">
+          <tr>
+            <td>
+              <h3 id="userName" class="userName">Sign in to View User Info</h3>
+              <i id="userScore" class="userScore"></i>
+            </td>
+            <td>
+              <button id="quickstart-button">Sign In</button> 
+            </td>
+          </tr>
+          <tr id="settingsHeader"><td>Settings:</td></tr>
+          <tr class="settingsItem">
+            <td class="settingsLabel">Color Scheme</td>
+            <td class="settingsOption">
+              <select class="colorScheme" id="colorScheme">
+                <option value="Light" selected>Light</option>
+                <option value="Dark">Dark</option>
+              </select>              
+            </td>
+          <tr>
+          <tr class="settingsItem">
+            <td class="settingsLabel">Auto-Highlighting</td>
+            <td class="settingsOption">
+              <input type="checkbox" id="autoHighlighting">
+            </td>
+          <tr>
+          <tr class="settingsItem">
+            <td class="settingsLabel">Show Pending Flags</td>
+            <td class="settingsOption">
+              <input type="checkbox" id="showPendingFlags">
+            </td>
+          <tr> 
+        </table>
+    </div>
+    <!-- 
+    <input type="text" id="BC_nf_sourceUrl" class="bc_input" placeholder="Enter a citation url to expedite approval">
     
+    <select class="bc_input colorScheme" id="BC_nf_offenseSelect">
+      <option value="Light" selected>Light</option>
+      <option value="Dark">Dark</option>
+    </select>
 
-    <body>
-            <div id="wrapper">
-        <h1>Hi!</h1>
+    <button id="BC_SaveSettings" class="bc_input submit">Save</button>     -->
+  </div>
+  
+  <div id="flagContainer" class="flagContainer">
+    
+  </div>
 
-         <div id = "comments">
-                <p>This is where the comments will go. This is also where the voting buttons will be (next to the comments).</p>
-         </div>
+  <div id="newFlag" class="flagform hidden">
+    <div class="bc_header">
+      <h3 class="bc_header">New Flag:</h3>
+    </div>
+    <textarea class="bc_input" id="BC_nf_selectedText" placeholder="Enter the offending text here"></textarea>
+    
+    <input type="text" id="BC_nf_sourceUrl" class="bc_input" placeholder="Enter a citation url to expedite approval">
+    
+    <select class="bc_input offense" id="BC_nf_offenseSelect">
+      <option value="Misleading" selected>Select Offense</option>
+      <option value="Slander">Slander</option>
+      <option value="Fraud">Fraud</option>
+      <option value="Misleading">Misleading</option>
+      <option value="Offensive">Offensive</option>
+    </select>
 
-         <div id="addComment">
-                <input type="button" value="+ Comment" onClick="addComment('addComment');"><input type="button" id="cancel" value="Cancel" onClick="drop('cplus');">
-         <div id="cplus"></div>
-         </div>
+    <select class="bc_input subject" id="BC_nf_subjectSelect">
+      <option value="General" selected>General</option>
+      <option value="Medical">Medical</option>
+      <option value="Science">Science</option>
+      <option value="Chemistry">Chemistry</option>
+      <option value="Economics">Economics</option>
+      <option value="History">History</option>
+    </select>
 
-        </div>
+    <textarea class="bc_input bc_description" id="BC_nf_description" placeholder="Leave a comment (optional)"></textarea>
+    <br>
 
+    <button id="BC_nf_submitNewFlagForm" class="bc_input submit">Submit Flag</button>
+  </div>  
 
-    </body>
-  <script src="https://www.gstatic.com/firebasejs/5.5.1/firebase.js"></script>    
+</body>
+<footer>
+  <table>
+    <tr>
+      <td class="left" id="_settings"><a class="moreLink" href="#">Settings</a></td>
+      <td class="middle" id="_main"><a class="moreLink" href="#">Main</a></td>
+      <td class="right" id="_newFlag"><a class="moreLink" href="#">New</a></td>
+    </tr>
+  </table>
+</footer>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-

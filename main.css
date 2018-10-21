@@ -103,13 +103,16 @@ p.submitFlagInstruction {
   color: black;
   font-size: 11pt;
   margin-bottom: 5px;
+  font-weight: 100;
 
 }
 button.flagInfo {
   float: right;
-  padding: 5px;
-  background-color: lightgray;
-  border-radius: 5px;
+  background-color: #d3d3d36b;
+  border-radius: 20px;
+  width: 20px;
+  height: 20px;
+  font-family: cursive;
 }
 .flagContainer {
   padding: 3px;
@@ -121,6 +124,7 @@ p.flagStatus {
   display: inline-block;
   margin-bottom: 0;
   color: darkgrey;
+  margin-top: 5px;
 }
 table {
     width: 100%;
@@ -133,6 +137,8 @@ td.left {
 }
 td.middle {
     text-align: center;
+    border-left: solid grey 1px;
+    border-right: solid grey 1px;
 }
 td.right {
     text-align: center;
@@ -151,4 +157,84 @@ footer {
   margin-right: -10px;
   margin-bottom: -10px;
   padding: 10px;
+}
+.hidden {
+  display: none !important;
+}
+
+/* Flag Form */
+.flagform {
+  background-color: aliceblue;
+  border-radius: 5px;
+  padding: 5px;
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
+h3.bc_header {
+  border-bottom: solid white 1px;
+  padding-bottom: 5px;
+  text-transform: uppercase;
+}
+.bc_header {
+  width: 100%;
+}
+.bc_input {
+  width: 285px;
+  margin-top: 5px;
+}
+select.bc_input {
+  width: 290px;
+}
+.bc_input.submit {
+  width: 100%;
+  background-color: #2196F3;
+  padding: 5px;
+  border-radius: 5px;
+  color: white;
+  font-size: 9pt;
+  text-transform: uppercase;
+}
+p.flagSubject {
+  float: right;
+  width: 50%;
+  text-align: right;
+  margin-top: 2px;
+  text-transform: uppercase;
+}
+p.flagOffense {
+  font-size: 12pt;
+  float: left;
+  width: 50%;
+  text-align: left;
+  margin-top: 0;
+  margin-bottom: 2px;
+  text-transform: capitalize;
+}
+
+/* Settings */
+.settings {
+    height: 250px;
+    text-align: center;
+    vertical-align: middle;
+}
+.settings h3.bc_header {
+    margin-top: 20%;
+}
+tr#settingsHeader {
+    float: left;
+    font-weight: bold;
+    margin-top: 15px;
+}
+tr.settingsItem {
+    width: -webkit-fill-available;
+    vertical-align: text-top;
+}
+td.settingsOption {
+    float: right;
+    width: max-content;
+    display: block;
+}
+td.settingsLabel {
+    float: left;
+    width: max-content;
 }

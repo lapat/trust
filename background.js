@@ -1,91 +1,5 @@
 
 console.log("background.js");
-// Sample data:
-// var sample_data = {
-//   "verified":
-//   [ "en.wikipedia.org", "alexmorris.com" ],
-//   "banned" :
-//   [
-//     {
-//       "domain" : "coinflashapp.com",
-//       "urls" :
-//       [{
-//         "url":"coinflashapp.com/verified.html",
-//         "flags" : []
-//       },{
-//         "url":"coinflashapp.com/verified2.html",
-//         "flags" : []
-//       }]
-//     },
-//     {
-//       "domain" : "www.breitbart.com",
-//       "urls" :
-//       [{
-//         "url":"www.breitbart.com/big-government/2018/09/14/donald-trump-jr-kimberly-guilfoyle-hit-campaign-trail-in-ohio-to-keep-state-red-in-2018/",
-//         "flags" : [{
-//           "flagId" : "abc123",
-//           "divId" : "MainW"
-//         },{
-//           "flagId" : "abc124",
-//           "divId" : "MainW"
-//         }]
-//       },{
-//         "url":"www.breitbart.com/big-government/2018/10/06/kavanaugh-confirmed-possibly-most-conservative-supreme-court-since-1934/",
-//         "flags" : [{
-//           "flagId" : "abc123",
-//           "divId" : "MainW"
-//         },{
-//           "flagId" : "abc124",
-//           "divId" : "MainW"
-//         }]
-//       }]
-//     }
-//   ],
-//   "flagged" :
-//   [
-//     {
-//       "domain" : "dirkdiggler.com",
-//       "urls" :
-//       [{
-//         "url":"dirkdiggler.com/big-government/2018/09/14/donald-trump-jr-kimberly-guilfoyle-hit-campaign-trail-in-ohio-to-keep-state-red-in-2018/",
-//         "flags" : ["abc1238172, abc1247318"]
-//       },{
-//         "url":"dirkdiggler.com/38822.html",
-//         "flags" : ["abc1239182, abc12498128"]
-//       }]
-//     },
-//     {
-//       "domain" : "thisisbullshit.com",
-//       "urls" :
-//       [{
-//         "url":"thisisbullshit.com/big-government/2018/09/14/donald-trump-jr-kimberly-guilfoyle-hit-campaign-trail-in-ohio-to-keep-state-red-in-2018/",
-//         "flags" : ["abc1238172, abc1247318"]
-//       },{
-//         "url":"thisisbullshit.com/38822.html",
-//         "flags" : ["abc1239182, abc12498128"]
-//       }]
-//     },
-//     {
-//       "domain" : "stackoverflow.com",
-//       "urls" :
-//       [{
-//         "url":"stackoverflow.com/someUrl.html",
-//         "flags" : ["abc1238172, abc1247318"]
-//       },{
-//         "url":"stackoverflow.com/someUrl2.html",
-//         "flags" : ["abc1239182, abc12498128"]
-//       }]
-//     }
-//   ]
-// }
-
-// var sample_flags = {
-//   "flags" : [{
-//     "id" : "abc123",
-//     "parentNode" : "MainW",
-//     "selectedText" : "hysteria is the key to destruction"
-//   }]
-// }
 
 if (!mousePoint) {
   var mousePoint = {};
@@ -136,18 +50,12 @@ chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
 
   if ( msg.from == 'newFlag' ) {
 
-    console.log('new Flag submit received')
-
     var payload = msg.payload;
+    console.log('new Flag submit received', msg)
 
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+    callAPIForNewFlag(msg.payload)
 
-      payload.url = tabs[0].url
-      console.log(payload)
-      callAPIForNewFlag(payload)
-
-    });
-
+    
   }
 
   if (msg.from == 'getFlags') {
@@ -158,32 +66,39 @@ chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
 
   }
 
-  // if (msg.from == 'resetData') {
-  //   //storing position
-  //   console.log('received getflags ', msg)
-  //   setData()
-  //   return true
+  if (msg.from == 'search') {
+    //storing position
+    console.log('received search request ', msg)
+    sendResponse = "OK"
 
-  // }  
+    var request = {
+      'actionType' : 'search',
+      'searchText' : msg.payload.searchText
+    }
+
+    sendMessageToCurrentTab(request)
+    return sendResponse
+
+  }
 
 })
 
 function callAPIForNewFlag (payload) {
-  firebase.functions().httpsCallable('flag')(payload)
-  .then( function(result) {
-    console.log('flag submitted, returned:', result);
-    setData()
-  }).catch(exception => {
+    firebase.functions().httpsCallable('flag')(payload)
+    .then( function(result) {
+      console.log('flag submitted, returned:', result);
+      setData()
+    }).catch( function(error){
 
-    console.log('flag submission error!: ' + exception)
+      console.log('flag submission error!: ' + exception)
 
-    var payload = {
-      'actionType' : 'error',
-      'message' : exception.toString()
-    }
+      var payload = {
+        'actionType' : 'error',
+        'message' : exception.toString()
+      }
 
-    sendMessageToCurrentTab (payload)
-  })
+      sendMessageToCurrentTab (payload)
+    })
 }
 
 // Set up context menu tree at install time.
@@ -234,11 +149,23 @@ function newFlag (tab, text) {
     "selectedText" : text,
     "actionType" : "newFlag"
   }
-  sendMessageToCurrentTab (payload)
+  
+  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+
+    var url = tabs[0].url
+
+    var paramString = "url=" + encodeURIComponent(url) + "&text=" + encodeURIComponent(text)
+
+    window.open("flagForm.html?" + paramString, "extension_popup", "width=300px,status=no,scrollbars=yes,resizable=no");
+    // sendMessageToCurrentTab (payload)
+
+
+  });
 
 }
 
 function sendMessageToCurrentTab (payload) {
+  console.log('sendMessageToCurrentTab', payload)
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
     chrome.tabs.sendMessage(tabs[0].id, payload, function(response) {
        console.log(response);
@@ -316,30 +243,30 @@ function newFocusHandler (url) {
 
 
 function setFlag (currentUrl) {
-  console.log('setFlag ran with url ', currentUrl)
+  // console.log('setFlag ran with url ', currentUrl)
   var rawUrl = getRawUrl(currentUrl)
   var domain = rawUrl.split("/")[0]
   var domain = removeWww(domain);
-   console.log(rawUrl, domain)
+   // console.log(rawUrl, domain)
   var setflag = 0;
 
   getData( function(listings) {
-    console.log('checking against data ', listings)
+    // console.log('checking against data ', listings)
 
     listings=listings.data;
     for ( var i = 0; i < listings.verified.length; i ++ ) {
-       console.log('checking domain ' + listings.verified[i])
-       console.log('currentDomain is ' + domain)
+       // console.log('checking domain ' + listings.verified[i])
+       // console.log('currentDomain is ' + domain)
         if ( listings.verified[i] === domain ) {
           // if there's a match to a verified domain we stop here
-          console.log ('domain matches verified', listings.verified[i], domain)
+          // console.log ('domain matches verified', listings.verified[i], domain)
           return setIcon('blue')
           setflag = 1;
         }
     }
 
     if ( setflag === 0 ) {
-       console.log('no verified URLs found, checking for banned domains')
+       // console.log('no verified URLs found, checking for banned domains')
 
       for ( var i = 0; i < listings.banned.length; i ++ ) {
         if ( listings.banned[i].domain === domain ) {
@@ -348,7 +275,8 @@ function setFlag (currentUrl) {
             if ( listings.banned[i].urls[u].url === rawUrl ) {
               // here we'll need to index through the urls to identify if this url is flagged or banned
 
-               console.log ('url matches banned', listings.banned[i], domain)
+               // console.log ('url matches banned', listings.banned[i], domain)
+
               return setIcon('red', listings.banned[i].urls[u].flagArray.length)
 
               // sendSetFlagsToView(listings.banned[i].urls[u].flags)
@@ -357,7 +285,7 @@ function setFlag (currentUrl) {
             }
 
           }
-          console.log ('domain is flagged but this URL didn\'t match a known banned site', listings.verified[i], rawUrl)
+          // console.log ('domain is flagged but this URL didn\'t match a known banned site', listings.verified[i], rawUrl)
           return setIcon('yellow')
           setflag = 1;
         }
@@ -365,20 +293,20 @@ function setFlag (currentUrl) {
       }
 
 
-       console.log('no banned URLs found, checking for flagged domains rawUrl:'+rawUrl)
+       // console.log('no banned URLs found, checking for flagged domains rawUrl:'+rawUrl)
 
       for ( var i = 0; i < listings.flagged.length; i ++ ) {
 
-         console.log ('checking domain', listings.flagged[i].domain, domain)
+         // console.log ('checking domain', listings.flagged[i].domain, domain)
         if ( listings.flagged[i].domain === domain ) {
-          console.log("matched domain:",domain)
-          console.log("listings.flagged[i].urls:",listings.flagged[i].urls)
+          // console.log("matched domain:",domain)
+          // console.log("listings.flagged[i].urls:",listings.flagged[i].urls)
           // here we'll need to index through the urls to identify if this url is flagged or banned
           for ( var u = 0; u < listings.flagged[i].urls.length; u ++ ) {
-            console.log("checking url:",listings.flagged[i].urls[u].url)
+            // console.log("checking url:",listings.flagged[i].urls[u].url)
             if ( listings.flagged[i].urls[u].url === rawUrl ) {
               // here we'll need to index through the urls to identify if this url is flagged or banned
-              console.log ('url matches flagged', listings.flagged[i].urls[u], rawUrl)
+              // console.log ('url matches flagged', listings.flagged[i].urls[u], rawUrl)
               return setIcon('yellow', listings.flagged[i].urls[u].flagArray.length)
               // sendSetFlagsToView(listings.flagged[i].urls[u].flags)
               setflag = 1;
@@ -394,6 +322,39 @@ function setFlag (currentUrl) {
     }
   });
 
+}
+
+function highlightTextInView () {
+  console.log('autoHighlighting ran')
+  chrome.storage.local.get(["settings"] , function(settings){
+    console.log('autoHighlighting: ', settings.settings.autoHighlighting) 
+    var autoHighlighting = settings.settings.autoHighlighting
+    if ( autoHighlighting === true ) {
+      console.log ('autoHighlighting is true, checking flags for url')
+      chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+
+        fetchFlagsForUrl(getRawUrl(tabs[0].url), function(flags) {
+          console.log('flags retrieved, sending highlight calls')
+
+          for (var i = 0; i < flags.length; i++ ) {
+            var payload = {
+                  "actionType" : "highlight",
+                  "searchText" : flags[i].selectedText
+                }
+            console.log('highlight call 1: ', payload, "to", tabs[0].id )
+            chrome.tabs.sendMessage(tabs[0].id, payload, function(response) {
+              
+              // console.log(response);
+              
+
+            });
+          }
+        })
+
+  
+      });
+    }
+  })
 }
 
 function setViewData (data) {
@@ -432,21 +393,25 @@ function setIcon(flag, count){
     // console.log("Set to blue");
 
   }else if(flag==="red"){
+
     chrome.browserAction.setIcon({
       path: "images/red.png"
     });
+    highlightTextInView ()
     // console.log("Set to red");
 
   }else if(flag==="yellow"){
     chrome.browserAction.setIcon({
       path: "images/yellow.png"
     });
+    highlightTextInView ()
     // console.log("Set to yellow");
 
   }else{
     chrome.browserAction.setIcon({
       path: "images/grey.png"
     });
+    ighlightTextInView ()
     // console.log("Set to grey");
   }
 }
@@ -483,6 +448,24 @@ function getData (cb) {
   });
 }
 
+function fetchFlagsForUrl (url, cb) {
+  console.log(url)
+
+    //url == "www.breitbart.com/big-government/2018/10/06/kavanaugh-confirmed-possibly-most-conservative-supreme-court-since-1934/") {
+    firebase.functions().httpsCallable('getShortDataForUrl')({'url' : url})
+      .then( function(result) {
+        console.log(result);
+        flags = result.data
+
+        if (flags.length) {
+          cb (flags)
+        } else {
+          var arr = []
+          cb(arr)
+        }
+        //chrome.storage.sync.set({data: result}, function() {
+      });
+}
 
 function setDiscreteData () {
   // insert api call to fetch flag data here
