@@ -68,7 +68,7 @@ function initApp() {
 
 
 function refreshData () {
-  console.log('refresh data called')
+  // console.log('refresh data called')
   getFlags(function(flags) {
     showFlags(flags)
   })
@@ -102,12 +102,12 @@ function getRawUrl (rawUrl) {
 }
 
 function fetchFlagsForUrl (url, cb) {
-  console.log(url)
+  // console.log(url)
 
     //url == "www.breitbart.com/big-government/2018/10/06/kavanaugh-confirmed-possibly-most-conservative-supreme-court-since-1934/") {
     firebase.functions().httpsCallable('getShortDataForUrl')({'url' : url})
       .then( function(result) {
-        console.log(result);
+        // console.log(result);
         flags = result.data
 
         if (flags.length) {
@@ -124,7 +124,7 @@ function loadFlags () {
 
   getFlags(function (flags) {
     // var flags = []
-    console.log('flags', flags)
+    // console.log('flags', flags)
 
     if ( flags.length > 0 ) {
       document.getElementById('home').className += " hidden"
@@ -148,7 +148,7 @@ function getUserData (  ) {
 
   firebase.functions().httpsCallable('getShortDataForUrl')({'url' : url})
     .then( function(result) {
-      console.log(result);
+      // console.log(result);
       flags = result.data
 
       if (flags.length) {
@@ -169,7 +169,7 @@ function addSettingsListeners() {
 
 function saveSettings () {
 
-  console.log('save settings running')
+  // console.log('save settings running')
 
   var settings = {
     "colorScheme" : document.getElementById('colorScheme').value, 
@@ -178,20 +178,20 @@ function saveSettings () {
   }
 
   chrome.storage.local.set({ "settings": settings }, function(result){
-      console.log('successfully saved settings', result)
+      // console.log('successfully saved settings', result)
   });
 }
 
 function getSettings () {
   chrome.storage.local.get(["settings"] , function(settings){
-      console.log('loaded settings', settings)
+      // console.log('loaded settings', settings)
       setSettings(settings)
   });
 }
 
 function setSettings (settings) {
-  console.log('setting settings', settings)
-  console.log('setting colorScheme ', settings.settings.colorScheme)
+  // console.log('setting settings', settings)
+  // console.log('setting colorScheme ', settings.settings.colorScheme)
   document.getElementById('colorScheme').value = settings.settings.colorScheme
   document.getElementById('autoHighlighting').checked = settings.settings.autoHighlighting
   document.getElementById('showPendingFlags').checked = settings.settings.showPendingFlags
@@ -207,7 +207,7 @@ function setNavListeners() {
 
 function navSettings () {
   // getUserData()
-  console.log('nav to settings')
+  // console.log('nav to settings')
   getSettings()
   document.getElementById('home').className += " hidden"
   document.getElementById('flagContainer').className += " hidden"
@@ -216,7 +216,7 @@ function navSettings () {
 }
 
 function navNewFlag () {
-  console.log('nav to new flag')
+  // console.log('nav to new flag')
   document.getElementById('home').className += " hidden"
   document.getElementById('flagContainer').className += " hidden"
   document.getElementById('settings').className += " hidden"
@@ -224,7 +224,7 @@ function navNewFlag () {
 }
 
 function navFlagContainer () {
-  console.log('nav to new flag')
+  // console.log('nav to new flag')
   document.getElementById('home').className += " hidden"
   document.getElementById('newFlag').className += " hidden"
   document.getElementById('settings').className += " hidden"
@@ -232,13 +232,13 @@ function navFlagContainer () {
 }
 
 function navHome () {
-  console.log('nav to home')
+  // console.log('nav to home')
   // loadFlags()
   if(document.getElementById('flagContainer').children.length > 0) {
-    console.log('flagContainer has children - navigating to flagContainer')
+    // console.log('flagContainer has children - navigating to flagContainer')
     navFlagContainer()
   } else {
-    console.log('flagContainer has no children - navigating to home')
+    // console.log('flagContainer has no children - navigating to home')
     document.getElementById('settings').className += " hidden"
     document.getElementById('flagContainer').className += " hidden"
     document.getElementById('newFlag').className += " hidden"
@@ -269,7 +269,7 @@ function showFlags (flags) {
     var showPendingFlags = settings.settings.showPendingFlags
 
     // Fill Flag Container
-    console.log('flags**'+JSON.stringify(flags), "showPendingFlags is ", showPendingFlags)
+    // console.log('flags**'+JSON.stringify(flags), "showPendingFlags is ", showPendingFlags)
     for ( var x = 0; x < flags.length; x++ ) {
 
       // Check if flag is already present
@@ -283,7 +283,7 @@ function showFlags (flags) {
         if ( showPendingFlags === true || (showPendingFlags === false && flags[x].status != 'FLAG PENDING') ) {
           addFlagToFlagContainer(flags[x])
         } else {
-          console.log('skipping flag ', flags[x], 'x is ', x, 'flags.length is', flags.length)
+          // console.log('skipping flag ', flags[x], 'x is ', x, 'flags.length is', flags.length)
           if ( x === (flags.length - 1 ) ){
             navHome ()
           }
@@ -425,22 +425,22 @@ function BC_submitNewFlagForm () {
 }
 
 function getRawUrl (rawUrl) {
-  console.log('getting raw url of ', rawUrl)
+  // console.log('getting raw url of ', rawUrl)
   var url =  (rawUrl.split('?')[0]).split('//')[1] // remove get params and remove protocol header
   return url
 }
 
 function removeWww(rawUrl){
-  console.log('getting www-less url of ', rawUrl)
+  // console.log('getting www-less url of ', rawUrl)
   var noWww = rawUrl.split('www.')[1]
-  console.log('noWww', noWww)
+  // console.log('noWww', noWww)
   return noWww
 }
 
 function searchPageAndNav (text) {
  
   
-  console.log('search request sent to background for text', text)
+  // console.log('search request sent to background for text', text)
 
   // temporarily hardcoding subject_id to 1 to avoid bugs
   var payload = {
@@ -448,7 +448,7 @@ function searchPageAndNav (text) {
   }
 
     var msg = {payload: payload, from: 'search'};
-    console.log('msg ', msg)
+    // console.log('msg ', msg)
 
     // BC_hideElement ("testFlagForm")
 
