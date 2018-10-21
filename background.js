@@ -276,6 +276,7 @@ function setFlag (currentUrl) {
               // here we'll need to index through the urls to identify if this url is flagged or banned
 
                // console.log ('url matches banned', listings.banned[i], domain)
+
               return setIcon('red', listings.banned[i].urls[u].flagArray.length)
 
               // sendSetFlagsToView(listings.banned[i].urls[u].flags)
@@ -323,6 +324,39 @@ function setFlag (currentUrl) {
 
 }
 
+function highlightTextInView () {
+  console.log('autoHighlighting ran')
+  chrome.storage.local.get(["settings"] , function(settings){
+    console.log('autoHighlighting: ', settings.settings.autoHighlighting) 
+    var autoHighlighting = settings.settings.autoHighlighting
+    if ( autoHighlighting === true ) {
+      console.log ('autoHighlighting is true, checking flags for url')
+      chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+
+        fetchFlagsForUrl(getRawUrl(tabs[0].url), function(flags) {
+          console.log('flags retrieved, sending highlight calls')
+
+          for (var i = 0; i < flags.length; i++ ) {
+            var payload = {
+                  "actionType" : "highlight",
+                  "searchText" : flags[i].selectedText
+                }
+            console.log('highlight call 1: ', payload, "to", tabs[0].id )
+            chrome.tabs.sendMessage(tabs[0].id, payload, function(response) {
+              
+              // console.log(response);
+              
+
+            });
+          }
+        })
+
+  
+      });
+    }
+  })
+}
+
 function setViewData (data) {
 
   var payload = {
@@ -359,21 +393,25 @@ function setIcon(flag, count){
     // console.log("Set to blue");
 
   }else if(flag==="red"){
+
     chrome.browserAction.setIcon({
       path: "images/red.png"
     });
+    highlightTextInView ()
     // console.log("Set to red");
 
   }else if(flag==="yellow"){
     chrome.browserAction.setIcon({
       path: "images/yellow.png"
     });
+    highlightTextInView ()
     // console.log("Set to yellow");
 
   }else{
     chrome.browserAction.setIcon({
       path: "images/grey.png"
     });
+    ighlightTextInView ()
     // console.log("Set to grey");
   }
 }
@@ -410,6 +448,24 @@ function getData (cb) {
   });
 }
 
+function fetchFlagsForUrl (url, cb) {
+  console.log(url)
+
+    //url == "www.breitbart.com/big-government/2018/10/06/kavanaugh-confirmed-possibly-most-conservative-supreme-court-since-1934/") {
+    firebase.functions().httpsCallable('getShortDataForUrl')({'url' : url})
+      .then( function(result) {
+        console.log(result);
+        flags = result.data
+
+        if (flags.length) {
+          cb (flags)
+        } else {
+          var arr = []
+          cb(arr)
+        }
+        //chrome.storage.sync.set({data: result}, function() {
+      });
+}
 
 function setDiscreteData () {
   // insert api call to fetch flag data here
