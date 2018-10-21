@@ -1,5 +1,5 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 2.1,
 
   "name": "BreadCrumbs",
   "description": "Verify before you believe. Blue : Good, Yellow : Debate, Red : Bad, Grey : Untracked",
