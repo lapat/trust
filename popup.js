@@ -283,8 +283,10 @@ function showFlags (flags) {
         if ( showPendingFlags === true || (showPendingFlags === false && flags[x].status != 'FLAG PENDING') ) {
           addFlagToFlagContainer(flags[x])
         } else {
-          console.log('skipping flag ', flags[x])
-          
+          console.log('skipping flag ', flags[x], 'x is ', x, 'flags.length is', flags.length)
+          if ( x === (flags.length - 1 ) ){
+            navHome ()
+          }
         }
       }
 
