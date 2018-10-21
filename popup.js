@@ -61,8 +61,11 @@ function initApp() {
 
   document.getElementById('quickstart-button').addEventListener('click', startSignIn, false);
   document.getElementById('refresh-button').addEventListener('click', refreshData);
+  document.getElementById('refresh-button').addEventListener('click', refreshData);
+  addSettingsListeners();
 
 }
+
 
 function refreshData () {
   console.log('refresh data called')
@@ -140,6 +143,61 @@ function loadFlags () {
 
 }
 
+function getUserData (  ) {
+  // calls from navSettings to load the user data 
+
+  firebase.functions().httpsCallable('getShortDataForUrl')({'url' : url})
+    .then( function(result) {
+      console.log(result);
+      flags = result.data
+
+      if (flags.length) {
+        cb (flags)
+      } else {
+        var arr = []
+        cb(arr)
+      }
+      //chrome.storage.sync.set({data: result}, function() {
+    });
+}
+
+function addSettingsListeners() {
+  document.getElementById('colorScheme').addEventListener("change", saveSettings)
+  document.getElementById('autoHighlighting').addEventListener("change", saveSettings)
+  document.getElementById('showPendingFlags').addEventListener("change", saveSettings)
+}
+
+function saveSettings () {
+
+  console.log('save settings running')
+
+  var settings = {
+    "colorScheme" : document.getElementById('colorScheme').value, 
+    "autoHighlighting" : document.getElementById('autoHighlighting').checked, 
+    "showPendingFlags" : document.getElementById('showPendingFlags').checked
+  }
+
+  chrome.storage.local.set({ "settings": settings }, function(result){
+      console.log('successfully saved settings', result)
+  });
+}
+
+function getSettings () {
+  chrome.storage.local.get(["settings"] , function(settings){
+      console.log('loaded settings', settings)
+      setSettings(settings)
+  });
+}
+
+function setSettings (settings) {
+  console.log('setting settings', settings)
+  console.log('setting colorScheme ', settings.settings.colorScheme)
+  document.getElementById('colorScheme').value = settings.settings.colorScheme
+  document.getElementById('autoHighlighting').checked = settings.settings.autoHighlighting
+  document.getElementById('showPendingFlags').checked = settings.settings.showPendingFlags
+  
+}
+
 function setNavListeners() {
   document.getElementById('_settings').addEventListener('click', navSettings)
   document.getElementById('_main').addEventListener('click', navHome)
@@ -148,7 +206,9 @@ function setNavListeners() {
 }
 
 function navSettings () {
+  // getUserData()
   console.log('nav to settings')
+  getSettings()
   document.getElementById('home').className += " hidden"
   document.getElementById('flagContainer').className += " hidden"
   document.getElementById('newFlag').className += " hidden"
@@ -201,78 +261,93 @@ function returnRandomQuote () {
 function showFlags (flags) {
 
   // Retrieve Flag Container
-  var flagContainer = document.getElementById("flagContainer");
   // flagContainer.className = "flagContainer"
 
-  // Fill Flag Container
-  console.log('flags**'+JSON.stringify(flags))
-  for ( var x = 0; x < flags.length; x++ ) {
+  // check for show pending
+  chrome.storage.local.get(["settings"] , function(settings){
 
-    // Check if flag is already present
-    var fCheck = document.getElementById("flagHeader_" + flags[x].flagId)
+    var showPendingFlags = settings.settings.showPendingFlags
 
-    if (fCheck != null) {
-      // skip this flag as it's already loaded
-    
-    } else {
+    // Fill Flag Container
+    console.log('flags**'+JSON.stringify(flags), "showPendingFlags is ", showPendingFlags)
+    for ( var x = 0; x < flags.length; x++ ) {
 
-      // If not, then add it
-      var newFlag = document.createElement('div')
-      newFlag.id = flags[x].flagId
-      newFlag.className = "flagElement"
+      // Check if flag is already present
+      var fCheck = document.getElementById("flagHeader_" + flags[x].flagId)
 
-      var flagHeader = document.createElement('div')
-          flagHeader.id = "flagHeader_" + flags[x].flagId
-          flagHeader.className = "flagHeader"
+      if (fCheck != null) {
+        // skip this flag as it's already loaded
+      
+      } else {
 
-      var flagFooter = document.createElement('div')
-          flagFooter.id = flags[x].flagId
-          flagFooter.className = "flagFooter"
+        if ( showPendingFlags === true || (showPendingFlags === false && flags[x].status != 'FLAG PENDING') ) {
+          addFlagToFlagContainer(flags[x])
+        } else {
+          console.log('skipping flag ', flags[x])
+          
+        }
+      }
 
-      var flagText = document.createElement('i')
-          flagText.innerHTML = '"' + flags[x].selectedText + '"'
-          flagText.id = flags[x].flagId + "_div"
-          flagText.className = "flagText"
-
-      var searchButton = document.createElement('button')
-          searchButton.innerHTML = "s"
-          searchButton.className = "flagInfo"
-          searchButton.value = flags[x].selectedText
-          searchButton.onclick = function() { searchPageAndNav (this.value) }
-
-      var moreInfoButton = document.createElement('button')
-          moreInfoButton.innerHTML = "i"
-          moreInfoButton.className = "flagInfo"
-          moreInfoButton.onclick = function() { moreInfo (this) }
-
-      var flagStatus = document.createElement('p')
-          flagStatus.innerHTML = flags[x].status.split("FLAG ")[1]
-          flagStatus.className = "flagStatus"
-
-      var flagCategory = document.createElement('p')
-          flagCategory.innerHTML = flags[x].flagSubject
-          flagCategory.className = "flagSubject"
-
-      var flagOffense = document.createElement('p')
-          flagOffense.innerHTML = flags[x].offense
-          flagOffense.className = "flagOffense"                
-
-      // flagHeader.appendChild(status)
-      flagHeader.appendChild(flagOffense)
-      flagHeader.appendChild(flagCategory)
-
-      flagFooter.appendChild(flagStatus)
-      flagFooter.appendChild(searchButton)
-      flagFooter.appendChild(moreInfoButton)
-
-      newFlag.appendChild(flagHeader)
-      newFlag.appendChild(flagText)
-      newFlag.appendChild(flagFooter)
-
-      flagContainer.appendChild(newFlag)
     }
+  });  
+}
 
-  }
+function addFlagToFlagContainer (flag) {
+    // If not, then add it
+  var newFlag = document.createElement('div')
+  newFlag.id = flag.flagId
+  newFlag.className = "flagElement"
+  var flagContainer = document.getElementById("flagContainer");
+
+  var flagHeader = document.createElement('div')
+      flagHeader.id = "flagHeader_" + flag.flagId
+      flagHeader.className = "flagHeader"
+
+  var flagFooter = document.createElement('div')
+      flagFooter.id = flag.flagId
+      flagFooter.className = "flagFooter"
+
+  var flagText = document.createElement('i')
+      flagText.innerHTML = '"' + flag.selectedText + '"'
+      flagText.id = flag.flagId + "_div"
+      flagText.className = "flagText"
+
+  var searchButton = document.createElement('button')
+      searchButton.innerHTML = "s"
+      searchButton.className = "flagInfo"
+      searchButton.value = flag.selectedText
+      searchButton.onclick = function() { searchPageAndNav (this.value) }
+
+  var moreInfoButton = document.createElement('button')
+      moreInfoButton.innerHTML = "i"
+      moreInfoButton.className = "flagInfo"
+      moreInfoButton.onclick = function() { moreInfo (this) }
+
+  var flagStatus = document.createElement('p')
+      flagStatus.innerHTML = flag.status.split("FLAG ")[1]
+      flagStatus.className = "flagStatus"
+
+  var flagCategory = document.createElement('p')
+      flagCategory.innerHTML = flag.flagSubject
+      flagCategory.className = "flagSubject"
+
+  var flagOffense = document.createElement('p')
+      flagOffense.innerHTML = flag.offense
+      flagOffense.className = "flagOffense"                
+
+  // flagHeader.appendChild(status)
+  flagHeader.appendChild(flagOffense)
+  flagHeader.appendChild(flagCategory)
+
+  flagFooter.appendChild(flagStatus)
+  flagFooter.appendChild(searchButton)
+  flagFooter.appendChild(moreInfoButton)
+
+  newFlag.appendChild(flagHeader)
+  newFlag.appendChild(flagText)
+  newFlag.appendChild(flagFooter)
+
+  flagContainer.appendChild(newFlag)
 }
 
 function moreInfo (div) {
