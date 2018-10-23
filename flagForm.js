@@ -33,7 +33,16 @@ var sample_flag = {
 //     }
 // })
 
+// Handlers for return messages from background.js
+chrome.runtime.onMessage.addListener( function(request, sender, sendResponse) {
+	// console.log('message received', request)
 
+	if ( request.actionType === "error" ) {
+		// console.log(request)
+	    alert(request.message)
+	}
+
+});
 
 // on final load, initiate onpage flag setup
 window.onload = function() {

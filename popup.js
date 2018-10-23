@@ -22,6 +22,20 @@ window.onload = function() {
   setNavListeners();
 };
 
+// Handlers for return messages from background.js
+chrome.runtime.onMessage.addListener( function(request, sender, sendResponse) {
+  console.log('message received', request)
+
+  if ( request.actionType === "refresh" ) {
+      refreshData()
+  }
+
+  if ( request.actionType === "error" ) {
+    // console.log(request)
+      alert(request.message)
+  }
+
+});
 
 
 function initApp() {
@@ -421,14 +435,18 @@ function BC_submitNewFlagForm () {
       "subject_id":"1"
     }
 
-      var msg = {payload: payload, from: 'newFlag'};
-      // console.log('msg ', msg)
 
-      // BC_hideElement ("testFlagForm")
+    // console.log('calling new flag with', payload)
 
-      chrome.runtime.sendMessage(msg, function(response) {
-        // console.log(response)
-      });
+    var msg = {payload: payload, from: 'newFlag'};
+    // console.log('msg ', msg)
+
+    // BC_hideElement ("testFlagForm")
+
+    chrome.runtime.sendMessage(msg, function(response) {
+      // console.log(response)
+    });
+  
   })
 }
 

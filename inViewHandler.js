@@ -13,6 +13,15 @@ chrome.runtime.onMessage.addListener( function(request, sender, sendResponse) {
 		// console.log('search request received', request.searchText)
 	    highlight(request.searchText)
 	}
+	// if ( request.actionType === "refresh" ) {
+	//     addNewFlagForm (request.point, request.selectedText)
+	// }
+
+	if ( request.actionType === "error" ) {
+		// console.log(request)
+	    alert(request.message)
+	}	
+	
 
 });
 function highlight (text) {

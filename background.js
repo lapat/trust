@@ -88,9 +88,9 @@ function callAPIForNewFlag (payload) {
     .then( function(result) {
       console.log('flag submitted, returned:', result);
       setData()
-    }).catch( function(error){
+    }).catch( function(exception){
 
-      console.log('flag submission error!: ' + exception)
+      console.log('flag submission error!: ', exception)
 
       var payload = {
         'actionType' : 'error',
@@ -167,9 +167,16 @@ function newFlag (tab, text) {
 function sendMessageToCurrentTab (payload) {
   console.log('sendMessageToCurrentTab', payload)
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-    chrome.tabs.sendMessage(tabs[0].id, payload, function(response) {
-       console.log(response);
-    });
+    if (typeof tabs[0] != undefined) {
+      console.log('sending to ', tabs[0])
+      chrome.tabs.sendMessage(tabs[0].id, payload, function(response) {
+         console.log(response);
+      });
+    } else {
+      console.log('tabs', tabs)
+      chrome.runtime.sendMessage(payload);
+    }
+
   });
 }
 
@@ -233,7 +240,11 @@ chrome.tabs.onActivated.addListener(function(activeInfo) {
 
 function updateFlagForCurrentTab () {
   chrome.tabs.query({'active': true, 'lastFocusedWindow': true}, function (tabs) {
-    setFlag(tabs[0].url)
+    if (typeof tabs[0] != undefined) {
+      setFlag(tabs[0].url)
+    } else {
+      console.log('tabs', tabs)
+    }
   });
 }
 
@@ -437,8 +448,14 @@ function setData () {
     console.log('fetched data and setting ', result);
     chrome.storage.local.set({data: result}, function() {
       updateFlagForCurrentTab ()
+      forcePopupRefresh()
     });
   });
+}
+
+function forcePopupRefresh() {
+  console.log('forcePopupRefresh ran')
+  chrome.runtime.sendMessage({actionType: "refresh"});
 }
 
 function getData (cb) {
