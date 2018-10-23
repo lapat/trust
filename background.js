@@ -411,7 +411,7 @@ function setIcon(flag, count){
     chrome.browserAction.setIcon({
       path: "images/grey.png"
     });
-    ighlightTextInView ()
+    highlightTextInView ()
     // console.log("Set to grey");
   }
 }
