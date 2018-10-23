@@ -238,3 +238,7 @@ td.settingsLabel {
     float: left;
     width: max-content;
 }
+td.userData {
+    max-width: 200px;
+    overflow: hidden;
+}

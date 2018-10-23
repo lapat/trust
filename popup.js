@@ -29,6 +29,8 @@ function initApp() {
   // Listen for auth state changes.
   // [START authstatelistener]
   firebase.auth().onAuthStateChanged(function(user) {
+    getUserData(user)
+
     if (user) {
       chrome.extension.getBackgroundPage().console.log("Got User");
 
@@ -50,7 +52,7 @@ function initApp() {
       // [START_EXCLUDE]
       chrome.extension.getBackgroundPage().console.log("Could not get user");
 
-      document.getElementById('quickstart-button').textContent = 'Sign in';
+      document.getElementById('quickstart-button').textContent = 'Google Login';
       // document.getElementById('quickstart-sign-in-status').textContent = 'Signed out';
       // document.getElementById('quickstart-account-details').textContent = 'null';
       // [END_EXCLUDE]
@@ -146,19 +148,24 @@ function loadFlags () {
 function getUserData (  ) {
   // calls from navSettings to load the user data 
 
-  firebase.functions().httpsCallable('getShortDataForUrl')({'url' : url})
+  firebase.functions().httpsCallable('getUser')()
     .then( function(result) {
-      console.log(result);
-      flags = result.data
-
-      if (flags.length) {
-        cb (flags)
-      } else {
-        var arr = []
-        cb(arr)
-      }
+      console.log('got user')
+      setUserData(result)
       //chrome.storage.sync.set({data: result}, function() {
     });
+}
+
+function setUserData (user) {
+  console.log('setting user info ', user)
+  document.getElementById('userName').innerHTML = user.data.email
+  document.getElementById('userScore').innerHTML = "(" + user.data.score + ")"
+}
+
+function unsetUserData () {
+  console.log('unsetting user info ')
+  document.getElementById('userName').innerHTML = "Not signed in"
+  document.getElementById('userScore').innerHTML = ""
 }
 
 function addSettingsListeners() {
@@ -206,7 +213,7 @@ function setNavListeners() {
 }
 
 function navSettings () {
-  // getUserData()
+  getUserData()
   console.log('nav to settings')
   getSettings()
   document.getElementById('home').className += " hidden"
@@ -379,6 +386,7 @@ function startAuth(interactive) {
     } else if (token) {
       // Authorize Firebase with the OAuth Access Token.
       var credential = firebase.auth.GoogleAuthProvider.credential(null, token);
+
       firebase.auth().signInAndRetrieveDataWithCredential(credential).catch(function(error) {
         // The OAuth token might have been invalidated. Lets' remove it from cache.
         if (error.code === 'auth/invalid-credential') {
@@ -466,6 +474,7 @@ function startSignIn() {
   document.getElementById('quickstart-button').disabled = true;
   if (firebase.auth().currentUser) {
     firebase.auth().signOut();
+    unsetUserData();
   } else {
     startAuth(true);
   }
