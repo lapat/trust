@@ -3,14 +3,14 @@
 
 // Handlers for return messages from background.js
 chrome.runtime.onMessage.addListener( function(request, sender, sendResponse) {
-	// console.log('message received', request)
+	console.log('message received', request)
 
 	if ( request.actionType === "search" ) {
-		// console.log('search request received', request.searchText)
+		console.log('search request received', request.searchText)
 	    searchAndScroll(request.searchText)
 	}
 	if ( request.actionType === "highlight" ) {
-		// console.log('search request received', request.searchText)
+		console.log('search request received', request.searchText)
 	    highlight(request.searchText)
 	}
 	// if ( request.actionType === "refresh" ) {
@@ -18,7 +18,7 @@ chrome.runtime.onMessage.addListener( function(request, sender, sendResponse) {
 	// }
 
 	if ( request.actionType === "error" ) {
-		// console.log(request)
+		console.log(request)
 	    alert(request.message)
 	}	
 	
@@ -26,18 +26,18 @@ chrome.runtime.onMessage.addListener( function(request, sender, sendResponse) {
 });
 function highlight (text) {
 	getAllParagraphs (function (result) {
-		// console.log('found paragraphs', result)
+		console.log('found paragraphs', result)
 		for ( var i = 0; i < result.length; i++ ) {
-			// console.log('checking if div', result[i], 'contains', text)
+			console.log('checking if div', result[i], 'contains', text)
 			if (result[i].textContent.includes(text)) {
 				highlightFound(result[i])
 			}
 		}
 	}) 
 	getAllSpans (function (result) {
-		// console.log('found spans', result)
+		console.log('found spans', result)
 		for ( var i = 0; i < result.length; i++ ) {
-			// console.log('checking if div', result[i], 'contains', text)
+			console.log('checking if div', result[i], 'contains', text)
 			if (result[i].textContent.includes(text)) {
 				highlightFound(result[i])
 			}
@@ -48,18 +48,18 @@ function highlight (text) {
 function searchAndScroll (text) {
 
 	getAllParagraphs (function (result) {
-		// console.log('found paragraphs', result)
+		console.log('found paragraphs', result)
 		for ( var i = 0; i < result.length; i++ ) {
-			// console.log('checking if div', result[i], 'contains', text)
+			console.log('checking if div', result[i], 'contains', text)
 			if (result[i].textContent.includes(text)) {
 				handleFound(result[i])
 			}
 		}
 	}) 
 	getAllSpans (function (result) {
-		// console.log('found spans', result)
+		console.log('found spans', result)
 		for ( var i = 0; i < result.length; i++ ) {
-			// console.log('checking if div', result[i], 'contains', text)
+			console.log('checking if div', result[i], 'contains', text)
 			if (result[i].textContent.includes(text)) {
 				handleFound(result[i])
 			}

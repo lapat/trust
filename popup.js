@@ -161,10 +161,10 @@ function loadFlags () {
 
 function getUserData (  ) {
   // calls from navSettings to load the user data 
-
+  console.log('get user called')
   firebase.functions().httpsCallable('getUser')()
     .then( function(result) {
-      console.log('got user')
+      console.log('got user', result)
       setUserData(result)
       //chrome.storage.sync.set({data: result}, function() {
     });

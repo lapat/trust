@@ -3,7 +3,7 @@
 
   "name": "BreadCrumbs",
   "description": "Verify before you believe. Blue : Good, Yellow : Debate, Red : Bad, Grey : Untracked",
-  "version": "1.2",
+  "version": "1.5",
       "background": {
         "scripts": ["thirdParty/jquery-3.1.1.js","js/firebase.js","background.js"],
         "persistent": false

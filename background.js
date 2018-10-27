@@ -31,6 +31,7 @@ function runTimeTasks () {
   // console.log('chrome launched - syncing sample data')
   // console.log("initializingApp")
   firebase.initializeApp(config);
+  initSettings()  
   setData();
   configureContextMenus();
   chrome.contextMenus.onClicked.addListener(onClickHandler);
@@ -517,4 +518,28 @@ function getFlagged () {
     console.log('retrieved flagged data')
     return result
   });
+}
+
+function initSettings () {
+
+  chrome.storage.local.get(["settings"] , function(settings){
+    console.log('loaded settings', settings, JSON.stringify(settings))
+    if ("{}" === JSON.stringify(settings) ) {
+      console.log('init settings running')
+
+      var settings = {
+        "colorScheme" : "light", 
+        "autoHighlighting" : false, 
+        "showPendingFlags" : true
+      }
+
+      chrome.storage.local.set({ "settings": settings }, function(result){
+          console.log('successfully initialized settings', result)
+      });
+    } else {
+      console.log('loaded settings', settings)
+      // all good - no need to initialize as settings are already stored
+    }
+  });
+
 }
