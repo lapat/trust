@@ -88,18 +88,36 @@ function callAPIForNewFlag (payload) {
     firebase.functions().httpsCallable('flag')(payload)
     .then( function(result) {
       console.log('flag submitted, returned:', result);
-      setData()
+
+      if ( typeof(result.data.error) != "undefined" ) {
+
+        console.log('caught api error: ', result.data.error)
+        handleError(result.data.error)
+
+      } else {
+      
+        setData()
+      
+      }
+      
+
     }).catch( function(exception){
 
       console.log('flag submission error!: ', exception)
 
-      var payload = {
-        'actionType' : 'error',
-        'message' : exception.toString()
-      }
-
-      sendMessageToCurrentTab (payload)
+      handleError(exception.toString())
     })
+}
+
+function handleError (err) {
+  console.log('handle err triggered w/', err)
+  var payload = {
+    'actionType' : 'error',
+    'message' : err
+  }
+
+  // sendMessageToCurrentTab (payload)
+  chrome.runtime.sendMessage(payload);
 }
 
 // Set up context menu tree at install time.
@@ -523,9 +541,9 @@ function getFlagged () {
 function initSettings () {
 
   chrome.storage.local.get(["settings"] , function(settings){
-    console.log('loaded settings', settings, JSON.stringify(settings))
+    // console.log('loaded settings', settings, JSON.stringify(settings))
     if ("{}" === JSON.stringify(settings) ) {
-      console.log('init settings running')
+      console.log('initializing settings')
 
       var settings = {
         "colorScheme" : "light", 
