@@ -110,7 +110,7 @@ function addButtonListeners() {
   document.getElementById('refresh-button').addEventListener('click', refreshData);
   document.getElementById('refresh-button').addEventListener('click', refreshData);
   document.getElementById('showRulesButton').addEventListener('click', showRules)
-  document.getElementById('showFAQButton').addEventListener('click', showFAQ)
+  // document.getElementById('showFAQButton').addEventListener('click', showFAQ)
   document.getElementById('breadcrumbIsFlag').addEventListener('click', showFlagRules)
 
 }
