@@ -186,13 +186,16 @@ select.bc_input {
   width: 290px;
 }
 .bc_input.submit {
-  width: 100%;
+  width: 15%;
   background-color: #2196F3;
   padding: 5px;
   border-radius: 5px;
   color: white;
   font-size: 9pt;
   text-transform: uppercase;
+}
+.bc_description {
+  height: 100px;
 }
 p.flagSubject {
   float: right;
@@ -241,4 +244,37 @@ td.settingsLabel {
 td.userData {
     max-width: 200px;
     overflow: hidden;
+}
+.errorMessage {
+    background-color: #e79595;
+    padding: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+    border-radius: 5px;
+}
+.errorMessage span {
+    color: white;
+    width: 85%;
+    font-size: 10pt;
+}
+
+.errorMessage a {
+    position: absolute;
+    right: 12.5px;
+    top: 42.5px;
+    font-size: 8px;
+    width: 10px;
+    color: #6c6161;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+.faqButtons {
+    float: right;
+    margin-top: 6px;
+    padding: 5px;
+    font-size: 12px;
+    color: #808080c2;
+    font-weight: 600;
 }

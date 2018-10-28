@@ -36,6 +36,10 @@ limitations under the License.
     <a href="https://downloadbreadcrumbs.com/#/latest" target="_blank"><h3><img class="logoImage" src="images/logo.png" alt="Breadcrumbs"></img></h3></a>
     <button id="refresh-button">Refresh</button>    
   </div>
+
+  <div id="error">
+    
+  </div>
   
   <div id="home">
     <div id="noFlags" class="flagElement">
@@ -104,19 +108,20 @@ limitations under the License.
 
   <div id="newFlag" class="flagform hidden">
     <div class="bc_header">
-      <h3 class="bc_header">New Flag:</h3>
+      <h3 class="bc_header">Leave a breadcrumb</h3>
     </div>
-    <textarea class="bc_input" id="BC_nf_selectedText" placeholder="Enter the offending text here"></textarea>
+<!--     <textarea class="bc_input" id="BC_nf_selectedText" placeholder="Enter the offending text here"></textarea>
     
     <input type="text" id="BC_nf_sourceUrl" class="bc_input" placeholder="Enter a citation url to expedite approval">
-    
+  
     <select class="bc_input offense" id="BC_nf_offenseSelect">
+      <option value="Misleading" selected>Select Offense</option>
       <option value="Misleading" selected>Select Offense</option>
       <option value="Slander">Slander</option>
       <option value="Fraud">Fraud</option>
       <option value="Misleading">Misleading</option>
       <option value="Offensive">Offensive</option>
-    </select>
+    </select> 
 
     <select class="bc_input subject" id="BC_nf_subjectSelect">
       <option value="General" selected>General</option>
@@ -125,12 +130,25 @@ limitations under the License.
       <option value="Chemistry">Chemistry</option>
       <option value="Economics">Economics</option>
       <option value="History">History</option>
-    </select>
+    </select> -->
 
-    <textarea class="bc_input bc_description" id="BC_nf_description" placeholder="Leave a comment (optional)"></textarea>
-    <br>
+    <textarea class="bc_input bc_description" id="BC_nf_description" placeholder="Leave a comment"></textarea><br>
+    <span class="breadcrumbIsFlagLabel">Content on this page is misleading or false</span><input type="checkbox" id="breadcrumbIsFlag"><br>
 
-    <button id="BC_nf_submitNewFlagForm" class="bc_input submit">Submit Flag</button>
+    <div class="newFlagControls">
+      <button id="BC_nf_submitNewFlagForm" class="bc_input submit">Save</button>
+      <a href="#" class="faqButtons" id="showRulesButton">Rules</a>
+      <a href="#" class="faqButtons" id="showFAQButton">FAQ</a>
+    </div>
+    <div id="rules" class="rulesContainer hidden">
+      <span>rules!</span>
+    </div>
+    <div id="flagRules" class="rulesContainer hidden">
+      <span>flagrules!</span>
+    </div>    
+    <div id="FAQ" class="faqContainer hidden">
+      <span>FAQ!</span>
+    </div>
   </div>  
 
 </body>

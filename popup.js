@@ -32,11 +32,36 @@ chrome.runtime.onMessage.addListener( function(request, sender, sendResponse) {
 
   if ( request.actionType === "error" ) {
     // console.log(request)
-      alert(request.message)
+      displayError(request.message)
   }
 
 });
 
+function displayError (message) {
+  console.log('setting child', message)
+  var id = randomString(16);
+  var e = document.getElementById('error')
+  var eDiv = document.createElement('div')
+      eDiv.className = "errorMessage"
+      eDiv.id = id
+  var m = document.createElement('span')
+      m.textContent = message
+  var c = document.createElement('a')
+      c.href = "#"
+      c.textContent = "✕"
+      c.onclick = function() { hideDiv(id) }
+      eDiv.appendChild(m)
+      eDiv.appendChild(c)
+
+  e.appendChild(eDiv)
+
+}
+
+function hideDiv (id) {
+  var element = document.getElementById(id)
+      element.style.display = "none";
+      element.parentNode.removeChild(document.getElementById(id));
+}
 
 function initApp() {
   chrome.extension.getBackgroundPage().console.log("initApp Called");
@@ -75,13 +100,25 @@ function initApp() {
   });
   // [END authstatelistener]
 
-  document.getElementById('quickstart-button').addEventListener('click', startSignIn, false);
-  document.getElementById('refresh-button').addEventListener('click', refreshData);
-  document.getElementById('refresh-button').addEventListener('click', refreshData);
-  addSettingsListeners();
+  addButtonListeners()
+  addSettingsListeners()
 
 }
 
+function addButtonListeners() {
+  document.getElementById('quickstart-button').addEventListener('click', startSignIn, false);
+  document.getElementById('refresh-button').addEventListener('click', refreshData);
+  document.getElementById('refresh-button').addEventListener('click', refreshData);
+  document.getElementById('showRulesButton').addEventListener('click', showRules)
+  document.getElementById('showFAQButton').addEventListener('click', showFAQ)
+}
+
+function showRules () {
+  document.getElementById('rules').className = document.getElementById('rules').className.split('hidden').join(' ')
+}
+function showFAQ () {
+  document.getElementById('FAQ').className = document.getElementById('rules').className.split('hidden').join(' ')
+}
 
 function refreshData () {
   console.log('refresh data called')
@@ -427,12 +464,8 @@ function BC_submitNewFlagForm () {
     // temporarily hardcoding subject_id to 1 to avoid bugs
     var payload = {
       "url" : getRawUrl(tabs[0].url),
-      "source":document.getElementById("BC_nf_sourceUrl").value,
-      "offense_type":document.getElementById("BC_nf_offenseSelect").value,
-      "selected_text":document.getElementById("BC_nf_selectedText").value,
-      "description":document.getElementById("BC_nf_description").value,
-      "subject":document.getElementById("BC_nf_subjectSelect").value,
-      "subject_id":"1"
+      "comment":document.getElementById("BC_nf_description").value,
+      "isFlag" : document.getElementById("breadcrumbIsFlag").value
     }
 
 
@@ -497,3 +530,14 @@ function startSignIn() {
     startAuth(true);
   }
 }
+
+function randomString(n) {
+  var text = "";
+  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+  for (var i = 0; i < n; i++)
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+  return text;
+}
+
