@@ -111,13 +111,41 @@ function addButtonListeners() {
   document.getElementById('refresh-button').addEventListener('click', refreshData);
   document.getElementById('showRulesButton').addEventListener('click', showRules)
   document.getElementById('showFAQButton').addEventListener('click', showFAQ)
+  document.getElementById('breadcrumbIsFlag').addEventListener('click', showFlagRules)
+
+}
+function showFlagRules () {
+  
+  var rulesClass = document.getElementById('flagRules').className
+  if (rulesClass.indexOf("hidden") !== -1 ) {
+    // currently hidden, so show it
+    document.getElementById('flagRules').className = rulesClass.split('hidden').join(' ')
+  } else {
+    // currently shown, so hide it
+    document.getElementById('flagRules').className += "hidden"
+  }
+
 }
 
 function showRules () {
-  document.getElementById('rules').className = document.getElementById('rules').className.split('hidden').join(' ')
+  var rulesClass = document.getElementById('rules').className
+  if (rulesClass.indexOf("hidden") !== -1 ) {
+    // currently hidden, so show it
+    document.getElementById('rules').className = rulesClass.split('hidden').join(' ')
+  } else {
+    // currently shown, so hide it
+    document.getElementById('rules').className += "hidden"
+  }
 }
 function showFAQ () {
-  document.getElementById('FAQ').className = document.getElementById('rules').className.split('hidden').join(' ')
+  var rulesClass = document.getElementById('FAQ').className
+  if (rulesClass.indexOf("hidden") !== -1 ) {
+    // currently hidden, so show it
+    document.getElementById('FAQ').className = rulesClass.split('hidden').join(' ')
+  } else {
+    // currently shown, so hide it
+    document.getElementById('FAQ').className += "hidden"
+  }
 }
 
 function refreshData () {
