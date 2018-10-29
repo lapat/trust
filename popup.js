@@ -180,7 +180,7 @@ function refreshData () {
 }
 
 function getFlags (cb) {
-  // console.log('get flags ran')
+  console.log('get flags ran')
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 
     var url = getRawUrl(tabs[0].url)
@@ -188,6 +188,7 @@ function getFlags (cb) {
     console.log(url)
 
     fetchFlagsForUrl(url, function (result){
+      console.log('returned flags', result)      
       if ( flags.length > 0 ) {
         cb(flags)
       } else {
@@ -406,61 +407,106 @@ function showFlags (flags) {
 }
 
 function addFlagToFlagContainer (flag) {
-    // If not, then add it
+  // If not, then add it
   var newFlag = document.createElement('div')
   newFlag.id = flag.flagId
   newFlag.className = "flagElement"
   var flagContainer = document.getElementById("flagContainer");
 
   var flagHeader = document.createElement('div')
-      flagHeader.id = "flagHeader_" + flag.flagId
       flagHeader.className = "flagHeader"
 
+  var flagStatus = document.createElement('i')
+      flagStatus.className = "fas fa-circle status_" + flag.status.split("FLAG ")[1]  
+
+  var flagUsername = document.createElement('span')
+      flagUsername.className = "flagUsername"
+      flagUsername.textContent = "Username"
+
+  var flagAge = document.createElement('span')
+      flagAge.className = "flagAge"
+      flagAge.textContent = "2 days old"
+
+  var flagType = document.createElement("i")
+      flagType.className = "fas fa-flag flagType"
+
+      flagHeader.appendChild(flagStatus)
+      flagHeader.appendChild(flagUsername)
+      flagHeader.appendChild(flagAge)
+      flagHeader.appendChild(flagType)    
+
+  var flagBody = document.createElement('div')
+      flagBody.className = "flagBody"
+
+  var flagVoting = document.createElement('div')
+      flagVoting.className = "flagVoting"
+
+  var flagUpvote = document.createElement('i')
+      flagUpvote.className = "fas fa-sort-up"    
+      flagUpvote.id = "upvote_" + flag.flagId
+      flagUpvote.onclick = function() { vote (flag.flagId, "upvote") }
+
+  var flagDownvote = document.createElement('i')
+      flagDownvote.className = "fas fa-sort-down"    
+      flagDownvote.id = "downvote_" + flag.flagId
+      flagDownvote.onclick = function() { vote (flag.flagId, "downvote") }
+
+  var flagScore = document.createElement('span')
+      flagScore.className = "flagScore"
+      flagScore.id = "score_" + flag.flagId
+      flagScore.textContent = "5"
+
+      flagVoting.appendChild(flagUpvote)
+      flagVoting.appendChild(flagScore)
+      flagVoting.appendChild(flagDownvote)
+
+  var flagText = document.createElement('span')
+      flagText.className = "flagBodyText"
+      flagText.textContent = "This is where the comment body will go when it's ready to go here."    
+
+      flagBody.appendChild(flagVoting)
+      flagBody.appendChild(flagText)
+
   var flagFooter = document.createElement('div')
-      flagFooter.id = flag.flagId
       flagFooter.className = "flagFooter"
 
-  var flagText = document.createElement('i')
-      flagText.innerHTML = '"' + flag.selectedText + '"'
-      flagText.id = flag.flagId + "_div"
-      flagText.className = "flagText"
+  var replyButton = document.createElement('span')
+      replyButton.className = "flagActionButton"
+      replyButton.textContent = "reply"
+      replyButton.onclick = function() { reply (flag.flagId) }
 
-  var searchButton = document.createElement('button')
-      searchButton.innerHTML = "s"
-      searchButton.className = "flagInfo"
-      searchButton.value = flag.selectedText
-      searchButton.onclick = function() { searchPageAndNav (this.value) }
+  var infoButton = document.createElement('span')
+      infoButton.className = "flagActionButton"
+      infoButton.textContent = "info"
 
-  var moreInfoButton = document.createElement('button')
-      moreInfoButton.innerHTML = "i"
-      moreInfoButton.className = "flagInfo"
-      moreInfoButton.onclick = function() { moreInfo (this) }
+  var infoButtonContainer = document.createElement('a')
+      infoButtonContainer.target = "_blank"
+      infoButtonContainer.href = "https://downloadbreadcrumbs.com/#/getinfo?i=" + flag.flagId
+      infoButtonContainer.innerHTML = infoButton.outerHTML
 
-  var flagStatus = document.createElement('p')
-      flagStatus.innerHTML = flag.status.split("FLAG ")[1]
-      flagStatus.className = "flagStatus"
+  var reportButton = document.createElement('span')
+      reportButton.className = "flagActionButton"
+      reportButton.textContent = "report"
+      reportButton.onclick = function() { report (flag.flagId) }            
 
-  var flagCategory = document.createElement('p')
-      flagCategory.innerHTML = flag.flagSubject
-      flagCategory.className = "flagSubject"
-
-  var flagOffense = document.createElement('p')
-      flagOffense.innerHTML = flag.offense
-      flagOffense.className = "flagOffense"                
-
-  // flagHeader.appendChild(status)
-  flagHeader.appendChild(flagOffense)
-  flagHeader.appendChild(flagCategory)
-
-  flagFooter.appendChild(flagStatus)
-  flagFooter.appendChild(searchButton)
-  flagFooter.appendChild(moreInfoButton)
+      flagFooter.appendChild(replyButton)
+      flagFooter.appendChild(infoButtonContainer)
+      flagFooter.appendChild(reportButton)
 
   newFlag.appendChild(flagHeader)
-  newFlag.appendChild(flagText)
+  newFlag.appendChild(flagBody)
   newFlag.appendChild(flagFooter)
 
-  flagContainer.appendChild(newFlag)
+  flagContainer.appendChild(newFlag)      
+
+}
+
+function report (id) {
+  console.log('reported:', id)
+}
+
+function vote (id, action) {
+  console.log('vote action triggered: ', action, id)
 }
 
 function moreInfo (div) {
