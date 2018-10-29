@@ -20,6 +20,7 @@ window.onload = function() {
   initApp();
   loadFlags();
   setNavListeners();
+  setFactoid()
 };
 
 // Handlers for return messages from background.js
@@ -36,6 +37,20 @@ chrome.runtime.onMessage.addListener( function(request, sender, sendResponse) {
   }
 
 });
+
+function setFactoid () {
+  getFactoid (function(result) {
+    document.getElementById('footerFactoid').textContent = result.text
+    document.getElementById('footerMoreInfoFactoid').href = result.link
+  })
+}
+
+function getFactoid (cb) {
+  cb( {
+    "text" : "Billionaire Ray Dalio credits his success to an open-minded approach to life.",
+    "link" : "https://inside.bwater.com/publications/principles_excerpt"
+  } )
+}
 
 function displayError (message) {
   console.log('setting child', message)
@@ -293,7 +308,7 @@ function setNavListeners() {
 }
 
 function navSettings () {
-  getUserData()
+  // getUserData()
   console.log('nav to settings')
   getSettings()
   document.getElementById('home').className += " hidden"
