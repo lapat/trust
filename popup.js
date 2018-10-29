@@ -46,10 +46,20 @@ function setFactoid () {
 }
 
 function getFactoid (cb) {
-  cb( {
+  var factoids = [{
     "text" : "Billionaire Ray Dalio credits his success to an open-minded approach to life.",
     "link" : "https://inside.bwater.com/publications/principles_excerpt"
-  } )
+  },{
+    "text" : "Breacrumbs was created to provide a forum for open conversation. The more you know, the wiser you are.",
+    "link" : "https://downloadbreadcrumbs.com"
+  },{
+    "text" : "A wise man knows that he knows nothing. - A.K.A. The Socratic Paradox",
+    "link" : "https://en.wikipedia.org/wiki/I_know_that_I_know_nothing"
+  }]
+
+  var i = Math.floor(Math.random() * (factoids.length))
+
+  cb( factoids[i] )
 }
 
 function displayError (message) {
