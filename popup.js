@@ -442,12 +442,12 @@ function addFlagToFlagContainer (flag) {
       flagVoting.className = "flagVoting"
 
   var flagUpvote = document.createElement('i')
-      flagUpvote.className = "fas fa-sort-up"    
+      flagUpvote.className = "fas fa-sort-up upvote"    
       flagUpvote.id = "upvote_" + flag.flagId
       flagUpvote.onclick = function() { vote (flag.flagId, "upvote") }
 
   var flagDownvote = document.createElement('i')
-      flagDownvote.className = "fas fa-sort-down"    
+      flagDownvote.className = "fas fa-sort-down downvote"    
       flagDownvote.id = "downvote_" + flag.flagId
       flagDownvote.onclick = function() { vote (flag.flagId, "downvote") }
 
@@ -503,6 +503,10 @@ function addFlagToFlagContainer (flag) {
 
 function report (id) {
   console.log('reported:', id)
+}
+
+function reply (id) {
+  console.log ('reply triggered', id) 
 }
 
 function vote (id, action) {

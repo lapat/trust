@@ -293,3 +293,47 @@ td.userData {
     color: #808080c2;
     font-weight: 600;
 }
+
+/* New flag format stuff */
+.flagType {
+    float: right;
+}
+.flagBodyText {
+    padding-left: 10px;
+}
+.flagVoting {
+    width: 5px;
+}
+.flagBody {
+    display: flex;
+    margin-top: 2px;
+}
+.flagActionButton {
+    color: grey;
+    font-weight: 600;
+    margin-right: 5px;
+}
+.flagUsername {
+    margin-left: 5px;
+    font-weight: 700;
+    margin-right: 8px;
+}
+.flagHeader i {
+    font-size: 8pt;
+    margin-left: -2px;
+}
+.status_PENDING {
+    color: yellow;
+    text-shadow: black 0px 0px 3px;
+    border-radius: 5px;
+}
+.status_VERIFIED {
+    color: red;
+    text-shadow: black 0px 0px 3px;
+    border-radius: 5px;
+}
+.status_undefined {
+    color: lightgrey;
+    text-shadow: black 0px 0px 3px;
+    border-radius: 5px;
+}
