@@ -151,6 +151,7 @@ function showFAQ () {
 function refreshData () {
   console.log('refresh data called')
   getFlags(function(flags) {
+    navHome()
     showFlags(flags)
   })
 }
@@ -285,9 +286,9 @@ function setSettings (settings) {
 }
 
 function setNavListeners() {
-  document.getElementById('_settings').addEventListener('click', navSettings)
-  document.getElementById('_main').addEventListener('click', navHome)
-  document.getElementById('_newFlag').addEventListener('click', navNewFlag)
+  document.getElementById('settings-button').addEventListener('click', navSettings)
+  document.getElementById('home-button').addEventListener('click', navHome)
+  document.getElementById('new-button').addEventListener('click', navNewFlag)
   document.getElementById('BC_nf_submitNewFlagForm').addEventListener('click', BC_submitNewFlagForm)
 }
 
@@ -303,7 +304,7 @@ function navSettings () {
 
 function navNewFlag () {
   console.log('nav to new flag')
-  document.getElementById('home').className += " hidden"
+  // document.getElementById('home').className += " hidden"
   document.getElementById('flagContainer').className += " hidden"
   document.getElementById('settings').className += " hidden"
   document.getElementById('newFlag').className = document.getElementById('newFlag').className.split('hidden').join(' ')       

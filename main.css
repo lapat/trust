@@ -87,6 +87,20 @@ p.submitFlagInstruction {
   padding: 5px;
   margin-top: 5px;
 }
+.headerButtons {
+    float: right;
+    position: absolute;
+    right: 8px;
+    top: 10px;
+}
+.actionButton {
+    padding: 5px;
+    background-color: lightgrey;
+    border-radius: 3px;
+    float: right;
+    display: inline-block;
+    margin-right: 2px;
+}
 .flagElement {
   width: 92%;
   margin: auto;

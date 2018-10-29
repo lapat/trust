@@ -3,7 +3,7 @@
 
   "name": "BreadCrumbs",
   "description": "Verify before you believe. Blue : Good, Yellow : Debate, Red : Bad, Grey : Untracked",
-  "version": "1.5",
+  "version": "1.51",
       "background": {
         "scripts": ["thirdParty/jquery-3.1.1.js","js/firebase.js","background.js"],
         "persistent": false
@@ -40,7 +40,7 @@
         },
   "content_security_policy" : "script-src 'self' https://www.gstatic.com/ https://*.firebaseio.com https://www.googleapis.com; object-src 'self'",
   "oauth2": {
-    "client_id": "802077806931-pl1ql36dfhnjccug95f1v8ggj13j9k2a.apps.googleusercontent.com",
+    "client_id": "802077806931-h5n2kn7vq9c4sq9eogksir1348003pmr.apps.googleusercontent.com",
     "scopes": [
       "https://www.googleapis.com/auth/userinfo.email",
       "https://www.googleapis.com/auth/userinfo.profile"

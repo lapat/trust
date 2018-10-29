@@ -25,7 +25,7 @@ limitations under the License.
   <!-- ***************************************************************************************
        * TODO(DEVELOPER): Make sure you are importing the latest version of the Firebase JS. *
        *************************************************************************************** -->
-  <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js" integrity="sha384-kW+oWsYx3YpxvjtZjFXqazFpA7UP/MbiY4jvs+RWZo2+N94PFZ36T6TFkc9O3qoB" crossorigin="anonymous"></script>     
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/all.css" integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns" crossorigin="anonymous">     
   <script src="https://www.gstatic.com/firebasejs/5.5.1/firebase.js"></script>
   <script src="popup.js"></script>
 
@@ -34,12 +34,72 @@ limitations under the License.
   
   <div class="header">
     <a href="https://downloadbreadcrumbs.com/#/latest" target="_blank"><h3><img class="logoImage" src="images/logo.png" alt="Breadcrumbs"></img></h3></a>
-    <button id="refresh-button">Refresh</button>    
+    <div class="headerButtons">
+      <i class="fas fa-sync actionButton" id="refresh-button"></i> 
+      <i class="fas fa-cog actionButton" id="settings-button"></i>  
+      <i class="fas fa-home actionButton" id="home-button"></i>  
+      <i class="fas fa-plus actionButton" id="new-button"></i>  
+    </div> 
   </div>
 
   <div id="error">
     
   </div>
+
+  <div id="newFlag" class="flagform hidden">
+    <div class="bc_header">
+      <h3 class="bc_header">Leave a breadcrumb</h3>
+    </div>
+
+    <textarea class="bc_input bc_description" id="BC_nf_description" placeholder="Leave a comment"></textarea><br>
+    <span class="breadcrumbIsFlagLabel">Content on this page is misleading or false</span><input type="checkbox" id="breadcrumbIsFlag"><br>
+
+    <div class="newFlagControls">
+      <button id="BC_nf_submitNewFlagForm" class="bc_input submit">Save</button>
+      <a href="#" class="faqButtons" id="showRulesButton">Rules</a>
+      
+    </div>
+    
+    <div id="rules" class="rulesContainer hidden">
+      <div class="rulesHeader">
+        <hr>
+        <h3>Rules:</h3><br>
+        <br><span>
+        Breadcrumbs was founded to help people share and exchange ideas freely.<br>  
+          1. Be kind.<br>
+          2. Be respectful. <br>
+          3. Be open-minded.<br>
+        </span><br>
+        <i>Rudeness, personal attacks, or unsubstantiated claims make it more difficult for other users to learn, and can hurt your position more than they help. If you see another user engaging in this sort of behaviour please report them to the moderators.</i>
+      </div>
+    </div>
+    <div id="flagRules" class="rulesContainer hidden">
+      <div class="rulesHeader">
+        <hr>
+        <h3>Misleading Content Flag Rules:</h3><br>
+        <br><span>
+        We take misleading content flags very seriously. All flags will be reviewed by a member of our moderator panel.<br>  
+          1. Include citations if possible. (Web urls are fine)<br>
+          2. Include an excerpt from the page. <br>
+          3. Explain why you believe the content to be false.<br>
+        </span><br>
+        <i>If you find it difficult to do any of the above, don't worry. You can always submit your thoughts as a comment (un-check the box) and other users can help you flush out the details!</i>
+      </div>
+    </div>    
+    <div id="FAQ" class="faqContainer hidden">
+      <div class="rulesHeader">
+        <hr>
+        <h3>FAQ:</h3><br>
+        <br><span>
+        Breadcrumbs was founded to help people share and exchange ideas freely.<br>  
+          1. Be kind.<br>
+          2. Be respectful. <br>
+          3. Be open-minded.<br>
+        </span><br>
+        <i>Rudeness, personal attacks, or unsubstantiated claims make it more difficult for other users to learn, and can hurt your position more than they help. If you see another user engaging in this sort of behaviour please report them to the moderators.</i>
+      </div>
+    </div>
+  </div> 
   
   <div id="home">
     <div id="noFlags" class="flagElement">
@@ -106,60 +166,7 @@ limitations under the License.
     
   </div>
 
-  <div id="newFlag" class="flagform hidden">
-    <div class="bc_header">
-      <h3 class="bc_header">Leave a breadcrumb</h3>
-    </div>
 
-    <textarea class="bc_input bc_description" id="BC_nf_description" placeholder="Leave a comment"></textarea><br>
-    <span class="breadcrumbIsFlagLabel">Content on this page is misleading or false</span><input type="checkbox" id="breadcrumbIsFlag"><br>
-
-    <div class="newFlagControls">
-      <button id="BC_nf_submitNewFlagForm" class="bc_input submit">Save</button>
-      <a href="#" class="faqButtons" id="showRulesButton">Rules</a>
-      
-    </div>
-    
-    <div id="rules" class="rulesContainer hidden">
-      <div class="rulesHeader">
-        <hr>
-        <h3>Rules:</h3><br>
-        <br><span>
-        Breadcrumbs was founded to help people share and exchange ideas freely.<br>  
-          1. Be kind.<br>
-          2. Be respectful. <br>
-          3. Be open-minded.<br>
-        </span><br>
-        <i>Rudeness, personal attacks, or unsubstantiated claims make it more difficult for other users to learn, and can hurt your position more than they help. If you see another user engaging in this sort of behaviour please report them to the moderators.</i>
-      </div>
-    </div>
-    <div id="flagRules" class="rulesContainer hidden">
-      <div class="rulesHeader">
-        <hr>
-        <h3>Misleading Content Flag Rules:</h3><br>
-        <br><span>
-        We take misleading content flags very seriously. All flags will be reviewed by a member of our moderator panel.<br>  
-          1. Include citations if possible. (Web urls are fine)<br>
-          2. Include an excerpt from the page. <br>
-          3. Explain why you believe the content to be false.<br>
-        </span><br>
-        <i>If you find it difficult to do any of the above, don't worry. You can always submit your thoughts as a comment (un-check the box) and other users can help you flush out the details!</i>
-      </div>
-    </div>    
-    <div id="FAQ" class="faqContainer hidden">
-      <div class="rulesHeader">
-        <hr>
-        <h3>FAQ:</h3><br>
-        <br><span>
-        Breadcrumbs was founded to help people share and exchange ideas freely.<br>  
-          1. Be kind.<br>
-          2. Be respectful. <br>
-          3. Be open-minded.<br>
-        </span><br>
-        <i>Rudeness, personal attacks, or unsubstantiated claims make it more difficult for other users to learn, and can hurt your position more than they help. If you see another user engaging in this sort of behaviour please report them to the moderators.</i>
-      </div>
-    </div>
-  </div>  
 
 </body>
 <footer>
