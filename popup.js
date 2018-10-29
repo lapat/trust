@@ -175,10 +175,8 @@ function showFAQ () {
 
 function refreshData () {
   console.log('refresh data called')
-  getFlags(function(flags) {
-    navHome()
-    showFlags(flags)
-  })
+  window.location.reload() 
+
 }
 
 function getFlags (cb) {
@@ -193,6 +191,7 @@ function getFlags (cb) {
       if ( flags.length > 0 ) {
         cb(flags)
       } else {
+        var arr = []
         cb(arr)
       }
     })
