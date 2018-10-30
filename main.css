@@ -285,6 +285,31 @@ td.userData {
     text-transform: uppercase;
     font-weight: 700;
 }
+.successMessage {
+    background-color: #ace26dcf;
+    padding: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+    border-radius: 5px;
+}
+.successMessage span {
+    color: white;
+    width: 85%;
+    font-size: 10pt;
+}
+
+.successMessage a {
+    position: absolute;
+    right: 12.5px;
+    top: 42.5px;
+    font-size: 8px;
+    width: 10px;
+    color: #6c6161;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: 700;
+}
 .faqButtons {
     float: right;
     margin-top: 6px;

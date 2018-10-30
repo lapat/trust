@@ -63,11 +63,31 @@ function getFactoid (cb) {
 }
 
 function displayError (message) {
-  console.log('setting child', message)
+  console.log('setting error message', message)
   var id = randomString(16);
   var e = document.getElementById('error')
   var eDiv = document.createElement('div')
       eDiv.className = "errorMessage"
+      eDiv.id = id
+  var m = document.createElement('span')
+      m.textContent = message
+  var c = document.createElement('a')
+      c.href = "#"
+      c.textContent = "✕"
+      c.onclick = function() { hideDiv(id) }
+      eDiv.appendChild(m)
+      eDiv.appendChild(c)
+
+  e.appendChild(eDiv)
+
+}
+
+function displaySuccess (message) {
+  console.log('setting success message', message)
+  var id = randomString(16);
+  var e = document.getElementById('success')
+  var eDiv = document.createElement('div')
+      eDiv.className = "successMessage"
       eDiv.id = id
   var m = document.createElement('span')
       m.textContent = message
@@ -137,7 +157,7 @@ function addButtonListeners() {
   document.getElementById('showRulesButton').addEventListener('click', showRules)
   // document.getElementById('showFAQButton').addEventListener('click', showFAQ)
   document.getElementById('breadcrumbIsFlag').addEventListener('click', showFlagRules)
-
+  document.getElementById('saveUserNameButton').addEventListener('click', updateUser)
 }
 function showFlagRules () {
   
@@ -263,7 +283,14 @@ function getUserData (  ) {
 
 function setUserData (user) {
   console.log('setting user info ', user)
-  document.getElementById('userName').innerHTML = user.data.email
+  if (user.data.name !== "undefined") {
+    var username = user.data.name
+  } else {
+    var username = "No username set."    
+    displayError('No username set. You will need to choose a username before you can submit breadcrumbs.')    
+  }
+
+  document.getElementById('userName').innerHTML = username
   document.getElementById('userScore').innerHTML = "(" + user.data.score + ")"
 }
 
@@ -393,7 +420,15 @@ function showFlags (flags) {
       } else {
 
         if ( showPendingFlags === true || (showPendingFlags === false && flags[x].status != 'FLAG PENDING') ) {
-          addFlagToFlagContainer(flags[x])
+          
+          if (flags[x].is_flag) {
+            addFlagToFlagContainer(flags[x])  
+          } else {
+            addCommentToFlagContainer(flags[x])
+          }
+          
+
+
         } else {
           console.log('skipping flag ', flags[x], 'x is ', x, 'flags.length is', flags.length)
           if ( x === (flags.length - 1 ) ){
@@ -409,7 +444,7 @@ function showFlags (flags) {
 function addFlagToFlagContainer (flag) {
   // If not, then add it
   var newFlag = document.createElement('div')
-  newFlag.id = flag.flagId
+  newFlag.id = flag.id
   newFlag.className = "flagElement"
   var flagContainer = document.getElementById("flagContainer");
 
@@ -421,11 +456,11 @@ function addFlagToFlagContainer (flag) {
 
   var flagUsername = document.createElement('span')
       flagUsername.className = "flagUsername"
-      flagUsername.textContent = "Username"
+      flagUsername.textContent = flag.user_name
 
   var flagAge = document.createElement('span')
       flagAge.className = "flagAge"
-      flagAge.textContent = "2 days old"
+      flagAge.textContent = timeSince(flag.time)
 
   var flagType = document.createElement("i")
       flagType.className = "fas fa-flag flagType"
@@ -443,18 +478,18 @@ function addFlagToFlagContainer (flag) {
 
   var flagUpvote = document.createElement('i')
       flagUpvote.className = "fas fa-sort-up upvote"    
-      flagUpvote.id = "upvote_" + flag.flagId
-      flagUpvote.onclick = function() { vote (flag.flagId, "upvote") }
+      flagUpvote.id = "upvote_" + flag.id
+      flagUpvote.onclick = function() { vote (flag.id, "UP_VOTE", true) }
 
   var flagDownvote = document.createElement('i')
       flagDownvote.className = "fas fa-sort-down downvote"    
-      flagDownvote.id = "downvote_" + flag.flagId
-      flagDownvote.onclick = function() { vote (flag.flagId, "downvote") }
+      flagDownvote.id = "downvote_" + flag.id
+      flagDownvote.onclick = function() { vote (flag.id, "DOWN_VOTE", true) }
 
   var flagScore = document.createElement('span')
       flagScore.className = "flagScore"
-      flagScore.id = "score_" + flag.flagId
-      flagScore.textContent = "5"
+      flagScore.id = "score_" + flag.id
+      flagScore.textContent = flag.score
 
       flagVoting.appendChild(flagUpvote)
       flagVoting.appendChild(flagScore)
@@ -462,7 +497,7 @@ function addFlagToFlagContainer (flag) {
 
   var flagText = document.createElement('span')
       flagText.className = "flagBodyText"
-      flagText.textContent = "This is where the comment body will go when it's ready to go here."    
+      flagText.textContent = flag.description
 
       flagBody.appendChild(flagVoting)
       flagBody.appendChild(flagText)
@@ -473,7 +508,7 @@ function addFlagToFlagContainer (flag) {
   var replyButton = document.createElement('span')
       replyButton.className = "flagActionButton"
       replyButton.textContent = "reply"
-      replyButton.onclick = function() { reply (flag.flagId) }
+      replyButton.onclick = function() { reply (flag.id) }
 
   var infoButton = document.createElement('span')
       infoButton.className = "flagActionButton"
@@ -481,13 +516,108 @@ function addFlagToFlagContainer (flag) {
 
   var infoButtonContainer = document.createElement('a')
       infoButtonContainer.target = "_blank"
-      infoButtonContainer.href = "https://downloadbreadcrumbs.com/#/getinfo?i=" + flag.flagId
+      infoButtonContainer.href = "https://downloadbreadcrumbs.com/#/getinfo?i=" + flag.id
       infoButtonContainer.innerHTML = infoButton.outerHTML
 
   var reportButton = document.createElement('span')
       reportButton.className = "flagActionButton"
       reportButton.textContent = "report"
-      reportButton.onclick = function() { report (flag.flagId) }            
+      reportButton.onclick = function() { report (flag.id) }            
+
+      flagFooter.appendChild(replyButton)
+      flagFooter.appendChild(infoButtonContainer)
+      flagFooter.appendChild(reportButton)
+
+  newFlag.appendChild(flagHeader)
+  newFlag.appendChild(flagBody)
+  newFlag.appendChild(flagFooter)
+
+  flagContainer.appendChild(newFlag)      
+
+}
+
+function addCommentToFlagContainer (flag) {
+  // If not, then add it
+  var newFlag = document.createElement('div')
+  newFlag.id = flag.id
+  newFlag.className = "flagElement"
+  var flagContainer = document.getElementById("flagContainer");
+
+  var flagHeader = document.createElement('div')
+      flagHeader.className = "flagHeader"
+
+  var flagStatus = document.createElement('i')
+      flagStatus.className = "fas fa-circle status_"  
+
+  var flagUsername = document.createElement('span')
+      flagUsername.className = "flagUsername"
+      flagUsername.textContent = flag.user_name
+
+  var flagAge = document.createElement('span')
+      flagAge.className = "flagAge"
+      flagAge.textContent = timeSince(flag.time)
+
+  var flagType = document.createElement("i")
+      flagType.className = "fas fa-comments flagType"
+
+      flagHeader.appendChild(flagStatus)
+      flagHeader.appendChild(flagUsername)
+      flagHeader.appendChild(flagAge)
+      flagHeader.appendChild(flagType)    
+
+  var flagBody = document.createElement('div')
+      flagBody.className = "flagBody"
+
+  var flagVoting = document.createElement('div')
+      flagVoting.className = "flagVoting"
+
+  var flagUpvote = document.createElement('i')
+      flagUpvote.className = "fas fa-sort-up upvote"    
+      flagUpvote.id = "upvote_" + flag.id
+      flagUpvote.onclick = function() { vote (flag.id, "UP_VOTE", false) }
+
+  var flagDownvote = document.createElement('i')
+      flagDownvote.className = "fas fa-sort-down downvote"    
+      flagDownvote.id = "downvote_" + flag.id
+      flagDownvote.onclick = function() { vote (flag.id, "DOWN_VOTE", false) }
+
+  var flagScore = document.createElement('span')
+      flagScore.className = "flagScore"
+      flagScore.id = "cc_score_" + flag.id
+      flagScore.textContent = flag.vote_count
+
+      flagVoting.appendChild(flagUpvote)
+      flagVoting.appendChild(flagScore)
+      flagVoting.appendChild(flagDownvote)
+
+  var flagText = document.createElement('span')
+      flagText.className = "flagBodyText"
+      flagText.textContent = flag.description
+
+      flagBody.appendChild(flagVoting)
+      flagBody.appendChild(flagText)
+
+  var flagFooter = document.createElement('div')
+      flagFooter.className = "flagFooter"
+
+  var replyButton = document.createElement('span')
+      replyButton.className = "flagActionButton"
+      replyButton.textContent = "reply"
+      replyButton.onclick = function() { reply (flag.id) }
+
+  var infoButton = document.createElement('span')
+      infoButton.className = "flagActionButton"
+      infoButton.textContent = "info"
+
+  var infoButtonContainer = document.createElement('a')
+      infoButtonContainer.target = "_blank"
+      infoButtonContainer.href = "https://downloadbreadcrumbs.com/#/getinfo?i=" + flag.id
+      infoButtonContainer.innerHTML = infoButton.outerHTML
+
+  var reportButton = document.createElement('span')
+      reportButton.className = "flagActionButton"
+      reportButton.textContent = "report"
+      reportButton.onclick = function() { report (flag.id) }            
 
       flagFooter.appendChild(replyButton)
       flagFooter.appendChild(infoButtonContainer)
@@ -509,8 +639,43 @@ function reply (id) {
   console.log ('reply triggered', id) 
 }
 
-function vote (id, action) {
-  console.log('vote action triggered: ', action, id)
+function vote (id, action, isFlag) {
+  console.log('vote action triggered: ', action, id, isFlag)
+  firebase.functions().httpsCallable('vote')({'id' : id, 'vote_type' : action, 'is_flag' : isFlag})
+  .then( function(result) {
+    console.log('flag submission succeeded', result)
+    updateScore(id, action, result, isFlag)
+  }).catch( function (err) {
+    displayError(err)
+  })
+}
+
+function updateUser () {
+  var username = document.getElementById('userNameInput').value
+  console.log('update user triggered', username)
+
+  firebase.functions().httpsCallable('updateUser')({ 'user_name' : username })
+  .then( function(result) {
+    console.log('user updated', result)
+    displaySuccess('Username updated successfully.')
+    document.getElementById('userName').textContent = username
+  }).catch( function (err) {
+    displayError(err)
+  })
+}
+
+
+
+function updateScore (id, action, result, isFlag) {
+  console.log('update score triggered with', id, action, result)
+  if (isFlag) {
+    console.log('updating flag score with ID', id)
+    document.getElementById('score_' + id).textContent = result.data.vote_count
+  } else {
+    console.log('updating comment score with ID', id)
+    document.getElementById('cc_score_' + id).textContent = result.data.vote_count
+  }
+  
 }
 
 function moreInfo (div) {
@@ -560,15 +725,15 @@ function startAuth(interactive) {
 
 // send flag to background.js
 function BC_submitNewFlagForm () {
-  alert('Thanks!')
+  displaySuccess('Breadcrumb submitted!')
   navHome()
   // console.log('submitted!')
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) { 
     // temporarily hardcoding subject_id to 1 to avoid bugs
     var payload = {
       "url" : getRawUrl(tabs[0].url),
-      "comment":document.getElementById("BC_nf_description").value,
-      "isFlag" : document.getElementById("breadcrumbIsFlag").value
+      "description": document.getElementById("BC_nf_description").value,
+      "is_flag" : document.getElementById("breadcrumbIsFlag").checked
     }
 
 
@@ -642,5 +807,33 @@ function randomString(n) {
     text += possible.charAt(Math.floor(Math.random() * possible.length));
 
   return text;
+}
+
+function timeSince(date) {
+
+  var seconds = Math.floor((new Date() - date) / 1000);
+
+  var interval = Math.floor(seconds / 31536000);
+
+  if (interval > 1) {
+    return interval + " years";
+  }
+  interval = Math.floor(seconds / 2592000);
+  if (interval > 1) {
+    return interval + " months";
+  }
+  interval = Math.floor(seconds / 86400);
+  if (interval > 1) {
+    return interval + " days";
+  }
+  interval = Math.floor(seconds / 3600);
+  if (interval > 1) {
+    return interval + " hours";
+  }
+  interval = Math.floor(seconds / 60);
+  if (interval > 1) {
+    return interval + " minutes";
+  }
+  return Math.floor(seconds) + " seconds";
 }
 
