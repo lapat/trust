@@ -59,6 +59,16 @@ chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
     
   }
 
+  if ( msg.from == 'newComment' ) {
+
+    var payload = msg.payload;
+    console.log('new comment submit received', msg)
+
+    callAPIForNewFlag(msg.payload)
+
+    
+  }  
+
   if (msg.from == 'getFlags') {
     //storing position
     console.log('received getflags ', msg)
@@ -85,6 +95,7 @@ chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
 })
 
 function callAPIForNewFlag (payload) {
+
     firebase.functions().httpsCallable('flag')(payload)
     .then( function(result) {
       console.log('flag submitted, returned:', result);

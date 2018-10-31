@@ -362,3 +362,6 @@ td.userData {
     text-shadow: black 0px 0px 3px;
     border-radius: 5px;
 }
+.bc_description.bc_comment {
+    width: 97%;
+}
