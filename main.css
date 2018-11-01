@@ -73,6 +73,8 @@ p.submitFlagInstruction {
   margin-left: -6px;
   margin-right: 5px;
   width: 97%;
+  height: 50px;
+  padding-top: 45px;
 }
 .header {
     height: 30px;
@@ -364,4 +366,15 @@ td.userData {
 }
 .bc_description.bc_comment {
     width: 97%;
+}
+div#noFlags {
+    height: 200px;
+}
+.actionButton.example {
+    font-size: 6pt;
+    display: inline;
+    margin: unset;
+    position: unset;
+    float: unset;
+    vertical-align: middle;
 }
