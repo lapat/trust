@@ -36,6 +36,11 @@ chrome.runtime.onMessage.addListener( function(request, sender, sendResponse) {
       displayError(request.message)
   }
 
+  if ( request.actionType === "success" ) {
+    // console.log(request)
+      displaySuccess(request.message)
+  }
+
 });
 
 function setFactoid () {
@@ -711,8 +716,13 @@ function vote (id, action, isFlag) {
   console.log('vote action triggered: ', action, id, isFlag)
   firebase.functions().httpsCallable('vote')({'id' : id, 'vote_type' : action, 'is_flag' : isFlag})
   .then( function(result) {
-    console.log('flag submission succeeded', result)
-    updateScore(id, action, result, isFlag)
+    console.log('flag submission returned', result)
+    if (result.data.success) {
+      updateScore(id, action, result, isFlag)
+    } else {
+      displayError('It seems you\'ve already voted on that one. You can still reverse your vote if you want though!')
+    }
+    
   }).catch( function (err) {
     displayError(err)
   })
@@ -793,7 +803,7 @@ function startAuth(interactive) {
 
 // send flag to background.js
 function BC_submitNewFlagForm () {
-  displaySuccess('Breadcrumb submitted!')
+  // displaySuccess('Breadcrumb submitted!')
   navHome()
   // console.log('submitted!')
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) { 
@@ -803,18 +813,18 @@ function BC_submitNewFlagForm () {
       "description": document.getElementById("BC_nf_description").value,
       "is_flag" : document.getElementById("breadcrumbIsFlag").checked
     }
+    var slicedURL = payload.url.split('/')
 
+    if ( slicedURL.length > 2 ) {
+      var msg = {payload: payload, from: 'newFlag'};
 
-    // console.log('calling new flag with', payload)
+      chrome.runtime.sendMessage(msg, function(response) {
+        
+      });
+    } else {
+      displayError('Submitting comments on pages that change frequently is discouraged.')
+    }
 
-    var msg = {payload: payload, from: 'newFlag'};
-    // console.log('msg ', msg)
-
-    // BC_hideElement ("testFlagForm")
-
-    chrome.runtime.sendMessage(msg, function(response) {
-      // console.log(response)
-    });
   
   })
 }

@@ -106,8 +106,10 @@ function callAPIForNewFlag (payload) {
         handleError(result.data.error)
 
       } else {
-      
+        
+        handleSuccess("Breadcrumb submitted successfully!")
         setData()
+
       
       }
       
@@ -118,6 +120,17 @@ function callAPIForNewFlag (payload) {
 
       handleError(exception.toString())
     })
+}
+
+function handleSuccess (message) {
+  console.log('handle success triggered w/', message)
+  var payload = {
+    'actionType' : 'success',
+    'message' : message
+  }
+
+  // sendMessageToCurrentTab (payload)
+  chrome.runtime.sendMessage(payload);
 }
 
 function handleError (err) {
