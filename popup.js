@@ -739,31 +739,38 @@ function reply (id) {
 
 // send flag to background.js
 function submitReply (id) {
-  displaySuccess('Breadcrumb submitted!')
-  navHome()
-  // console.log('submitted!')
-  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) { 
-    // temporarily hardcoding subject_id to 1 to avoid bugs
-    var payload = {
-      "url" : getRawUrl(tabs[0].url),
-      "description": document.getElementById( "replyBody_" + id ).value,
-      "is_flag" : false,
-      "parent_id" : id
-    }
+  chrome.storage.local.get(["username"] , function(username){
+      console.log('loaded username', username)
+      if (username === "undefined") {
+        displayError('You must set a username in settings before you can submit breadcrumbs.')
+      } else {
+        navHome()
+        // console.log('submitted!')
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) { 
+          // temporarily hardcoding subject_id to 1 to avoid bugs
+          var payload = {
+            "url" : getRawUrl(tabs[0].url),
+            "description": document.getElementById( "replyBody_" + id ).value,
+            "is_flag" : false,
+            "parent_id" : id
+          }
 
 
-    // console.log('calling new flag with', payload)
+          // console.log('calling new flag with', payload)
 
-    var msg = {payload: payload, from: 'newComment'};
-    // console.log('msg ', msg)
+          var msg = {payload: payload, from: 'newComment'};
+          // console.log('msg ', msg)
 
-    // BC_hideElement ("testFlagForm")
+          // BC_hideElement ("testFlagForm")
 
-    chrome.runtime.sendMessage(msg, function(response) {
-      // console.log(response)
-    });
-  
-  })
+          chrome.runtime.sendMessage(msg, function(response) {
+            // console.log(response)
+          });
+        
+        })
+      }
+  });
+
 }
 
 function vote (id, action, isFlag) {
@@ -789,8 +796,10 @@ function updateUser () {
   firebase.functions().httpsCallable('updateUser')({ 'user_name' : username })
   .then( function(result) {
     console.log('user updated', result)
-    displaySuccess('Username updated successfully.')
     document.getElementById('userName').textContent = username
+    chrome.storage.local.set({ "username": username }, function(result){
+        displaySuccess('Username updated successfully.')
+    });
   }).catch( function (err) {
     displayError(err)
   })
@@ -868,8 +877,9 @@ function BC_submitNewFlagForm () {
       "is_flag" : document.getElementById("breadcrumbIsFlag").checked
     }
     var slicedURL = payload.url.split('/')
+    console.log('payload', payload, 'slicedUrl', slicedURL, slicedURL[(slicedURL.length - 1)])
 
-    if ( slicedURL.length > 2 ) {
+    if ( (slicedURL.length > 1) && (slicedURL[(slicedURL.length - 1)] != "")) {
       var msg = {payload: payload, from: 'newFlag'};
 
       chrome.runtime.sendMessage(msg, function(response) {
