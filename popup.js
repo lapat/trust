@@ -695,45 +695,50 @@ function report (id) {
 }
 
 function reply (id) {
-  console.log ('reply triggered', id) 
-  var parent = document.getElementById(id)
+  if ( document.getElementById(id + "_replyDiv") === null ) {
+    console.log ('reply triggered', id) 
+    var parent = document.getElementById(id)
 
-  var child = document.createElement('div')
-      child.id = id + "_children"
+    var child = document.createElement('div')
+        child.id = id + "_children"
 
-  var b = document.createElement('hr')
+    var b = document.createElement('hr')
 
-  var d = document.createElement('div')
-      d.id = id + "_replyDiv"
+    var d = document.createElement('div')
+        d.id = id + "_replyDiv"
 
-  var i = document.createElement('textarea')
-      i.id = "replyBody_" + id
-      i.className = "bc_input bc_description bc_comment"
-      i.placeholder = "Leave a reply..."
+    var i = document.createElement('textarea')
+        i.id = "replyBody_" + id
+        i.className = "bc_input bc_description bc_comment"
+        i.placeholder = "Leave a reply..."
 
-  var f = document.createElement('div')
-      f.className = "newFlagControls bc_comment"
+    var f = document.createElement('div')
+        f.className = "newFlagControls bc_comment"
 
-  var s = document.createElement('button')
-      s.textContent = "Save"
-      s.onclick = function () { submitReply(id) }
-      s.className = "bc_input submit"
+    var s = document.createElement('button')
+        s.textContent = "Save"
+        s.onclick = function () { submitReply(id) }
+        s.className = "bc_input submit"
 
-  var c = document.createElement('a')
-      c.onclick = function() { hideDiv(id + "_replyDiv") }
-      c.className = "faqButtons"
-      c.textContent = "cancel"
+    var c = document.createElement('a')
+        c.onclick = function() { hideDiv(id + "_replyDiv") }
+        c.className = "faqButtons"
+        c.textContent = "cancel"
 
-  f.appendChild(s)
-  f.appendChild(c)
+    f.appendChild(s)
+    f.appendChild(c)
 
-  d.appendChild(b)
-  d.appendChild(i)
-  d.appendChild(f)
+    d.appendChild(b)
+    d.appendChild(i)
+    d.appendChild(f)
 
-  child.appendChild(d)
+    child.appendChild(d)
 
-  parent.appendChild(child)
+    parent.appendChild(child)
+  } else {
+    hideDiv(id + "_replyDiv")
+  }
+  
       
 }
 
