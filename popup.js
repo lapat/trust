@@ -402,10 +402,12 @@ function returnRandomQuote () {
   return quote
 }
 
-function showFlags (flags) {
+function showFlags (unsortedFlags) {
 
   // Retrieve Flag Container
   // flagContainer.className = "flagContainer"
+
+  var flags = sortCommentsByScore(unsortedFlags)
 
   // check for show pending
   chrome.storage.local.get(["settings"] , function(settings){
@@ -984,3 +986,15 @@ function timeSince(date) {
   return Math.floor(seconds) + " seconds";
 }
 
+function sortCommentsByScore (comments) {
+  console.log('sorting comments', comments)
+  return comments.sort(commentSort)
+}
+
+function commentSort(a,b) {
+  if (a.vote_count > b.vote_count)
+    return -1;
+  if (a.vote_count < b.vote_count)
+    return 1;
+  return 0;
+}  
