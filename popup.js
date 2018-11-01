@@ -412,12 +412,18 @@ function showFlags (flags) {
 
     var showPendingFlags = settings.settings.showPendingFlags
 
-    // Fill Flag Container
+    var flagContainer = document.getElementById("flagContainer");
+
+    // Inititalize 'extras' array
+    var extras = []
+    var layer3 = []
+
+    // Fill Flag Container (top level comments)
     console.log('flags**'+JSON.stringify(flags), "showPendingFlags is ", showPendingFlags)
     for ( var x = 0; x < flags.length; x++ ) {
 
       // Check if flag is already present
-      var fCheck = document.getElementById("flagHeader_" + flags[x].flagId)
+      var fCheck = document.getElementById(flags[x].id)
 
       if (fCheck != null) {
         // skip this flag as it's already loaded
@@ -425,14 +431,16 @@ function showFlags (flags) {
       } else {
 
         if ( showPendingFlags === true || (showPendingFlags === false && flags[x].status != 'FLAG PENDING') ) {
-          
-          if (flags[x].is_flag) {
-            addFlagToFlagContainer(flags[x])  
+          console.log('parent is', flags[x].parent_id)
+          if (typeof(flags[x].parent_id) === "undefined" || flags[x].parent_id === 0) {
+            if (flags[x].is_flag) {
+              addFlagToFlagContainer(flags[x], flagContainer)  
+            } else {
+              addCommentToFlagContainer(flags[x], flagContainer)
+            }             
           } else {
-            addCommentToFlagContainer(flags[x])
+            extras.push(flags[x])
           }
-          
-
 
         } else {
           console.log('skipping flag ', flags[x], 'x is ', x, 'flags.length is', flags.length)
@@ -443,15 +451,61 @@ function showFlags (flags) {
       }
 
     }
+
+    // loop through extras
+    for ( var y = 0; y < extras.length; y++ ) {
+      console.log('searching for parent', extras[y].parent_id)
+      var parentCheck = document.getElementById(extras[y].parent_id)
+
+      if ( parentCheck === "undefined" ) {
+        console.log('parent not found, proceeding with others')
+      } else {
+        // first, check if the child node exists
+        var children = document.getElementById(extras[y].parent_id + "_children")
+
+        if ( children === null) {
+          console.log('children is undefined, creating children node')
+          children = document.createElement('div')
+          children.id = extras[y].parent_id + "_children"
+          children.className = "childNode"
+
+          var parent = document.getElementById(extras[y].parent_id)
+
+          if ( parent === null ) {
+            console.log('layer 3 comment found... adding to array')
+            layer3.push(extras[y])
+
+          } else {
+            console.log('appending', children, "to", parent)
+
+            parent.appendChild(children)
+
+            children = document.getElementById(extras[y].parent_id + "_children")
+
+            addCommentToFlagContainer(extras[y], children)
+
+          }
+            
+        } else {
+          console.log('children node found, appending child')
+          children = document.getElementById(extras[y].parent_id + "_children")
+          addCommentToFlagContainer(extras[y], children)
+
+        }
+
+      }
+
+    } 
+
   });  
 }
 
-function addFlagToFlagContainer (flag) {
+function addFlagToFlagContainer (flag, flagContainer) {
   // If not, then add it
   var newFlag = document.createElement('div')
   newFlag.id = flag.id
   newFlag.className = "flagElement"
-  var flagContainer = document.getElementById("flagContainer");
+  // var flagContainer = document.getElementById("flagContainer");
 
   var flagHeader = document.createElement('div')
       flagHeader.className = "flagHeader"
@@ -541,12 +595,12 @@ function addFlagToFlagContainer (flag) {
 
 }
 
-function addCommentToFlagContainer (flag) {
+function addCommentToFlagContainer (flag, flagContainer) {
   // If not, then add it
   var newFlag = document.createElement('div')
   newFlag.id = flag.id
   newFlag.className = "flagElement"
-  var flagContainer = document.getElementById("flagContainer");
+  // var flagContainer = document.getElementById("flagContainer");
 
   var flagHeader = document.createElement('div')
       flagHeader.className = "flagHeader"
