@@ -87,6 +87,26 @@ function displayError (message) {
 
 }
 
+function displayTip (message) {
+  console.log('setting tip message', message)
+  var id = randomString(16);
+  var e = document.getElementById('error')
+  var eDiv = document.createElement('div')
+      eDiv.className = "tipMessage"
+      eDiv.id = id
+  var m = document.createElement('span')
+      m.textContent = message
+  var c = document.createElement('a')
+      c.href = "#"
+      c.textContent = "✕"
+      c.onclick = function() { hideDiv(id) }
+      eDiv.appendChild(m)
+      eDiv.appendChild(c)
+
+  e.appendChild(eDiv)
+
+}
+
 function displaySuccess (message) {
   console.log('setting success message', message)
   var id = randomString(16);
@@ -158,7 +178,8 @@ function initApp() {
 function addButtonListeners() {
   document.getElementById('quickstart-button').addEventListener('click', startSignIn, false);
   document.getElementById('refresh-button').addEventListener('click', refreshData);
-  document.getElementById('refresh-button').addEventListener('click', refreshData);
+  document.getElementById('newFlag-button').addEventListener('click', BC_submitNewFlag);
+  document.getElementById('newStar-button').addEventListener('click', BC_submitNewStar);
   document.getElementById('showRulesButton').addEventListener('click', showRules)
   // document.getElementById('showFAQButton').addEventListener('click', showFAQ)
   document.getElementById('breadcrumbIsFlag').addEventListener('click', showFlagRules)
@@ -887,13 +908,66 @@ function BC_submitNewFlagForm () {
     console.log('payload', payload, 'slicedUrl', slicedURL, slicedURL[(slicedURL.length - 1)])
 
     if ( (slicedURL.length > 1) && (slicedURL[(slicedURL.length - 1)] != "")) {
-      var msg = {payload: payload, from: 'newFlag'};
+      var msg = {payload: payload, from: 'newComment'};
 
       chrome.runtime.sendMessage(msg, function(response) {
         
       });
     } else {
       displayError('Submitting comments on pages that change frequently is discouraged.')
+    }
+
+  
+  })
+}
+function BC_submitNewFlag () {
+  // displaySuccess('Breadcrumb submitted!')
+
+  // console.log('submitted!')
+  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) { 
+    // temporarily hardcoding subject_id to 1 to avoid bugs
+    var payload = {
+      "url" : getRawUrl(tabs[0].url),
+      "description": "",
+      "is_flag" : true
+    }
+    var slicedURL = payload.url.split('/')
+    console.log('payload', payload, 'slicedUrl', slicedURL, slicedURL[(slicedURL.length - 1)])
+
+    if ( (slicedURL.length > 1) && (slicedURL[(slicedURL.length - 1)] != "")) {
+      var msg = {payload: payload, from: 'newFlag'};
+
+      chrome.runtime.sendMessage(msg, function(response) {
+        
+      });
+    } else {
+      displayTip('Submitting flags on pages that change frequently is discouraged.')
+    }
+
+  
+  })
+}
+function BC_submitNewStar () {
+  // displaySuccess('Breadcrumb submitted!')
+
+  // console.log('submitted!')
+  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) { 
+    // temporarily hardcoding subject_id to 1 to avoid bugs
+    var payload = {
+      "url" : getRawUrl(tabs[0].url),
+      "description": ""
+    }
+    var slicedURL = payload.url.split('/')
+    console.log('payload', payload, 'slicedUrl', slicedURL, slicedURL[(slicedURL.length - 1)])
+
+    if ( (slicedURL.length > 1) && (slicedURL[(slicedURL.length - 1)] != "")) {
+      var msg = {payload: payload, from: 'newStar'};
+
+      chrome.runtime.sendMessage(msg, function(response) {
+        
+      });
+    } else {
+      displayTip('Submitting flags on pages that change frequently is discouraged.')
     }
 
   

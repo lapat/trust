@@ -67,6 +67,16 @@ chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
     callAPIForNewFlag(msg.payload)
 
     
+  } 
+
+  if ( msg.from == 'newStar' ) {
+
+    var payload = msg.payload;
+    console.log('new star submit received', msg)
+
+    callAPIForNewStar(msg.payload)
+
+    
   }  
 
   if (msg.from == 'getFlags') {
@@ -108,6 +118,34 @@ function callAPIForNewFlag (payload) {
       } else {
         
         handleSuccess("Breadcrumb submitted successfully!")
+        setData()
+
+      
+      }
+      
+
+    }).catch( function(exception){
+
+      console.log('flag submission error!: ', exception)
+
+      handleError(exception.toString())
+    })
+}
+
+function callAPIForNewStar (payload) {
+
+    firebase.functions().httpsCallable('createStar')(payload)
+    .then( function(result) {
+      console.log('star submitted, returned:', result);
+
+      if ( typeof(result.data.error) != "undefined" ) {
+
+        console.log('caught api error: ', result.data.error)
+        handleError(result.data.error)
+
+      } else {
+        
+        handleSuccess("Star saved successfully!")
         setData()
 
       
