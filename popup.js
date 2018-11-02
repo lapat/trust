@@ -904,10 +904,10 @@ function BC_submitNewFlagForm () {
       "description": document.getElementById("BC_nf_description").value,
       "is_flag" : document.getElementById("breadcrumbIsFlag").checked
     }
-    var slicedURL = payload.url.split('/')
-    console.log('payload', payload, 'slicedUrl', slicedURL, slicedURL[(slicedURL.length - 1)])
 
-    if ( (slicedURL.length > 1) && (slicedURL[(slicedURL.length - 1)] != "")) {
+    var isHomePage = checkIfHomePage (payload.url) 
+    
+    if ( isHomePage === false ) {
       var msg = {payload: payload, from: 'newComment'};
 
       chrome.runtime.sendMessage(msg, function(response) {
@@ -920,6 +920,26 @@ function BC_submitNewFlagForm () {
   
   })
 }
+
+function checkIfHomePage (url) {
+  var slicedURL = url.split('/')
+  console.log( 'slicedUrl', slicedURL, slicedURL[(slicedURL.length - 1)] )
+
+  if ( slicedURL[(slicedURL.length - 1)] === "" ) {
+    if ( slicedURL.length > 2 ) {
+      return false
+    } else {
+      return true
+    }
+  } 
+
+  if ( slicedURL.length > 1 ) {
+    return false
+  } else {
+    return true
+  }
+}
+
 function BC_submitNewFlag () {
   // displaySuccess('Breadcrumb submitted!')
 
