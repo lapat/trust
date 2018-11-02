@@ -34,9 +34,7 @@ limitations under the License.
   
   <div class="header">
     <a href="https://downloadbreadcrumbs.com/#/latest" target="_blank"><h3><img class="logoImage" src="images/logo.png" alt="Breadcrumbs"></img></h3></a>
-    <div class="headerButtons">
-      <i class="fas fa-sync actionButton" id="refresh-button"></i> 
-      <i class="fas fa-cog actionButton" id="settings-button"></i>  
+    <div class="headerButtons">  
       <i class="fas fa-home actionButton" id="home-button"></i>  
       <i class="fas fa-plus actionButton" id="new-button"></i>  
     </div> 
@@ -179,7 +177,23 @@ limitations under the License.
 
 </body>
 <footer>
-  <span class='factoid' id="footerFactoid"></span>
-  <a class="footerMoreInfoFactoid" target="_blank" id="footerMoreInfoFactoid"><i class="fa fa-info-circle"></i></a>
+    <table>
+    <tr>
+      <td class="left" id="settings-button" href="#">
+        <a>
+          <i class="fas fa-cog"></i>
+        </a>
+      </td>
+      <td class="middle" id="_main">
+        <span class='factoid' id="footerFactoid"></span>
+        <a class="footerMoreInfoFactoid" target="_blank" id="footerMoreInfoFactoid"><i class="fa fa-info-circle"></i></a>
+      </td>
+      <td class="right" id="refresh-button" href="#">
+        <a>
+          <i class="fas fa-sync"></i> 
+        </a>
+      </td>
+    </tr>
+  </table>
 </footer>
 </html>

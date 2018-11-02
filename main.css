@@ -145,11 +145,11 @@ p.flagStatus {
 table {
     width: 100%;
 }
-footer td {
-    width: 33%;
-}
 td.left {
     text-align: center;
+    cursor: pointer;
+    width: 30px;
+    padding-left: 5px;
 }
 td.middle {
     text-align: center;
@@ -158,6 +158,9 @@ td.middle {
 }
 td.right {
     text-align: center;
+    cursor: pointer;
+    width: 30px;
+    padding-right: 5px;
 }
 img.logoImage {
   display: inline-block;
@@ -172,7 +175,6 @@ footer {
   margin-left: -10px;
   margin-right: -10px;
   margin-bottom: -10px;
-  padding: 10px;
   text-align: center;
 }
 .hidden {
