@@ -405,3 +405,20 @@ div#noFlags {
     float: unset;
     vertical-align: middle;
 }
+.counter {
+    background-color: #a06262;
+    padding: 2px;
+    border-radius: 5px;
+    width: 10px;
+    border: white 2px;
+    position: absolute;
+    left: 63px;
+    text-align: center;
+    color: lightgrey;
+    top: -8px;
+    font-size: 8pt;
+    font-weight: bold;
+}
+.present {
+    background: #ffeb3be3;
+}

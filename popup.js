@@ -441,6 +441,8 @@ function showFlags (unsortedFlags) {
     var extras = []
     var layer3 = []
 
+    var score = 0;
+
     // Fill Flag Container (top level comments)
     console.log('flags**'+JSON.stringify(flags), "showPendingFlags is ", showPendingFlags)
     for ( var x = 0; x < flags.length; x++ ) {
@@ -453,11 +455,14 @@ function showFlags (unsortedFlags) {
       
       } else {
 
+
+
         if ( showPendingFlags === true || (showPendingFlags === false && flags[x].status != 'FLAG PENDING') ) {
           console.log('parent is', flags[x].parent_id)
           if (typeof(flags[x].parent_id) === "undefined" || flags[x].parent_id === 0) {
             if (flags[x].is_flag) {
-              addFlagToFlagContainer(flags[x], flagContainer)  
+              score++
+              // addFlagToFlagContainer(flags[x], flagContainer)  
             } else {
               addCommentToFlagContainer(flags[x], flagContainer)
             }             
@@ -512,6 +517,8 @@ function showFlags (unsortedFlags) {
         } else {
           console.log('children node found, appending child')
           children = document.getElementById(extras[y].parent_id + "_children")
+          
+          score++
           addCommentToFlagContainer(extras[y], children)
 
         }
@@ -519,7 +526,8 @@ function showFlags (unsortedFlags) {
       }
 
     } 
-
+    document.getElementById('newFlag-button').className = document.getElementById('newFlag-button').className + " present"
+    document.getElementById('flagCount').textContent = score
   });  
 }
 
@@ -906,7 +914,7 @@ function BC_submitNewFlagForm () {
     }
 
     var isHomePage = checkIfHomePage (payload.url) 
-    
+    console.log('homepage: ', isHomePage)
     if ( isHomePage === false ) {
       var msg = {payload: payload, from: 'newComment'};
 
@@ -951,10 +959,10 @@ function BC_submitNewFlag () {
       "description": "",
       "is_flag" : true
     }
-    var slicedURL = payload.url.split('/')
-    console.log('payload', payload, 'slicedUrl', slicedURL, slicedURL[(slicedURL.length - 1)])
 
-    if ( (slicedURL.length > 1) && (slicedURL[(slicedURL.length - 1)] != "")) {
+    var isHomePage = checkIfHomePage (payload.url) 
+    console.log('homepage: ', isHomePage)
+    if ( isHomePage === false ) {
       var msg = {payload: payload, from: 'newFlag'};
 
       chrome.runtime.sendMessage(msg, function(response) {
@@ -977,10 +985,10 @@ function BC_submitNewStar () {
       "url" : getRawUrl(tabs[0].url),
       "description": ""
     }
-    var slicedURL = payload.url.split('/')
-    console.log('payload', payload, 'slicedUrl', slicedURL, slicedURL[(slicedURL.length - 1)])
-
-    if ( (slicedURL.length > 1) && (slicedURL[(slicedURL.length - 1)] != "")) {
+    var isHomePage = checkIfHomePage (payload.url) 
+    console.log('homepage: ', isHomePage)
+    if ( isHomePage === false ) {
+      
       var msg = {payload: payload, from: 'newStar'};
 
       chrome.runtime.sendMessage(msg, function(response) {
