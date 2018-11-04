@@ -229,6 +229,8 @@ function getFlags (cb) {
   console.log('get flags ran')
   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
 
+
+
     var url = getRawUrl(tabs[0].url)
     console.log('cb', cb)
     console.log(url)
@@ -261,7 +263,15 @@ function fetchFlagsForUrl (url, cb) {
     firebase.functions().httpsCallable('getShortDataForUrl')({'url' : url})
       .then( function(result) {
         console.log(result);
-        flags = result.data
+        flags = result.data.flagsAndCrumbs
+
+        if (result.data.isStarred) {
+          document.getElementById('newStar-button').className += " present"
+        }
+
+        if (result.data.isFlagged) {
+          document.getElementById('newFlag-button').className += " present"
+        }
 
         if (flags.length) {
           cb (flags)
@@ -526,8 +536,10 @@ function showFlags (unsortedFlags) {
       }
 
     } 
-    document.getElementById('newFlag-button').className = document.getElementById('newFlag-button').className + " present"
+
+    document.getElementById('flagCount').className = document.getElementById('flagCount').className.split('hidden')
     document.getElementById('flagCount').textContent = score
+
   });  
 }
 
