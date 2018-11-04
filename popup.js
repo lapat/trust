@@ -235,8 +235,8 @@ function getFlags (cb) {
     console.log('cb', cb)
     console.log(url)
 
-    fetchFlagsForUrl(url, function (result){
-      console.log('returned flags', result)      
+    fetchFlagsForUrl(url, function (flags){
+      console.log('returned flags', flags)      
       if ( flags.length > 0 ) {
         cb(flags)
       } else {
@@ -262,8 +262,8 @@ function fetchFlagsForUrl (url, cb) {
     //url == "www.breitbart.com/big-government/2018/10/06/kavanaugh-confirmed-possibly-most-conservative-supreme-court-since-1934/") {
     firebase.functions().httpsCallable('getShortDataForUrl')({'url' : url})
       .then( function(result) {
-        console.log(result);
-        flags = result.data.flagsAndCrumbs
+        console.log('Retrieved data for getShortDataForUrl: ', result);
+        var flags = result.data.flagsAndCrumbs
 
         if (result.data.isStarred) {
           document.getElementById('newStar-button').className += " present"
@@ -422,7 +422,7 @@ function navHome () {
 }
 
 function showNoFlagsMessage () {
-  document.getElementById('flagContainer').className = document.getElementById('flagContainer').className.split('hidden').join(' ') 
+  document.getElementById('home').className = document.getElementById('home').className.split('hidden').join(' ') 
 }
 
 function returnRandomQuote () {
@@ -437,8 +437,10 @@ function showFlags (unsortedFlags) {
 
   // Retrieve Flag Container
   // flagContainer.className = "flagContainer"
-
+  var noFlags = 0
   var flags = sortCommentsByScore(unsortedFlags)
+
+  document.getElementById('loadingMessage').className = document.getElementById('loadingMessage').className.split('hidden').join(' ')
 
   // check for show pending
   chrome.storage.local.get(["settings"] , function(settings){
@@ -474,7 +476,12 @@ function showFlags (unsortedFlags) {
               score++
               // addFlagToFlagContainer(flags[x], flagContainer)  
             } else {
+              if ( noFlags === 0 ) {
+                noFlags = 1
+                document.getElementById('loadingMessage').className += ' hidden'
+              }    
               addCommentToFlagContainer(flags[x], flagContainer)
+           
             }             
           } else {
             extras.push(flags[x])
@@ -537,8 +544,14 @@ function showFlags (unsortedFlags) {
 
     } 
 
-    document.getElementById('flagCount').className = document.getElementById('flagCount').className.split('hidden')
+    console.log('setting flag count to ', score)
+    document.getElementById('flagCount').className = document.getElementById('flagCount').className.split('hidden').join(' ')
     document.getElementById('flagCount').textContent = score
+
+    if ( noFlags === 0 ) {
+      document.getElementById('loadingMessage').className += ' hidden'
+      showNoFlagsMessage()
+    } 
 
   });  
 }
