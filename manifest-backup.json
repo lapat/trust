@@ -1,0 +1,41 @@
+{
+  "manifest_version": 2,
+
+  "name": "BreadCrumbs",
+  "description": "Verify before you believe. Blue : Good, Yellow : Debate, Red : Bad, Grey : Untracked",
+  "version": "1.51",
+      "background": {
+        "scripts": ["thirdParty/jquery-3.1.1.js","js/firebase.js","background.js"],
+        "persistent": false
+    },
+
+  "browser_action": {
+    "default_icon": "images/red.png",
+    "default_popup": "popup.html"
+  },
+  "permissions": [
+    "storage",
+    "activeTab",
+    "https://ajax.googleapis.com/",
+    "contentSettings",
+    "cookies",
+    "geolocation",
+    "*://*/*",
+    "identity",
+    "unlimitedStorage"
+  ],
+  "web_accessible_resources": ["images/*"],
+  "icons": {
+          "16": "images/red-16.png",
+          "48": "images/red-48.png",
+          "128": "images/red-128.png"
+        },
+  "content_security_policy" : "script-src 'self' https://www.gstatic.com/ https://*.firebaseio.com https://www.googleapis.com; object-src 'self'",
+  "oauth2": {
+    "client_id": "802077806931-pl1ql36dfhnjccug95f1v8ggj13j9k2a.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/auth/userinfo.email",
+      "https://www.googleapis.com/auth/userinfo.profile"
+    ]
+  }
+}

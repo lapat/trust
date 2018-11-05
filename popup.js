@@ -182,7 +182,7 @@ function addButtonListeners() {
   document.getElementById('newStar-button').addEventListener('click', BC_submitNewStar);
   document.getElementById('showRulesButton').addEventListener('click', showRules)
   // document.getElementById('showFAQButton').addEventListener('click', showFAQ)
-  document.getElementById('breadcrumbIsFlag').addEventListener('click', showFlagRules)
+  // document.getElementById('breadcrumbIsFlag').addEventListener('click', showFlagRules)
   document.getElementById('saveUserNameButton').addEventListener('click', updateUser)
 }
 function showFlagRules () {

@@ -33,7 +33,7 @@ function runTimeTasks () {
   firebase.initializeApp(config);
   initSettings()  
   setData();
-  configureContextMenus();
+  // configureContextMenus();
   chrome.contextMenus.onClicked.addListener(onClickHandler);
 
 }
@@ -195,7 +195,7 @@ function configureContextMenus() {
 
   // Create a parent item and two children.
   chrome.contextMenus.create(
-    {"title": "GetInfo", "id":"getInfo"}
+    {"title": "Star", "id":"star"}
   );
 
 }
@@ -204,13 +204,13 @@ function onClickHandler(info, tab) {
   // console.log('info click caught', info)
 
   if (info.menuItemId == "page") {
-    newFlag(tab, info.selectionText);
+    callAPIForNewFlag()
 
-  } else if (info.menuItemId == "getInfo") {
-    getInfo(tab.url);
+  } else if (info.menuItemId == "star") {
+    callAPIForNewStar()
 
   } else if (info.menuItemId == "selection") {
-    newFlag(tab, info.selectionText);
+    callAPIForNewFlag()
 
   } else {
     // Random debugging crap
@@ -220,6 +220,33 @@ function onClickHandler(info, tab) {
 
   }
 };
+
+function BC_submitNewStar () {
+  // displaySuccess('Breadcrumb submitted!')
+
+  // console.log('submitted!')
+  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) { 
+    // temporarily hardcoding subject_id to 1 to avoid bugs
+    var payload = {
+      "url" : getRawUrl(tabs[0].url),
+      "description": ""
+    }
+    var isHomePage = checkIfHomePage (payload.url) 
+    console.log('homepage: ', isHomePage)
+    if ( isHomePage === false ) {
+      
+      var msg = {payload: payload, from: 'newStar'};
+
+      chrome.runtime.sendMessage(msg, function(response) {
+        
+      });
+    } else {
+      displayTip('Submitting flags on pages that change frequently is discouraged.')
+    }
+
+  
+  })
+}
 
 function newFlag (tab, text) {
 
