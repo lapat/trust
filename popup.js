@@ -935,7 +935,7 @@ function BC_submitNewFlagForm () {
     var payload = {
       "url" : getRawUrl(tabs[0].url),
       "description": document.getElementById("BC_nf_description").value,
-      "is_flag" : document.getElementById("breadcrumbIsFlag").checked
+      "is_flag" : false
     }
 
     var isHomePage = checkIfHomePage (payload.url) 

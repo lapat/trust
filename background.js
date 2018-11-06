@@ -19,23 +19,28 @@ var config = {
 
 // 1. Data storage setup
 // init task - runs when chrome is opened and not after
-chrome.runtime.onStartup.addListener(function () {
+chrome.runtime.onStartup.addListener(function onStartup () {
   runTimeTasks()
 });
 
-chrome.runtime.onInstalled.addListener(function(details){
+chrome.runtime.onInstalled.addListener(function onInstalled (details){
   runTimeTasks()
 });
 
 function runTimeTasks () {
   // console.log('chrome launched - syncing sample data')
-  // console.log("initializingApp")
-  firebase.initializeApp(config);
+  console.log("runTimeTasks ran from " + runTimeTasks.caller)
+  callFirebaseInitApp()
   initSettings()  
   setData();
   // configureContextMenus();
   chrome.contextMenus.onClicked.addListener(onClickHandler);
 
+}
+
+function callFirebaseInitApp(){
+  console.log('initializing firebase from ' + callFirebaseInitApp.caller)
+  firebase.initializeApp(config);
 }
 
 // 2. Right click menu setup
@@ -366,7 +371,7 @@ function setFlag (currentUrl) {
   var rawUrl = getRawUrl(currentUrl)
   var domain = rawUrl.split("/")[0]
   var domain = removeWww(domain);
-   // console.log(rawUrl, domain)
+  console.log("r", rawUrl, "d", domain)
   var setflag = 0;
 
   getData( function(listings) {
@@ -412,31 +417,31 @@ function setFlag (currentUrl) {
       }
 
 
-       // console.log('no banned URLs found, checking for flagged domains rawUrl:'+rawUrl)
+       console.log('no banned URLs found, checking for flagged domains rawUrl:'+rawUrl)
 
       for ( var i = 0; i < listings.flagged.length; i ++ ) {
 
-         // console.log ('checking domain', listings.flagged[i].domain, domain)
+         console.log ('checking domain', listings.flagged[i].domain, domain)
         if ( listings.flagged[i].domain === domain ) {
-          // console.log("matched domain:",domain)
-          // console.log("listings.flagged[i].urls:",listings.flagged[i].urls)
+          console.log("matched domain:",domain)
+          console.log("listings.flagged[i].urls:",listings.flagged[i].urls)
           // here we'll need to index through the urls to identify if this url is flagged or banned
           for ( var u = 0; u < listings.flagged[i].urls.length; u ++ ) {
-            // console.log("checking url:",listings.flagged[i].urls[u].url)
+            console.log("checking url:",listings.flagged[i].urls[u].url)
             if ( listings.flagged[i].urls[u].url === rawUrl ) {
               // here we'll need to index through the urls to identify if this url is flagged or banned
-              // console.log ('url matches flagged', listings.flagged[i].urls[u], rawUrl)
+              console.log ('url matches flagged', listings.flagged[i].urls[u], rawUrl)
               return setIcon('yellow', listings.flagged[i].urls[u].flagArray.length)
               // sendSetFlagsToView(listings.flagged[i].urls[u].flags)
               setflag = 1;
             }
           }
-          // console.log ('domain has open flags but this URL didn\'t match a known banned site', listings.verified[i], rawUrl)
+          console.log ('domain has open flags but this URL didn\'t match a known banned site', listings.verified[i], rawUrl)
           return setIcon('grey')
           setflag = 1;
         }
       }
-      // console.log('no matching records found - setting to grey')
+      console.log('no matching records found - setting to grey')
       setIcon('grey')
     }
   });
@@ -543,9 +548,15 @@ function getRawUrl (rawUrl) {
 
 function removeWww(rawUrl){
   console.log('getting www-less url of ', rawUrl)
-  var noWww = rawUrl.split('www.')[1]
-  console.log('noWww', noWww)
-  return noWww
+  var set = rawUrl.split('www.')
+  if ( set.length > 1 ) {
+    console.log('noWww', set[1])
+    return set[1]
+  } else {
+    console.log('noWww', set[1])
+    return rawUrl
+  }
+
 }
 
 function setData () {
